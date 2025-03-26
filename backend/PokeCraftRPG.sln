@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35728.132
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CC81B9FF-9853-426B-B5E6-6288EAD7280A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft.Domain", "src\PokeCraft.Domain\PokeCraft.Domain.csproj", "{40FB4DED-79B5-4BE6-86F0-6CB56AD3984D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft.Application", "src\PokeCraft.Application\PokeCraft.Application.csproj", "{096AA1B4-32C4-45B3-A81F-ECBC570556DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft.Infrastructure", "src\PokeCraft.Infrastructure\PokeCraft.Infrastructure.csproj", "{87ECF3CE-8D9E-40F0-913F-22C36F4F3F0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft", "src\PokeCraft\PokeCraft.csproj", "{B1D1A320-8035-4C7B-B4FF-8DA949F6282E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40FB4DED-79B5-4BE6-86F0-6CB56AD3984D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40FB4DED-79B5-4BE6-86F0-6CB56AD3984D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40FB4DED-79B5-4BE6-86F0-6CB56AD3984D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40FB4DED-79B5-4BE6-86F0-6CB56AD3984D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{096AA1B4-32C4-45B3-A81F-ECBC570556DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{096AA1B4-32C4-45B3-A81F-ECBC570556DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{096AA1B4-32C4-45B3-A81F-ECBC570556DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{096AA1B4-32C4-45B3-A81F-ECBC570556DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87ECF3CE-8D9E-40F0-913F-22C36F4F3F0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87ECF3CE-8D9E-40F0-913F-22C36F4F3F0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87ECF3CE-8D9E-40F0-913F-22C36F4F3F0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87ECF3CE-8D9E-40F0-913F-22C36F4F3F0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1D1A320-8035-4C7B-B4FF-8DA949F6282E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1D1A320-8035-4C7B-B4FF-8DA949F6282E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1D1A320-8035-4C7B-B4FF-8DA949F6282E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1D1A320-8035-4C7B-B4FF-8DA949F6282E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
