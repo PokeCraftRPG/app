@@ -5,6 +5,7 @@ namespace PokeCraft.Domain.Worlds;
 
 public readonly struct WorldId
 {
+  private const string EntityType = "World";
   private const char Separator = ':';
 
   public StreamId StreamId { get; }
@@ -12,12 +13,12 @@ public readonly struct WorldId
 
   public WorldId(string value)
   {
-    StreamId = new(value);
+    StreamId = new StreamId(value);
   }
   public WorldId(Guid id)
   {
-    string value = string.Join(Separator, "World", Convert.ToBase64String(id.ToByteArray()).ToUriSafeBase64());
-    StreamId = new(value);
+    string value = string.Join(Separator, EntityType, Convert.ToBase64String(id.ToByteArray()).ToUriSafeBase64());
+    StreamId = new StreamId(value);
   }
   public WorldId(StreamId streamId)
   {

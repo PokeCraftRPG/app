@@ -8,6 +8,8 @@ public class World : AggregateRoot
   private WorldUpdated _updated = new();
   private bool HasUpdates => _updated.UniqueSlug is not null || _updated.DisplayName is not null || _updated.Description is not null;
 
+  public new WorldId Id => new(base.Id);
+
   public UserId OwnerId { get; private set; }
 
   private Slug? _uniqueSlug = null;
@@ -62,7 +64,7 @@ public class World : AggregateRoot
   {
     OwnerId = @event.OwnerId;
 
-    UniqueSlug = @event.UniqueSlug;
+    _uniqueSlug = @event.UniqueSlug;
   }
 
   public void Delete(UserId userId)
