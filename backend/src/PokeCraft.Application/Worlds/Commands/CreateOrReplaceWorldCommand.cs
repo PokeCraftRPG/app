@@ -11,6 +11,7 @@ public record CreateOrReplaceWorldResult(WorldModel World, bool Created);
 
 public record CreateOrReplaceWorldCommand(Guid? Id, CreateOrReplaceWorldPayload Payload) : IRequest<CreateOrReplaceWorldResult>;
 
+/// <exception cref="UniqueSlugAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>
 internal class CreateOrReplaceWorldCommandHandler : IRequestHandler<CreateOrReplaceWorldCommand, CreateOrReplaceWorldResult>
 {
@@ -66,7 +67,7 @@ internal class CreateOrReplaceWorldCommandHandler : IRequestHandler<CreateOrRepl
     world.Description = Description.TryCreate(payload.Description);
 
     world.Update(ownerId);
-    await _worldManager.SaveAsync(world, cancellationToken); // TODO(fpion): 409 + storage
+    await _worldManager.SaveAsync(world, cancellationToken);
 
     WorldModel model = await _worldQuerier.ReadAsync(world, cancellationToken);
     return new CreateOrReplaceWorldResult(model, created);

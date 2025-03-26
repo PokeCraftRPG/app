@@ -9,6 +9,7 @@ namespace PokeCraft.Application.Worlds.Commands;
 
 public record UpdateWorldCommand(Guid Id, UpdateWorldPayload Payload) : IRequest<WorldModel?>;
 
+/// <exception cref="UniqueSlugAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>
 internal class UpdateWorldCommandHandler : IRequestHandler<UpdateWorldCommand, WorldModel?>
 {
@@ -56,7 +57,7 @@ internal class UpdateWorldCommandHandler : IRequestHandler<UpdateWorldCommand, W
     }
 
     world.Update(_applicationContext.UserId);
-    await _worldManager.SaveAsync(world, cancellationToken); // TODO(fpion): 409 + storage
+    await _worldManager.SaveAsync(world, cancellationToken);
 
     return await _worldQuerier.ReadAsync(world, cancellationToken);
   }

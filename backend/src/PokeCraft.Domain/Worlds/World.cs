@@ -13,7 +13,7 @@ public class World : AggregateRoot
   private Slug? _uniqueSlug = null;
   public Slug UniqueSlug
   {
-    get => _uniqueSlug ?? throw new InvalidOperationException();
+    get => _uniqueSlug ?? throw new InvalidOperationException("The world has not been initialized.");
     set
     {
       if (_uniqueSlug != value)

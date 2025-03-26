@@ -1,4 +1,5 @@
 ﻿using Microsoft.FeatureManagement;
+using PokeCraft.Application;
 using PokeCraft.Constants;
 using PokeCraft.Extensions;
 
@@ -24,6 +25,8 @@ internal class Startup : StartupBase
     services.AddSwagger();
 
     IHealthChecksBuilder healthChecks = services.AddHealthChecks();
+
+    services.AddPokeCraftApplication();
   }
 
   public override void Configure(IApplicationBuilder builder)
