@@ -14,6 +14,8 @@ public record Url
     new Validator().ValidateAndThrow(this);
   }
 
+  public static Url? TryCreate(string? value) => string.IsNullOrWhiteSpace(value) ? null : new(value);
+
   public override string ToString() => Value;
 
   private class Validator : AbstractValidator<Url>

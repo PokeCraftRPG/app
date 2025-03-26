@@ -30,9 +30,10 @@ public static class ValidationExtensions
     return ruleBuilder.NotEmpty().MaximumLength(Domain.Slug.MaximumLength).SetValidator(new SlugValidator<T>());
   }
 
-  public static IRuleBuilderOptions<T, string> UniqueName<T>(this IRuleBuilder<T, string> ruleBuilder, string? allowedCharacters)
+  public static IRuleBuilderOptions<T, string> UniqueName<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
-    return ruleBuilder.NotEmpty().MaximumLength(Domain.UniqueName.MaximumLength).AllowedCharacters(allowedCharacters);
+    return ruleBuilder.NotEmpty().MaximumLength(Domain.UniqueName.MaximumLength)
+      .AllowedCharacters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+");
   }
 
   public static IRuleBuilderOptions<T, string> Url<T>(this IRuleBuilder<T, string> ruleBuilder)

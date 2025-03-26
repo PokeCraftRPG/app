@@ -5,7 +5,7 @@ namespace PokeCraft.Domain.Regions;
 
 public readonly struct RegionId
 {
-  private const string EntityType = "Region";
+  public const string EntityType = "Region";
 
   public StreamId StreamId { get; }
   public string Value => StreamId.Value;

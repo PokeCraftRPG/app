@@ -1,0 +1,78 @@
+﻿using FluentValidation;
+using MediatR;
+using PokeCraft.Application.Regions.Models;
+using PokeCraft.Application.Regions.Validators;
+using PokeCraft.Domain;
+using PokeCraft.Domain.Regions;
+
+namespace PokeCraft.Application.Regions.Commands;
+
+public record CreateOrReplaceRegionResult(RegionModel Region, bool Created);
+
+public record CreateOrReplaceRegionCommand(Guid? Id, CreateOrReplaceRegionPayload Payload) : IRequest<CreateOrReplaceRegionResult>;
+
+/// <exception cref="UniqueNameAlreadyUsedException"></exception>
+/// <exception cref="ValidationException"></exception>
+internal class CreateOrReplaceRegionCommandHandler : IRequestHandler<CreateOrReplaceRegionCommand, CreateOrReplaceRegionResult>
+{
+  private readonly IApplicationContext _applicationContext;
+  private readonly IRegionManager _regionManager;
+  private readonly IRegionQuerier _regionQuerier;
+  private readonly IRegionRepository _regionRepository;
+
+  public CreateOrReplaceRegionCommandHandler(
+    IApplicationContext applicationContext,
+    IRegionManager regionManager,
+    IRegionQuerier regionQuerier,
+    IRegionRepository regionRepository)
+  {
+    _applicationContext = applicationContext;
+    _regionManager = regionManager;
+    _regionQuerier = regionQuerier;
+    _regionRepository = regionRepository;
+  }
+
+  public async Task<CreateOrReplaceRegionResult> Handle(CreateOrReplaceRegionCommand command, CancellationToken cancellationToken)
+  {
+    CreateOrReplaceRegionPayload payload = command.Payload;
+    new CreateOrReplaceRegionValidator().ValidateAndThrow(payload);
+
+    RegionId id = RegionId.NewId(_applicationContext.WorldId);
+    Region? region = null;
+    if (command.Id.HasValue)
+    {
+      id = new(id.WorldId, command.Id.Value);
+      region = await _regionRepository.LoadAsync(id, cancellationToken);
+    }
+
+    UserId userId = _applicationContext.UserId;
+    UniqueName uniqueName = new(payload.UniqueName);
+
+    bool created = false;
+    if (region is null)
+    {
+      // TODO(fpion): create permission
+
+      region = new(uniqueName, userId, id);
+      created = true;
+    }
+    else
+    {
+      // TODO(fpion): update permission
+
+      region.UniqueName = uniqueName;
+    }
+
+    region.DisplayName = DisplayName.TryCreate(payload.DisplayName);
+    region.Description = Description.TryCreate(payload.Description);
+
+    region.Link = Url.TryCreate(payload.Link);
+    region.Notes = Notes.TryCreate(payload.Notes);
+
+    region.Update(userId);
+    await _regionManager.SaveAsync(region, cancellationToken);
+
+    RegionModel model = await _regionQuerier.ReadAsync(region, cancellationToken);
+    return new CreateOrReplaceRegionResult(model, created);
+  }
+}

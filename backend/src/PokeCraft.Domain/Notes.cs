@@ -12,6 +12,8 @@ public record Notes
     new Validator().ValidateAndThrow(this);
   }
 
+  public static Notes? TryCreate(string? value) => string.IsNullOrWhiteSpace(value) ? null : new(value);
+
   public override string ToString() => Value;
 
   private class Validator : AbstractValidator<Notes>

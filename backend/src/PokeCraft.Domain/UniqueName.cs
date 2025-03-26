@@ -4,7 +4,6 @@ namespace PokeCraft.Domain;
 
 public record UniqueName
 {
-  public const string AllowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
   public const int MaximumLength = byte.MaxValue;
 
   public string Value { get; }
@@ -21,7 +20,7 @@ public record UniqueName
   {
     public Validator()
     {
-      RuleFor(x => x.Value).UniqueName(AllowedCharacters);
+      RuleFor(x => x.Value).UniqueName();
     }
   }
 }

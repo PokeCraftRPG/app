@@ -1,0 +1,11 @@
+﻿using PokeCraft.Domain.Regions;
+
+namespace PokeCraft.Application.Regions;
+
+public interface IRegionRepository
+{
+  Task<Region?> LoadAsync(RegionId id, CancellationToken cancellationToken = default);
+
+  Task SaveAsync(Region region, CancellationToken cancellationToken = default);
+  Task SaveAsync(IEnumerable<Region> regions, CancellationToken cancellationToken = default);
+}
