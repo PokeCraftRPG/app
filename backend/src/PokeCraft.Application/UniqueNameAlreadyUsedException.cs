@@ -1,6 +1,7 @@
 ﻿using Logitar;
 using Logitar.Portal.Contracts;
 using PokeCraft.Domain;
+using PokeCraft.Domain.Abilities;
 using PokeCraft.Domain.Regions;
 using PokeCraft.Domain.Worlds;
 
@@ -56,8 +57,12 @@ public class UniqueNameAlreadyUsedException : ConflictException
     }
   }
 
+  public UniqueNameAlreadyUsedException(Ability ability, AbilityId conflictId)
+    : this(ability.WorldId, ability.ResourceType, ability.EntityId, conflictId.EntityId, ability.UniqueName, nameof(ability.UniqueName))
+  {
+  }
   public UniqueNameAlreadyUsedException(Region region, RegionId conflictId)
-    : this(region.Id.WorldId, ResourceType.Region, region.Id.EntityId, conflictId.EntityId, region.UniqueName, nameof(region.UniqueName))
+    : this(region.WorldId, region.ResourceType, region.EntityId, conflictId.EntityId, region.UniqueName, nameof(region.UniqueName))
   {
   }
   private UniqueNameAlreadyUsedException(WorldId worldId, ResourceType resourceType, Guid entityId, Guid conflictId, UniqueName uniqueName, string propertyName)
