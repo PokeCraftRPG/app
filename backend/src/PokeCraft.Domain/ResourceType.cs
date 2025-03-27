@@ -3,6 +3,7 @@
 public enum ResourceType
 {
   Ability,
+  Move,
   Region,
   World
 }
