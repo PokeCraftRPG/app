@@ -2,6 +2,7 @@
 
 public enum ResourceType
 {
+  Ability,
   Region,
   World
 }

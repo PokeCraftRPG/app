@@ -1,24 +1,24 @@
 ﻿using Logitar.EventSourcing;
-using PokeCraft.Domain.Regions.Events;
+using PokeCraft.Domain.Abilities.Events;
 using PokeCraft.Domain.Worlds;
 
-namespace PokeCraft.Domain.Regions;
+namespace PokeCraft.Domain.Abilities;
 
-public class Region : AggregateRoot, IResource
+public class Ability : AggregateRoot, IResource
 {
-  private RegionUpdated _updated = new();
+  private AbilityUpdated _updated = new();
   private bool HasUpdates => _updated.UniqueName is not null || _updated.DisplayName is not null || _updated.Description is not null
     || _updated.Link is not null || _updated.Notes is not null;
 
-  public new RegionId Id => new(base.Id);
+  public new AbilityId Id => new(base.Id);
   public WorldId WorldId => Id.WorldId;
-  public ResourceType ResourceType => ResourceType.Region;
+  public ResourceType ResourceType => ResourceType.Ability;
   public Guid EntityId => Id.EntityId;
 
   private UniqueName? _uniqueName = null;
   public UniqueName UniqueName
   {
-    get => _uniqueName ?? throw new InvalidOperationException("The region has not been initialized.");
+    get => _uniqueName ?? throw new InvalidOperationException("The ability has not been initialized.");
     set
     {
       if (_uniqueName != value)
@@ -84,15 +84,15 @@ public class Region : AggregateRoot, IResource
 
   public long Size => UniqueName.Size + (DisplayName?.Size ?? 0) + (Description?.Size ?? 0) + (Link?.Size ?? 0) + (Notes?.Size ?? 0);
 
-  public Region() : base()
+  public Ability() : base()
   {
   }
 
-  public Region(UniqueName uniqueName, UserId userId, RegionId id) : base(id.StreamId)
+  public Ability(UniqueName uniqueName, UserId userId, AbilityId id) : base(id.StreamId)
   {
-    Raise(new RegionCreated(uniqueName), userId.ActorId);
+    Raise(new AbilityCreated(uniqueName), userId.ActorId);
   }
-  protected virtual void Handle(RegionCreated @event)
+  protected virtual void Handle(AbilityCreated @event)
   {
     _uniqueName = @event.UniqueName;
   }
@@ -101,7 +101,7 @@ public class Region : AggregateRoot, IResource
   {
     if (!IsDeleted)
     {
-      Raise(new RegionDeleted(), userId.ActorId);
+      Raise(new AbilityDeleted(), userId.ActorId);
     }
   }
 
@@ -113,7 +113,7 @@ public class Region : AggregateRoot, IResource
       _updated = new();
     }
   }
-  protected virtual void Handle(RegionUpdated @event)
+  protected virtual void Handle(AbilityUpdated @event)
   {
     if (@event.UniqueName is not null)
     {
