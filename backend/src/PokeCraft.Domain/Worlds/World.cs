@@ -52,6 +52,8 @@ public class World : AggregateRoot
     }
   }
 
+  public long Size => UniqueSlug.Size + (DisplayName?.Size ?? 0) + (Description?.Size ?? 0);
+
   public World() : base()
   {
   }

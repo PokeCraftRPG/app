@@ -7,6 +7,7 @@ public record Slug
   public const int MaximumLength = byte.MaxValue;
 
   public string Value { get; }
+  public int Size => Value.Length;
 
   public Slug(string value)
   {

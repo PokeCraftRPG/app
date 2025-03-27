@@ -1,24 +1,29 @@
 ﻿using Logitar.Portal.Contracts;
 using MediatR;
+using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Regions.Models;
+using PokeCraft.Domain;
 
 namespace PokeCraft.Application.Regions.Queries;
 
 public record ReadRegionQuery(Guid? Id, string? UniqueName) : IRequest<RegionModel?>;
 
+/// <exception cref="PermissionDeniedException"></exception>
 /// <exception cref="TooManyResultsException{T}"></exception>
 internal class ReadRegionQueryHandler : IRequestHandler<ReadRegionQuery, RegionModel?>
 {
+  private readonly IPermissionService _permissionService;
   private readonly IRegionQuerier _regionQuerier;
 
-  public ReadRegionQueryHandler(IRegionQuerier regionQuerier)
+  public ReadRegionQueryHandler(IPermissionService permissionService, IRegionQuerier regionQuerier)
   {
+    _permissionService = permissionService;
     _regionQuerier = regionQuerier;
   }
 
   public async Task<RegionModel?> Handle(ReadRegionQuery query, CancellationToken cancellationToken)
   {
-    // TODO(fpion): read permission
+    await _permissionService.EnsureCanViewAsync(ResourceType.Region, cancellationToken);
 
     Dictionary<Guid, RegionModel> regions = new(capacity: 2);
 

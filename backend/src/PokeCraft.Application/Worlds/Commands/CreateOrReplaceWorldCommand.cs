@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Worlds.Models;
 using PokeCraft.Application.Worlds.Validators;
 using PokeCraft.Domain;
@@ -11,22 +12,26 @@ public record CreateOrReplaceWorldResult(WorldModel World, bool Created);
 
 public record CreateOrReplaceWorldCommand(Guid? Id, CreateOrReplaceWorldPayload Payload) : IRequest<CreateOrReplaceWorldResult>;
 
+/// <exception cref="PermissionDeniedException"></exception>
 /// <exception cref="UniqueSlugAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>
 internal class CreateOrReplaceWorldCommandHandler : IRequestHandler<CreateOrReplaceWorldCommand, CreateOrReplaceWorldResult>
 {
   private readonly IApplicationContext _applicationContext;
+  private readonly IPermissionService _permissionService;
   private readonly IWorldManager _worldManager;
   private readonly IWorldQuerier _worldQuerier;
   private readonly IWorldRepository _worldRepository;
 
   public CreateOrReplaceWorldCommandHandler(
     IApplicationContext applicationContext,
+    IPermissionService permissionService,
     IWorldManager worldManager,
     IWorldQuerier worldQuerier,
     IWorldRepository worldRepository)
   {
     _applicationContext = applicationContext;
+    _permissionService = permissionService;
     _worldManager = worldManager;
     _worldQuerier = worldQuerier;
     _worldRepository = worldRepository;
@@ -51,14 +56,14 @@ internal class CreateOrReplaceWorldCommandHandler : IRequestHandler<CreateOrRepl
     bool created = false;
     if (world is null)
     {
-      // TODO(fpion): create permission
+      await _permissionService.EnsureCanCreateAsync(ResourceType.World, cancellationToken);
 
       world = new(ownerId, uniqueSlug, id);
       created = true;
     }
     else
     {
-      // TODO(fpion): update permission
+      await _permissionService.EnsureCanUpdateAsync(world, cancellationToken);
 
       world.UniqueSlug = uniqueSlug;
     }

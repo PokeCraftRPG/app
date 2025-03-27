@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Regions.Models;
 using PokeCraft.Application.Regions.Validators;
 using PokeCraft.Domain;
@@ -11,22 +12,26 @@ public record CreateOrReplaceRegionResult(RegionModel Region, bool Created);
 
 public record CreateOrReplaceRegionCommand(Guid? Id, CreateOrReplaceRegionPayload Payload) : IRequest<CreateOrReplaceRegionResult>;
 
+/// <exception cref="PermissionDeniedException"></exception>
 /// <exception cref="UniqueNameAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>
 internal class CreateOrReplaceRegionCommandHandler : IRequestHandler<CreateOrReplaceRegionCommand, CreateOrReplaceRegionResult>
 {
   private readonly IApplicationContext _applicationContext;
+  private readonly IPermissionService _permissionService;
   private readonly IRegionManager _regionManager;
   private readonly IRegionQuerier _regionQuerier;
   private readonly IRegionRepository _regionRepository;
 
   public CreateOrReplaceRegionCommandHandler(
     IApplicationContext applicationContext,
+    IPermissionService permissionService,
     IRegionManager regionManager,
     IRegionQuerier regionQuerier,
     IRegionRepository regionRepository)
   {
     _applicationContext = applicationContext;
+    _permissionService = permissionService;
     _regionManager = regionManager;
     _regionQuerier = regionQuerier;
     _regionRepository = regionRepository;
@@ -51,14 +56,14 @@ internal class CreateOrReplaceRegionCommandHandler : IRequestHandler<CreateOrRep
     bool created = false;
     if (region is null)
     {
-      // TODO(fpion): create permission
+      await _permissionService.EnsureCanCreateAsync(ResourceType.Region, cancellationToken);
 
       region = new(uniqueName, userId, id);
       created = true;
     }
     else
     {
-      // TODO(fpion): update permission
+      await _permissionService.EnsureCanUpdateAsync(region, cancellationToken);
 
       region.UniqueName = uniqueName;
     }

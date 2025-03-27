@@ -1,15 +1,19 @@
 ﻿using Logitar.EventSourcing;
 using PokeCraft.Domain.Regions.Events;
+using PokeCraft.Domain.Worlds;
 
 namespace PokeCraft.Domain.Regions;
 
-public class Region : AggregateRoot
+public class Region : AggregateRoot, IResource
 {
   private RegionUpdated _updated = new();
   private bool HasUpdates => _updated.UniqueName is not null || _updated.DisplayName is not null || _updated.Description is not null
     || _updated.Link is not null || _updated.Notes is not null;
 
   public new RegionId Id => new(base.Id);
+  public WorldId WorldId => Id.WorldId;
+  public ResourceType ResourceType => ResourceType.Region;
+  public Guid EntityId => Id.EntityId;
 
   private UniqueName? _uniqueName = null;
   public UniqueName UniqueName
@@ -77,6 +81,8 @@ public class Region : AggregateRoot
       }
     }
   }
+
+  public long Size => UniqueName.Size + (DisplayName?.Size ?? 0) + (Description?.Size ?? 0) + (Link?.Size ?? 0) + (Notes?.Size ?? 0);
 
   public Region() : base()
   {

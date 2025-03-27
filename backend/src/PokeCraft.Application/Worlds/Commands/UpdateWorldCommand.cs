@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Worlds.Models;
 using PokeCraft.Application.Worlds.Validators;
 using PokeCraft.Domain;
@@ -9,22 +10,26 @@ namespace PokeCraft.Application.Worlds.Commands;
 
 public record UpdateWorldCommand(Guid Id, UpdateWorldPayload Payload) : IRequest<WorldModel?>;
 
+/// <exception cref="PermissionDeniedException"></exception>
 /// <exception cref="UniqueSlugAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>
 internal class UpdateWorldCommandHandler : IRequestHandler<UpdateWorldCommand, WorldModel?>
 {
   private readonly IApplicationContext _applicationContext;
+  private readonly IPermissionService _permissionService;
   private readonly IWorldManager _worldManager;
   private readonly IWorldQuerier _worldQuerier;
   private readonly IWorldRepository _worldRepository;
 
   public UpdateWorldCommandHandler(
     IApplicationContext applicationContext,
+    IPermissionService permissionService,
     IWorldManager worldManager,
     IWorldQuerier worldQuerier,
     IWorldRepository worldRepository)
   {
     _applicationContext = applicationContext;
+    _permissionService = permissionService;
     _worldManager = worldManager;
     _worldQuerier = worldQuerier;
     _worldRepository = worldRepository;
@@ -41,7 +46,7 @@ internal class UpdateWorldCommandHandler : IRequestHandler<UpdateWorldCommand, W
     {
       return null;
     }
-    // TODO(fpion): update permission
+    await _permissionService.EnsureCanUpdateAsync(world, cancellationToken);
 
     if (!string.IsNullOrWhiteSpace(payload.UniqueSlug))
     {

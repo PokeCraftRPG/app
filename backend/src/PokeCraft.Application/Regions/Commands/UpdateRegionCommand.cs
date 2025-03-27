@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Regions.Models;
 using PokeCraft.Application.Regions.Validators;
 using PokeCraft.Domain;
@@ -9,22 +10,26 @@ namespace PokeCraft.Application.Regions.Commands;
 
 public record UpdateRegionCommand(Guid Id, UpdateRegionPayload Payload) : IRequest<RegionModel?>;
 
+/// <exception cref="PermissionDeniedException"></exception>
 /// <exception cref="UniqueNameAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>
 internal class UpdateRegionCommandHandler : IRequestHandler<UpdateRegionCommand, RegionModel?>
 {
   private readonly IApplicationContext _applicationContext;
+  private readonly IPermissionService _permissionService;
   private readonly IRegionManager _regionManager;
   private readonly IRegionQuerier _regionQuerier;
   private readonly IRegionRepository _regionRepository;
 
   public UpdateRegionCommandHandler(
     IApplicationContext applicationContext,
+    IPermissionService permissionService,
     IRegionManager regionManager,
     IRegionQuerier regionQuerier,
     IRegionRepository regionRepository)
   {
     _applicationContext = applicationContext;
+    _permissionService = permissionService;
     _regionManager = regionManager;
     _regionQuerier = regionQuerier;
     _regionRepository = regionRepository;
@@ -41,7 +46,7 @@ internal class UpdateRegionCommandHandler : IRequestHandler<UpdateRegionCommand,
     {
       return null;
     }
-    // TODO(fpion): update permission
+    await _permissionService.EnsureCanUpdateAsync(region, cancellationToken);
 
     if (!string.IsNullOrWhiteSpace(payload.UniqueName))
     {

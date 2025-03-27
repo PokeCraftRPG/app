@@ -15,10 +15,10 @@ public class UniqueNameAlreadyUsedException : ConflictException
     get => (Guid)Data[nameof(WorldId)]!;
     private set => Data[nameof(WorldId)] = value;
   }
-  public string EntityType
+  public ResourceType ResourceType
   {
-    get => (string)Data[nameof(EntityType)]!;
-    private set => Data[nameof(EntityType)] = value;
+    get => (ResourceType)Data[nameof(ResourceType)]!;
+    private set => Data[nameof(ResourceType)] = value;
   }
   public Guid EntityId
   {
@@ -47,7 +47,7 @@ public class UniqueNameAlreadyUsedException : ConflictException
     {
       Error error = new(this.GetErrorCode(), ErrorMessage);
       error.Data[nameof(WorldId)] = WorldId;
-      error.Data[nameof(EntityType)] = EntityType;
+      error.Data[nameof(ResourceType)] = ResourceType;
       error.Data[nameof(EntityId)] = EntityId;
       error.Data[nameof(ConflictId)] = ConflictId;
       error.Data[nameof(UniqueName)] = UniqueName;
@@ -57,23 +57,23 @@ public class UniqueNameAlreadyUsedException : ConflictException
   }
 
   public UniqueNameAlreadyUsedException(Region region, RegionId conflictId)
-    : this(region.Id.WorldId, RegionId.EntityType, region.Id.EntityId, conflictId.EntityId, region.UniqueName, nameof(region.UniqueName))
+    : this(region.Id.WorldId, ResourceType.Region, region.Id.EntityId, conflictId.EntityId, region.UniqueName, nameof(region.UniqueName))
   {
   }
-  private UniqueNameAlreadyUsedException(WorldId worldId, string entityType, Guid entityId, Guid conflictId, UniqueName uniqueName, string propertyName)
-    : base(BuildMessage(worldId, entityType, entityId, conflictId, uniqueName, propertyName))
+  private UniqueNameAlreadyUsedException(WorldId worldId, ResourceType resourceType, Guid entityId, Guid conflictId, UniqueName uniqueName, string propertyName)
+    : base(BuildMessage(worldId, resourceType, entityId, conflictId, uniqueName, propertyName))
   {
     WorldId = worldId.ToGuid();
-    EntityType = entityType;
+    ResourceType = resourceType;
     EntityId = entityId;
     ConflictId = conflictId;
     UniqueName = uniqueName.Value;
     PropertyName = propertyName;
   }
 
-  private static string BuildMessage(WorldId worldId, string entityType, Guid entityId, Guid conflictId, UniqueName uniqueName, string propertyName) => new ErrorMessageBuilder(ErrorMessage)
+  private static string BuildMessage(WorldId worldId, ResourceType resourceType, Guid entityId, Guid conflictId, UniqueName uniqueName, string propertyName) => new ErrorMessageBuilder(ErrorMessage)
     .AddData(nameof(WorldId), worldId.ToGuid())
-    .AddData(nameof(EntityType), entityType)
+    .AddData(nameof(ResourceType), resourceType)
     .AddData(nameof(EntityId), entityId)
     .AddData(nameof(ConflictId), conflictId)
     .AddData(nameof(UniqueName), uniqueName)

@@ -5,8 +5,6 @@ namespace PokeCraft.Domain.Regions;
 
 public readonly struct RegionId
 {
-  public const string EntityType = "Region";
-
   public StreamId StreamId { get; }
   public string Value => StreamId.Value;
 
@@ -20,13 +18,13 @@ public readonly struct RegionId
   {
     StreamId = streamId;
 
-    Tuple<WorldId, Guid> components = IdHelper.Deconstruct(streamId, EntityType);
+    Tuple<WorldId, Guid> components = IdHelper.Deconstruct(streamId, ResourceType.Region);
     WorldId = components.Item1;
     EntityId = components.Item2;
   }
   public RegionId(WorldId worldId, Guid entityId)
   {
-    StreamId = IdHelper.Construct(worldId, EntityType, entityId);
+    StreamId = IdHelper.Construct(worldId, ResourceType.Region, entityId);
 
     WorldId = worldId;
     EntityId = entityId;

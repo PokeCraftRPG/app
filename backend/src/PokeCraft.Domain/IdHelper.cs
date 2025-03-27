@@ -9,12 +9,12 @@ internal static class IdHelper
   private const char ComponentSeparator = ':';
   private const char Separator = '|';
 
-  public static StreamId Construct(WorldId worldId, string entityType, Guid entityId)
+  public static StreamId Construct(WorldId worldId, ResourceType resourceType, Guid entityId)
   {
-    string value = string.Join(Separator, worldId, string.Join(ComponentSeparator, entityType, Convert.ToBase64String(entityId.ToByteArray()).ToUriSafeBase64()));
+    string value = string.Join(Separator, worldId, string.Join(ComponentSeparator, resourceType, Convert.ToBase64String(entityId.ToByteArray()).ToUriSafeBase64()));
     return new StreamId(value);
   }
-  public static Tuple<WorldId, Guid> Deconstruct(StreamId streamId, string expectedType)
+  public static Tuple<WorldId, Guid> Deconstruct(StreamId streamId, ResourceType expectedType)
   {
     string[] parts = streamId.Value.Split(Separator);
     if (parts.Length != 2)
@@ -30,7 +30,7 @@ internal static class IdHelper
       throw new ArgumentException("The value is not a valid entity ID.", nameof(streamId));
     }
     string entityType = components.First();
-    if (entityType != expectedType)
+    if (entityType != expectedType.ToString())
     {
       throw new ArgumentException($"The entity type '{entityType}' was not expected ({expectedType}).", nameof(streamId));
     }

@@ -7,6 +7,7 @@ public record Url
   public const int MaximumLength = 2048;
 
   public string Value { get; }
+  public int Size => Value.Length;
 
   public Url(string value)
   {

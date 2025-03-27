@@ -1,18 +1,22 @@
 ﻿using Logitar.Portal.Contracts;
 using MediatR;
+using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Worlds.Models;
 
 namespace PokeCraft.Application.Worlds.Queries;
 
 public record ReadWorldQuery(Guid? Id, string? UniqueSlug) : IRequest<WorldModel?>;
 
+/// <exception cref="PermissionDeniedException"></exception>
 /// <exception cref="TooManyResultsException{T}"></exception>
 internal class ReadWorldQueryHandler : IRequestHandler<ReadWorldQuery, WorldModel?>
 {
+  private readonly IPermissionService _permissionService;
   private readonly IWorldQuerier _worldQuerier;
 
-  public ReadWorldQueryHandler(IWorldQuerier worldQuerier)
+  public ReadWorldQueryHandler(IPermissionService permissionService, IWorldQuerier worldQuerier)
   {
+    _permissionService = permissionService;
     _worldQuerier = worldQuerier;
   }
 
@@ -25,7 +29,7 @@ internal class ReadWorldQueryHandler : IRequestHandler<ReadWorldQuery, WorldMode
       WorldModel? world = await _worldQuerier.ReadAsync(query.Id.Value, cancellationToken);
       if (world is not null)
       {
-        // TODO(fpion): read permission
+        await _permissionService.EnsureCanViewAsync(world, cancellationToken);
 
         worlds[world.Id] = world;
       }
@@ -35,7 +39,7 @@ internal class ReadWorldQueryHandler : IRequestHandler<ReadWorldQuery, WorldMode
       WorldModel? world = await _worldQuerier.ReadAsync(query.UniqueSlug, cancellationToken);
       if (world is not null)
       {
-        // TODO(fpion): read permission
+        await _permissionService.EnsureCanViewAsync(world, cancellationToken);
 
         worlds[world.Id] = world;
       }

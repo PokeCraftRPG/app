@@ -5,6 +5,7 @@ namespace PokeCraft.Domain;
 public record Notes
 {
   public string Value { get; }
+  public int Size => Value.Length;
 
   public Notes(string value)
   {
