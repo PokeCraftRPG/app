@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using PokeCraft.Application.Permissions;
+using PokeCraft.Application.Storages;
 using PokeCraft.Application.Worlds.Models;
 using PokeCraft.Application.Worlds.Validators;
 using PokeCraft.Domain;
@@ -12,6 +13,7 @@ public record CreateOrReplaceWorldResult(WorldModel World, bool Created);
 
 public record CreateOrReplaceWorldCommand(Guid? Id, CreateOrReplaceWorldPayload Payload) : IRequest<CreateOrReplaceWorldResult>;
 
+/// <exception cref="NotEnoughAvailableStorageException"></exception>
 /// <exception cref="PermissionDeniedException"></exception>
 /// <exception cref="UniqueSlugAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>

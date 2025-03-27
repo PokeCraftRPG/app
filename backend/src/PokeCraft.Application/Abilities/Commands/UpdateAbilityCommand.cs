@@ -3,6 +3,7 @@ using MediatR;
 using PokeCraft.Application.Abilities.Models;
 using PokeCraft.Application.Abilities.Validators;
 using PokeCraft.Application.Permissions;
+using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Abilities;
 
@@ -10,6 +11,7 @@ namespace PokeCraft.Application.Abilities.Commands;
 
 public record UpdateAbilityCommand(Guid Id, UpdateAbilityPayload Payload) : IRequest<AbilityModel?>;
 
+/// <exception cref="NotEnoughAvailableStorageException"></exception>
 /// <exception cref="PermissionDeniedException"></exception>
 /// <exception cref="UniqueNameAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>

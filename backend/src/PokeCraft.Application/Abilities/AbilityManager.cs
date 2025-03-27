@@ -1,4 +1,5 @@
 ﻿using Logitar.EventSourcing;
+using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Abilities;
 using PokeCraft.Domain.Abilities.Events;
@@ -14,11 +15,13 @@ internal class AbilityManager : IAbilityManager
 {
   private readonly IAbilityQuerier _abilityQuerier;
   private readonly IAbilityRepository _abilityRepository;
+  private readonly IStorageService _storageService;
 
-  public AbilityManager(IAbilityQuerier abilityQuerier, IAbilityRepository abilityRepository)
+  public AbilityManager(IAbilityQuerier abilityQuerier, IAbilityRepository abilityRepository, IStorageService storageService)
   {
     _abilityQuerier = abilityQuerier;
     _abilityRepository = abilityRepository;
+    _storageService = storageService;
   }
 
   public async Task SaveAsync(Ability ability, CancellationToken cancellationToken)
@@ -45,10 +48,10 @@ internal class AbilityManager : IAbilityManager
       }
     }
 
-    // TODO(fpion): ensure storage available
+    await _storageService.EnsureAvailableAsync(ability, cancellationToken);
 
     await _abilityRepository.SaveAsync(ability, cancellationToken);
 
-    // TODO(fpion): update storage
+    await _storageService.UpdateAsync(ability, cancellationToken);
   }
 }

@@ -3,6 +3,7 @@ using MediatR;
 using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Regions.Models;
 using PokeCraft.Application.Regions.Validators;
+using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Regions;
 
@@ -10,6 +11,7 @@ namespace PokeCraft.Application.Regions.Commands;
 
 public record UpdateRegionCommand(Guid Id, UpdateRegionPayload Payload) : IRequest<RegionModel?>;
 
+/// <exception cref="NotEnoughAvailableStorageException"></exception>
 /// <exception cref="PermissionDeniedException"></exception>
 /// <exception cref="UniqueNameAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>

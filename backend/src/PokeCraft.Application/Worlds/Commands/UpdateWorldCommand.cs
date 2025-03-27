@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using PokeCraft.Application.Permissions;
+using PokeCraft.Application.Storages;
 using PokeCraft.Application.Worlds.Models;
 using PokeCraft.Application.Worlds.Validators;
 using PokeCraft.Domain;
@@ -10,6 +11,7 @@ namespace PokeCraft.Application.Worlds.Commands;
 
 public record UpdateWorldCommand(Guid Id, UpdateWorldPayload Payload) : IRequest<WorldModel?>;
 
+/// <exception cref="NotEnoughAvailableStorageException"></exception>
 /// <exception cref="PermissionDeniedException"></exception>
 /// <exception cref="UniqueSlugAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>

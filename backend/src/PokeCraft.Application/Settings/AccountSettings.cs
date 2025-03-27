@@ -4,6 +4,7 @@ namespace PokeCraft.Application.Settings;
 
 internal record AccountSettings
 {
+  public long AllocatedBytes { get; set; } = 5 * 1024 * 1024; // 5 MB
   public int WorldLimit { get; set; } = 3;
 
   public static AccountSettings Initialize(IConfiguration configuration)
@@ -14,6 +15,12 @@ internal record AccountSettings
     if (!string.IsNullOrWhiteSpace(worldLimitValue) && int.TryParse(worldLimitValue, out int worldLimit))
     {
       settings.WorldLimit = worldLimit;
+    }
+
+    string? allocatedBytesValue = Environment.GetEnvironmentVariable("ACCOUNT_ALLOCATED_BYTES");
+    if (!string.IsNullOrWhiteSpace(allocatedBytesValue) && long.TryParse(allocatedBytesValue, out long allocatedBytes))
+    {
+      settings.AllocatedBytes = allocatedBytes;
     }
 
     return settings;

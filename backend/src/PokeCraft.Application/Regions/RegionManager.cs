@@ -1,4 +1,5 @@
 ﻿using Logitar.EventSourcing;
+using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Regions;
 using PokeCraft.Domain.Regions.Events;
@@ -14,11 +15,13 @@ internal class RegionManager : IRegionManager
 {
   private readonly IRegionQuerier _regionQuerier;
   private readonly IRegionRepository _regionRepository;
+  private readonly IStorageService _storageService;
 
-  public RegionManager(IRegionQuerier regionQuerier, IRegionRepository regionRepository)
+  public RegionManager(IRegionQuerier regionQuerier, IRegionRepository regionRepository, IStorageService storageService)
   {
     _regionQuerier = regionQuerier;
     _regionRepository = regionRepository;
+    _storageService = storageService;
   }
 
   public async Task SaveAsync(Region region, CancellationToken cancellationToken)
@@ -45,10 +48,10 @@ internal class RegionManager : IRegionManager
       }
     }
 
-    // TODO(fpion): ensure storage available
+    await _storageService.EnsureAvailableAsync(region, cancellationToken);
 
     await _regionRepository.SaveAsync(region, cancellationToken);
 
-    // TODO(fpion): update storage
+    await _storageService.UpdateAsync(region, cancellationToken);
   }
 }

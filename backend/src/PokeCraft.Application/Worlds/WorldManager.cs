@@ -1,4 +1,6 @@
 ﻿using Logitar.EventSourcing;
+using PokeCraft.Application.Permissions;
+using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Worlds;
 using PokeCraft.Domain.Worlds.Events;
@@ -12,11 +14,13 @@ public interface IWorldManager
 
 internal class WorldManager : IWorldManager
 {
+  private readonly IStorageService _storageService;
   private readonly IWorldQuerier _worldQuerier;
   private readonly IWorldRepository _worldRepository;
 
-  public WorldManager(IWorldQuerier worldQuerier, IWorldRepository worldRepository)
+  public WorldManager(IStorageService storageService, IWorldQuerier worldQuerier, IWorldRepository worldRepository)
   {
+    _storageService = storageService;
     _worldQuerier = worldQuerier;
     _worldRepository = worldRepository;
   }
@@ -45,10 +49,11 @@ internal class WorldManager : IWorldManager
       }
     }
 
-    // TODO(fpion): ensure storage available
+    Resource resource = Resource.From(world);
+    await _storageService.EnsureAvailableAsync(resource, cancellationToken);
 
     await _worldRepository.SaveAsync(world, cancellationToken);
 
-    // TODO(fpion): update storage
+    await _storageService.UpdateAsync(resource, cancellationToken);
   }
 }

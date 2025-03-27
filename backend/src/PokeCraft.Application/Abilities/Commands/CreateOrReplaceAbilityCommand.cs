@@ -3,6 +3,7 @@ using MediatR;
 using PokeCraft.Application.Abilities.Models;
 using PokeCraft.Application.Abilities.Validators;
 using PokeCraft.Application.Permissions;
+using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Abilities;
 
@@ -12,6 +13,7 @@ public record CreateOrReplaceAbilityResult(AbilityModel Ability, bool Created);
 
 public record CreateOrReplaceAbilityCommand(Guid? Id, CreateOrReplaceAbilityPayload Payload) : IRequest<CreateOrReplaceAbilityResult>;
 
+/// <exception cref="NotEnoughAvailableStorageException"></exception>
 /// <exception cref="PermissionDeniedException"></exception>
 /// <exception cref="UniqueNameAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>
