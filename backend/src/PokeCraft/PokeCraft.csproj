@@ -34,4 +34,8 @@
     <ProjectReference Include="..\PokeCraft.Infrastructure\PokeCraft.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="System.Text.Json.Serialization" />
+  </ItemGroup>
+
 </Project>

@@ -19,7 +19,7 @@ internal class Startup : StartupBase
     base.ConfigureServices(services);
 
     services.AddApplicationInsightsTelemetry();
-    services.AddControllers();
+    services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
     services.AddFeatureManagement();
     services.AddOpenApi();
     services.AddSwagger();
