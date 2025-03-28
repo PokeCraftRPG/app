@@ -26,18 +26,26 @@ internal class SpeciesManager : ISpeciesManager
 
   public async Task SaveAsync(Species species, CancellationToken cancellationToken)
   {
-    // TODO(fpion): number
     UniqueName? uniqueName = null;
-    // TODO(fpion): regional numbers
     foreach (IEvent change in species.Changes)
     {
       if (change is SpeciesCreated created)
       {
+        SpeciesId? conflictId = await _speciesQuerier.FindIdAsync(created.Number, cancellationToken);
+        if (conflictId.HasValue && !conflictId.Value.Equals(species.Id))
+        {
+          // TODO(fpion): implement
+        }
+
         uniqueName = created.UniqueName;
       }
       else if (change is SpeciesUpdated updated && updated.UniqueName is not null)
       {
         uniqueName = updated.UniqueName;
+      }
+      else if (change is SpeciesRegionalNumberChanged changed && changed.Number is not null)
+      {
+        // TODO(fpion): implement
       }
     }
 

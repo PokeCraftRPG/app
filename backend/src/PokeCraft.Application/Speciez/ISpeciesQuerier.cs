@@ -6,6 +6,7 @@ namespace PokeCraft.Application.Speciez;
 
 public interface ISpeciesQuerier
 {
+  Task<SpeciesId?> FindIdAsync(SpeciesNumber number, CancellationToken cancellationToken = default);
   Task<SpeciesId?> FindIdAsync(UniqueName uniqueName, CancellationToken cancellationToken = default);
 
   Task<SpeciesModel> ReadAsync(Species species, CancellationToken cancellationToken = default);

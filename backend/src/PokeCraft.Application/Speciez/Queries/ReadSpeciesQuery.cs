@@ -37,7 +37,7 @@ internal class ReadSpeciesQueryHandler : IRequestHandler<ReadSpeciesQuery, Speci
     }
     if (query.Number.HasValue)
     {
-      // TODO(fpion): regional number search
+      // TODO(fpion): regional number search with permission check
 
       SpeciesModel? species = await _speciesQuerier.ReadAsync(query.Number.Value, cancellationToken);
       if (species is not null)
