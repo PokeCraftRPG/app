@@ -2,9 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PokeCraft.Application.Abilities;
+using PokeCraft.Application.Moves;
 using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Regions;
 using PokeCraft.Application.Settings;
+using PokeCraft.Application.Speciez;
 using PokeCraft.Application.Storages;
 using PokeCraft.Application.Worlds;
 
@@ -27,7 +29,9 @@ public static class DependencyInjectionExtensions
   {
     return services
       .AddTransient<IAbilityManager, AbilityManager>()
+      .AddTransient<IMoveManager, MoveManager>()
       .AddTransient<IRegionManager, RegionManager>()
+      .AddTransient<ISpeciesManager, SpeciesManager>()
       .AddTransient<IWorldManager, WorldManager>();
   }
 

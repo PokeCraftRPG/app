@@ -4,6 +4,7 @@ using PokeCraft.Domain;
 using PokeCraft.Domain.Abilities;
 using PokeCraft.Domain.Moves;
 using PokeCraft.Domain.Regions;
+using PokeCraft.Domain.Speciez;
 using PokeCraft.Domain.Worlds;
 
 namespace PokeCraft.Application;
@@ -68,6 +69,10 @@ public class UniqueNameAlreadyUsedException : ConflictException
   }
   public UniqueNameAlreadyUsedException(Region region, RegionId conflictId)
     : this(region.WorldId, region.ResourceType, region.EntityId, conflictId.EntityId, region.UniqueName, nameof(region.UniqueName))
+  {
+  }
+  public UniqueNameAlreadyUsedException(Species species, SpeciesId conflictId)
+    : this(species.WorldId, species.ResourceType, species.EntityId, conflictId.EntityId, species.UniqueName, nameof(species.UniqueName))
   {
   }
   private UniqueNameAlreadyUsedException(WorldId worldId, ResourceType resourceType, Guid entityId, Guid conflictId, UniqueName uniqueName, string propertyName)
