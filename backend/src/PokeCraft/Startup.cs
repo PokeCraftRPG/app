@@ -1,4 +1,5 @@
 ﻿using Microsoft.FeatureManagement;
+using PokeCraft.Application;
 using PokeCraft.Constants;
 using PokeCraft.Extensions;
 
@@ -18,12 +19,14 @@ internal class Startup : StartupBase
     base.ConfigureServices(services);
 
     services.AddApplicationInsightsTelemetry();
-    services.AddControllers();
+    services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
     services.AddFeatureManagement();
     services.AddOpenApi();
     services.AddSwagger();
 
     IHealthChecksBuilder healthChecks = services.AddHealthChecks();
+
+    services.AddPokeCraftApplication();
   }
 
   public override void Configure(IApplicationBuilder builder)
