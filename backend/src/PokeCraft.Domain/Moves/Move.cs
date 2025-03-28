@@ -81,7 +81,7 @@ public class Move : AggregateRoot, IResource
   public Power? Power
   {
     get => _power;
-    set
+    set // TODO(fpion): Status moves should not have power.
     {
       if (_power != value)
       {
@@ -149,7 +149,13 @@ public class Move : AggregateRoot, IResource
     }
   }
 
-  public long Size => UniqueName.Size + (DisplayName?.Size ?? 0) + (Description?.Size ?? 0) + (Link?.Size ?? 0) + (Notes?.Size ?? 0);
+  public long Size => Type.ToString().Length + Category.ToString().Length
+    + UniqueName.Size + (DisplayName?.Size ?? 0) + (Description?.Size ?? 0)
+    + 1 /* Accuracy */ + 1 /* Power */ + 1 /* Power Points */
+    + (InflictedStatus?.Condition.ToString().Length ?? 0) + 1 /* Status Chance */
+    + StatisticChanges.Sum(x => x.Key.ToString().Length + 1)
+    + VolatileConditions.Sum(x => x.Size)
+    + (Link?.Size ?? 0) + (Notes?.Size ?? 0);
 
   public Move() : base()
   {

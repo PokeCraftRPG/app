@@ -2,7 +2,7 @@
 
 public enum MoveCategory
 {
-  Physical,
-  Special,
-  Status
+  Status = 0,
+  Physical = 1,
+  Special = 2
 }
