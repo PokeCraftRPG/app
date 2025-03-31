@@ -1,6 +1,8 @@
 ﻿using Logitar.Portal.Contracts;
 using MediatR;
 using PokeCraft.Application.Permissions;
+using PokeCraft.Application.Regions;
+using PokeCraft.Application.Regions.Models;
 using PokeCraft.Application.Speciez.Models;
 using PokeCraft.Domain;
 
@@ -9,15 +11,18 @@ namespace PokeCraft.Application.Speciez.Queries;
 public record ReadSpeciesQuery(Guid? Id, int? Number, string? UniqueName, string? Region) : IRequest<SpeciesModel?>;
 
 /// <exception cref="PermissionDeniedException"></exception>
+/// <exception cref="RegionNotFoundException"></exception>
 /// <exception cref="TooManyResultsException{T}"></exception>
 internal class ReadSpeciesQueryHandler : IRequestHandler<ReadSpeciesQuery, SpeciesModel?>
 {
   private readonly IPermissionService _permissionService;
+  private readonly IRegionQuerier _regionQuerier;
   private readonly ISpeciesQuerier _speciesQuerier;
 
-  public ReadSpeciesQueryHandler(IPermissionService permissionService, ISpeciesQuerier speciesQuerier)
+  public ReadSpeciesQueryHandler(IPermissionService permissionService, IRegionQuerier regionQuerier, ISpeciesQuerier speciesQuerier)
   {
     _permissionService = permissionService;
+    _regionQuerier = regionQuerier;
     _speciesQuerier = speciesQuerier;
   }
 
@@ -37,9 +42,15 @@ internal class ReadSpeciesQueryHandler : IRequestHandler<ReadSpeciesQuery, Speci
     }
     if (query.Number.HasValue)
     {
-      // TODO(fpion): regional number search with permission check
+      RegionModel? region = null;
+      if (!string.IsNullOrWhiteSpace(query.Region))
+      {
+        await _permissionService.EnsureCanViewAsync(ResourceType.Region, cancellationToken);
 
-      SpeciesModel? species = await _speciesQuerier.ReadAsync(query.Number.Value, cancellationToken);
+        region = await FindRegionAsync(query.Region, cancellationToken);
+      }
+
+      SpeciesModel? species = await _speciesQuerier.ReadAsync(query.Number.Value, region, cancellationToken);
       if (species is not null)
       {
         foundSpecies[species.Id] = species;
@@ -60,5 +71,19 @@ internal class ReadSpeciesQueryHandler : IRequestHandler<ReadSpeciesQuery, Speci
     }
 
     return foundSpecies.Values.SingleOrDefault();
+  }
+
+  private async Task<RegionModel> FindRegionAsync(string idOrUniqueName, CancellationToken cancellationToken)
+  {
+    if (Guid.TryParse(idOrUniqueName, out Guid id))
+    {
+      RegionModel? region = await _regionQuerier.ReadAsync(id, cancellationToken);
+      if (region is not null)
+      {
+        return region;
+      }
+    }
+
+    return await _regionQuerier.ReadAsync(idOrUniqueName, cancellationToken) ?? throw new RegionNotFoundException(idOrUniqueName, "region");
   }
 }

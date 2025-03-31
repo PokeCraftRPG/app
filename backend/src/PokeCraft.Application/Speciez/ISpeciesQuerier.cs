@@ -1,4 +1,5 @@
-﻿using PokeCraft.Application.Speciez.Models;
+﻿using PokeCraft.Application.Regions.Models;
+using PokeCraft.Application.Speciez.Models;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Speciez;
 
@@ -12,5 +13,6 @@ public interface ISpeciesQuerier
   Task<SpeciesModel> ReadAsync(Species species, CancellationToken cancellationToken = default);
   Task<SpeciesModel?> ReadAsync(Guid id, CancellationToken cancellationToken = default);
   Task<SpeciesModel?> ReadAsync(int number, CancellationToken cancellationToken = default);
+  Task<SpeciesModel?> ReadAsync(int number, RegionModel? region, CancellationToken cancellationToken = default);
   Task<SpeciesModel?> ReadAsync(string uniqueName, CancellationToken cancellationToken = default);
 }
