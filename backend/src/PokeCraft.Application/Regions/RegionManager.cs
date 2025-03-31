@@ -25,8 +25,10 @@ internal class RegionManager : IRegionManager
     _storageService = storageService;
   }
 
-  public Task<IReadOnlyDictionary<string, Region>> FindAsync(IEnumerable<string> idOrUniqueNames, CancellationToken cancellationToken)
+  public async Task<IReadOnlyDictionary<string, Region>> FindAsync(IEnumerable<string> idOrUniqueNames, CancellationToken cancellationToken)
   {
+    IReadOnlyDictionary<Guid, string> uniqueNameByIds = await _regionQuerier.GetUniqueNameByIdsAsync(cancellationToken);
+
     throw new NotImplementedException(); // TODO(fpion): implement
   }
 
