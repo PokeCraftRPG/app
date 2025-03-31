@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Settings;
-using PokeCraft.Application.Speciez;
 using PokeCraft.Application.Storages;
 using PokeCraft.Application.Worlds;
 
@@ -25,7 +24,6 @@ public static class DependencyInjectionExtensions
   private static IServiceCollection AddManagers(this IServiceCollection services)
   {
     return services
-      .AddTransient<ISpeciesManager, SpeciesManager>()
       .AddTransient<IWorldManager, WorldManager>();
   }
 

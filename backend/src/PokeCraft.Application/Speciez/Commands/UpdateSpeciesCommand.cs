@@ -24,7 +24,6 @@ internal class UpdateSpeciesCommandHandler : IRequestHandler<UpdateSpeciesComman
   private readonly IApplicationContext _applicationContext;
   private readonly IMediator _mediator;
   private readonly IPermissionService _permissionService;
-  private readonly ISpeciesManager _speciesManager;
   private readonly ISpeciesQuerier _speciesQuerier;
   private readonly ISpeciesRepository _speciesRepository;
 
@@ -32,14 +31,12 @@ internal class UpdateSpeciesCommandHandler : IRequestHandler<UpdateSpeciesComman
     IApplicationContext applicationContext,
     IMediator mediator,
     IPermissionService permissionService,
-    ISpeciesManager speciesManager,
     ISpeciesQuerier speciesQuerier,
     ISpeciesRepository speciesRepository)
   {
     _applicationContext = applicationContext;
     _mediator = mediator;
     _permissionService = permissionService;
-    _speciesManager = speciesManager;
     _speciesQuerier = speciesQuerier;
     _speciesRepository = speciesRepository;
   }
@@ -96,7 +93,7 @@ internal class UpdateSpeciesCommandHandler : IRequestHandler<UpdateSpeciesComman
     }
 
     species.Update(userId);
-    await _speciesManager.SaveAsync(species, cancellationToken);
+    await _mediator.Send(new SaveSpeciesCommand(species), cancellationToken);
 
     return await _speciesQuerier.ReadAsync(species, cancellationToken);
   }

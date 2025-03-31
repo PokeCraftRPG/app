@@ -1,31 +1,31 @@
 ﻿using Logitar.EventSourcing;
+using MediatR;
 using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Speciez;
 using PokeCraft.Domain.Speciez.Events;
 
-namespace PokeCraft.Application.Speciez;
+namespace PokeCraft.Application.Speciez.Commands;
 
-public interface ISpeciesManager
-{
-  Task SaveAsync(Species species, CancellationToken cancellationToken = default);
-}
+internal record SaveSpeciesCommand(Species Species) : IRequest;
 
-internal class SpeciesManager : ISpeciesManager
+internal class SaveSpeciesCommandHandler : IRequestHandler<SaveSpeciesCommand>
 {
   private readonly ISpeciesQuerier _speciesQuerier;
   private readonly ISpeciesRepository _speciesRepository;
   private readonly IStorageService _storageService;
 
-  public SpeciesManager(ISpeciesQuerier speciesQuerier, ISpeciesRepository speciesRepository, IStorageService storageService)
+  public SaveSpeciesCommandHandler(ISpeciesQuerier speciesQuerier, ISpeciesRepository speciesRepository, IStorageService storageService)
   {
     _speciesQuerier = speciesQuerier;
     _speciesRepository = speciesRepository;
     _storageService = storageService;
   }
 
-  public async Task SaveAsync(Species species, CancellationToken cancellationToken)
+  public async Task Handle(SaveSpeciesCommand command, CancellationToken cancellationToken)
   {
+    Species species = command.Species;
+
     UniqueName? uniqueName = null;
     foreach (IEvent change in species.Changes)
     {

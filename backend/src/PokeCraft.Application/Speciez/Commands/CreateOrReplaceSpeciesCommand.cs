@@ -26,7 +26,6 @@ internal class CreateOrReplaceSpeciesCommandHandler : IRequestHandler<CreateOrRe
   private readonly IApplicationContext _applicationContext;
   private readonly IMediator _mediator;
   private readonly IPermissionService _permissionService;
-  private readonly ISpeciesManager _speciesManager;
   private readonly ISpeciesQuerier _speciesQuerier;
   private readonly ISpeciesRepository _speciesRepository;
 
@@ -34,14 +33,12 @@ internal class CreateOrReplaceSpeciesCommandHandler : IRequestHandler<CreateOrRe
     IApplicationContext applicationContext,
     IMediator mediator,
     IPermissionService permissionService,
-    ISpeciesManager speciesManager,
     ISpeciesQuerier speciesQuerier,
     ISpeciesRepository speciesRepository)
   {
     _applicationContext = applicationContext;
     _mediator = mediator;
     _permissionService = permissionService;
-    _speciesManager = speciesManager;
     _speciesQuerier = speciesQuerier;
     _speciesRepository = speciesRepository;
   }
@@ -92,7 +89,7 @@ internal class CreateOrReplaceSpeciesCommandHandler : IRequestHandler<CreateOrRe
     species.Notes = Notes.TryCreate(payload.Notes);
 
     species.Update(userId);
-    await _speciesManager.SaveAsync(species, cancellationToken);
+    await _mediator.Send(new SaveSpeciesCommand(species), cancellationToken);
 
     SpeciesModel model = await _speciesQuerier.ReadAsync(species, cancellationToken);
     return new CreateOrReplaceSpeciesResult(model, created);
