@@ -52,9 +52,17 @@ internal class RegionManager : IRegionManager
       {
         ids.Add(new RegionId(worldId, entityId));
       }
+      else
+      {
+        // TODO(fpion): implement
+      }
     }
 
-    throw new NotImplementedException(); // TODO(fpion): implement
+    IReadOnlyCollection<Region> regions = await _regionRepository.LoadAsync(ids, cancellationToken);
+
+    Dictionary<string, Region> foundRegions = new(capacity);
+    // TODO(fpion): implement
+    return foundRegions.AsReadOnly();
   }
 
   public async Task SaveAsync(Region region, CancellationToken cancellationToken)
