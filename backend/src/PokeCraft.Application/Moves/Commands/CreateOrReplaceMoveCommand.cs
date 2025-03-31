@@ -21,20 +21,20 @@ public record CreateOrReplaceMoveCommand(Guid? Id, CreateOrReplaceMovePayload Pa
 internal class CreateOrReplaceMoveCommandHandler : IRequestHandler<CreateOrReplaceMoveCommand, CreateOrReplaceMoveResult>
 {
   private readonly IApplicationContext _applicationContext;
-  private readonly IMoveManager _moveManager;
+  private readonly IMediator _mediator;
   private readonly IMoveQuerier _moveQuerier;
   private readonly IMoveRepository _moveRepository;
   private readonly IPermissionService _permissionService;
 
   public CreateOrReplaceMoveCommandHandler(
     IApplicationContext applicationContext,
-    IMoveManager moveManager,
+    IMediator mediator,
     IMoveQuerier moveQuerier,
     IMoveRepository moveRepository,
     IPermissionService permissionService)
   {
     _applicationContext = applicationContext;
-    _moveManager = moveManager;
+    _mediator = mediator;
     _moveQuerier = moveQuerier;
     _moveRepository = moveRepository;
     _permissionService = permissionService;
@@ -87,7 +87,7 @@ internal class CreateOrReplaceMoveCommandHandler : IRequestHandler<CreateOrRepla
     move.Notes = Notes.TryCreate(payload.Notes);
 
     move.Update(userId);
-    await _moveManager.SaveAsync(move, cancellationToken);
+    await _mediator.Send(new SaveMoveCommand(move), cancellationToken);
 
     MoveModel model = await _moveQuerier.ReadAsync(move, cancellationToken);
     return new CreateOrReplaceMoveResult(model, created);

@@ -20,20 +20,20 @@ public record UpdateMoveCommand(Guid Id, UpdateMovePayload Payload) : IRequest<M
 internal class UpdateMoveCommandHandler : IRequestHandler<UpdateMoveCommand, MoveModel?>
 {
   private readonly IApplicationContext _applicationContext;
-  private readonly IMoveManager _moveManager;
+  private readonly IMediator _mediator;
   private readonly IMoveQuerier _moveQuerier;
   private readonly IMoveRepository _moveRepository;
   private readonly IPermissionService _permissionService;
 
   public UpdateMoveCommandHandler(
     IApplicationContext applicationContext,
-    IMoveManager moveManager,
+    IMediator mediator,
     IMoveQuerier moveQuerier,
     IMoveRepository moveRepository,
     IPermissionService permissionService)
   {
     _applicationContext = applicationContext;
-    _moveManager = moveManager;
+    _mediator = mediator;
     _moveQuerier = moveQuerier;
     _moveRepository = moveRepository;
     _permissionService = permissionService;
@@ -98,7 +98,7 @@ internal class UpdateMoveCommandHandler : IRequestHandler<UpdateMoveCommand, Mov
     }
 
     move.Update(_applicationContext.UserId);
-    await _moveManager.SaveAsync(move, cancellationToken);
+    await _mediator.Send(new SaveMoveCommand(move), cancellationToken);
 
     return await _moveQuerier.ReadAsync(move, cancellationToken);
   }

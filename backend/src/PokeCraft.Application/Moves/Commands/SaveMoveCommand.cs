@@ -1,31 +1,31 @@
 ﻿using Logitar.EventSourcing;
+using MediatR;
 using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Moves;
 using PokeCraft.Domain.Moves.Events;
 
-namespace PokeCraft.Application.Moves;
+namespace PokeCraft.Application.Moves.Commands;
 
-public interface IMoveManager
-{
-  Task SaveAsync(Move move, CancellationToken cancellationToken = default);
-}
+internal record SaveMoveCommand(Move Move) : IRequest;
 
-internal class MoveManager : IMoveManager
+internal class SaveMoveCommandHandler : IRequestHandler<SaveMoveCommand>
 {
   private readonly IMoveQuerier _moveQuerier;
   private readonly IMoveRepository _moveRepository;
   private readonly IStorageService _storageService;
 
-  public MoveManager(IMoveQuerier moveQuerier, IMoveRepository moveRepository, IStorageService storageService)
+  public SaveMoveCommandHandler(IMoveQuerier moveQuerier, IMoveRepository moveRepository, IStorageService storageService)
   {
     _moveQuerier = moveQuerier;
     _moveRepository = moveRepository;
     _storageService = storageService;
   }
 
-  public async Task SaveAsync(Move move, CancellationToken cancellationToken)
+  public async Task Handle(SaveMoveCommand command, CancellationToken cancellationToken)
   {
+    Move move = command.Move;
+
     UniqueName? uniqueName = null;
     foreach (IEvent change in move.Changes)
     {

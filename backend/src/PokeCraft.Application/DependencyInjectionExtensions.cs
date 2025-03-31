@@ -1,7 +1,6 @@
 ﻿using Logitar.EventSourcing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PokeCraft.Application.Moves;
 using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Regions;
 using PokeCraft.Application.Settings;
@@ -27,7 +26,6 @@ public static class DependencyInjectionExtensions
   private static IServiceCollection AddManagers(this IServiceCollection services)
   {
     return services
-      .AddTransient<IMoveManager, MoveManager>()
       .AddTransient<IRegionManager, RegionManager>()
       .AddTransient<ISpeciesManager, SpeciesManager>()
       .AddTransient<IWorldManager, WorldManager>();
