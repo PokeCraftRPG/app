@@ -44,6 +44,7 @@ internal class RegionManager : IRegionManager
 
     int capacity = idOrUniqueNames.Count();
     HashSet<RegionId> ids = new(capacity);
+    HashSet<string> notFound = new(capacity);
     WorldId worldId = _applicationContext.WorldId;
     foreach (string idOrUniqueName in idOrUniqueNames)
     {
@@ -54,14 +55,29 @@ internal class RegionManager : IRegionManager
       }
       else
       {
-        // TODO(fpion): implement
+        notFound.Add(idOrUniqueName);
       }
     }
 
+    if (notFound.Count > 0)
+    {
+      // TODO(fpion): implement
+    }
+
     IReadOnlyCollection<Region> regions = await _regionRepository.LoadAsync(ids, cancellationToken);
+    Dictionary<Guid, Region> regionsById = new(capacity: regions.Count);
+    Dictionary<string, Region> regionsByUniqueName = new(capacity: regions.Count);
+    foreach (Region region in regions)
+    {
+      regionsById[region.EntityId] = region;
+      regionsByUniqueName[Normalize(region.UniqueName.Value)] = region;
+    }
 
     Dictionary<string, Region> foundRegions = new(capacity);
-    // TODO(fpion): implement
+    foreach (string idOrUniqueName in idOrUniqueNames)
+    {
+      // TODO(fpion): implement
+    }
     return foundRegions.AsReadOnly();
   }
 
