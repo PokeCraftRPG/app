@@ -2,6 +2,7 @@
 using PokeCraft.Application;
 using PokeCraft.Constants;
 using PokeCraft.Extensions;
+using PokeCraft.Infrastructure;
 
 namespace PokeCraft;
 
@@ -27,6 +28,8 @@ internal class Startup : StartupBase
     IHealthChecksBuilder healthChecks = services.AddHealthChecks();
 
     services.AddPokeCraftApplication();
+    services.AddPokeCraftInfrastructure();
+    services.AddSingleton<IApplicationContext, HttpApplicationContext>();
   }
 
   public override void Configure(IApplicationBuilder builder)
