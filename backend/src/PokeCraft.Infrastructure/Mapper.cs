@@ -4,6 +4,7 @@ using Logitar.Portal.Contracts;
 using Logitar.Portal.Contracts.Actors;
 using PokeCraft.Application.Abilities.Models;
 using PokeCraft.Application.Moves.Models;
+using PokeCraft.Application.Regions.Models;
 using PokeCraft.Application.Worlds.Models;
 using PokeCraft.Infrastructure.Entities;
 
@@ -83,6 +84,33 @@ internal class Mapper
     };
     destination.StatisticChanges.AddRange(source.GetStatisticChanges().Select(x => new StatisticChangeModel(x)));
     destination.VolatileConditions.AddRange(source.GetVolatileConditions());
+
+    MapAggregate(source, destination);
+
+    return destination;
+  }
+
+  public RegionModel ToRegion(RegionEntity source)
+  {
+    if (source.World is null)
+    {
+      throw new ArgumentException($"The {nameof(source.World)} is required.", nameof(source));
+    }
+    WorldModel world = ToWorld(source.World);
+    return ToRegion(source, world);
+  }
+  public RegionModel ToRegion(RegionEntity source, WorldModel world)
+  {
+    RegionModel destination = new()
+    {
+      Id = source.Id,
+      World = world,
+      UniqueName = source.UniqueName,
+      DisplayName = source.DisplayName,
+      Description = source.Description,
+      Link = source.Link,
+      Notes = source.Notes
+    };
 
     MapAggregate(source, destination);
 
