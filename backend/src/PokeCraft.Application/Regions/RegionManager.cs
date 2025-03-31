@@ -9,7 +9,7 @@ namespace PokeCraft.Application.Regions;
 
 public interface IRegionManager
 {
-  Task<IReadOnlyDictionary<string, Region>> FindAsync(IEnumerable<string> idOrUniqueNames, CancellationToken cancellationToken = default);
+  Task<IReadOnlyDictionary<string, Region>> FindAsync(IEnumerable<string> idOrUniqueNames, string propertyName, CancellationToken cancellationToken = default);
   Task SaveAsync(Region region, CancellationToken cancellationToken = default);
 }
 
@@ -32,7 +32,7 @@ internal class RegionManager : IRegionManager
     _storageService = storageService;
   }
 
-  public async Task<IReadOnlyDictionary<string, Region>> FindAsync(IEnumerable<string> idOrUniqueNames, CancellationToken cancellationToken)
+  public async Task<IReadOnlyDictionary<string, Region>> FindAsync(IEnumerable<string> idOrUniqueNames, string propertyName, CancellationToken cancellationToken)
   {
     IReadOnlyDictionary<Guid, string> uniqueNameByIds = await _regionQuerier.GetUniqueNameByIdsAsync(cancellationToken);
 
@@ -61,7 +61,7 @@ internal class RegionManager : IRegionManager
 
     if (notFound.Count > 0)
     {
-      // TODO(fpion): implement
+      throw new RegionsNotFoundException(worldId, notFound, propertyName);
     }
 
     IReadOnlyCollection<Region> regions = await _regionRepository.LoadAsync(ids, cancellationToken);

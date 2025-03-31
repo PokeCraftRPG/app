@@ -101,7 +101,7 @@ internal class CreateOrReplaceSpeciesCommandHandler : IRequestHandler<CreateOrRe
     await _permissionService.EnsureCanViewAsync(ResourceType.Region, cancellationToken);
 
     IEnumerable<string> idOrUniqueNames = payload.RegionalNumbers.Select(x => x.Region);
-    IReadOnlyDictionary<string, Region> regions = await _regionManager.FindAsync(idOrUniqueNames, cancellationToken);
+    IReadOnlyDictionary<string, Region> regions = await _regionManager.FindAsync(idOrUniqueNames, nameof(payload.RegionalNumbers), cancellationToken);
 
     HashSet<RegionId> regionIds = regions.Select(x => x.Value.Id).ToHashSet();
     foreach (RegionId regionId in species.RegionalNumbers.Keys)

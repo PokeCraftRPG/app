@@ -104,7 +104,7 @@ internal class UpdateSpeciesCommandHandler : IRequestHandler<UpdateSpeciesComman
     await _permissionService.EnsureCanViewAsync(ResourceType.Region, cancellationToken);
 
     IEnumerable<string> idOrUniqueNames = payload.RegionalNumbers.Select(x => x.Region);
-    IReadOnlyDictionary<string, Region> regions = await _regionManager.FindAsync(idOrUniqueNames, cancellationToken);
+    IReadOnlyDictionary<string, Region> regions = await _regionManager.FindAsync(idOrUniqueNames, nameof(payload.RegionalNumbers), cancellationToken);
 
     foreach (RegionalNumberUpdatePayload regional in payload.RegionalNumbers)
     {
