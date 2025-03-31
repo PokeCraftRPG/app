@@ -15,12 +15,18 @@ public record ReadSpeciesQuery(Guid? Id, int? Number, string? UniqueName, string
 /// <exception cref="TooManyResultsException{T}"></exception>
 internal class ReadSpeciesQueryHandler : IRequestHandler<ReadSpeciesQuery, SpeciesModel?>
 {
+  private readonly IApplicationContext _applicationContext;
   private readonly IPermissionService _permissionService;
   private readonly IRegionQuerier _regionQuerier;
   private readonly ISpeciesQuerier _speciesQuerier;
 
-  public ReadSpeciesQueryHandler(IPermissionService permissionService, IRegionQuerier regionQuerier, ISpeciesQuerier speciesQuerier)
+  public ReadSpeciesQueryHandler(
+    IApplicationContext applicationContext,
+    IPermissionService permissionService,
+    IRegionQuerier regionQuerier,
+    ISpeciesQuerier speciesQuerier)
   {
+    _applicationContext = applicationContext;
     _permissionService = permissionService;
     _regionQuerier = regionQuerier;
     _speciesQuerier = speciesQuerier;
@@ -84,6 +90,7 @@ internal class ReadSpeciesQueryHandler : IRequestHandler<ReadSpeciesQuery, Speci
       }
     }
 
-    return await _regionQuerier.ReadAsync(idOrUniqueName, cancellationToken) ?? throw new RegionNotFoundException(idOrUniqueName, "region");
+    return await _regionQuerier.ReadAsync(idOrUniqueName, cancellationToken)
+      ?? throw new RegionNotFoundException(_applicationContext.WorldId, idOrUniqueName, "region");
   }
 }
