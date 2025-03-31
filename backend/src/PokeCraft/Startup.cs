@@ -1,8 +1,10 @@
-﻿using Microsoft.FeatureManagement;
+﻿using Logitar.EventSourcing.EntityFrameworkCore.Relational;
+using Microsoft.FeatureManagement;
 using PokeCraft.Application;
 using PokeCraft.Constants;
 using PokeCraft.Extensions;
 using PokeCraft.Infrastructure;
+using PokeCraft.Infrastructure.SqlServer;
 
 namespace PokeCraft;
 
@@ -30,6 +32,25 @@ internal class Startup : StartupBase
     services.AddPokeCraftApplication();
     services.AddPokeCraftInfrastructure();
     services.AddSingleton<IApplicationContext, HttpApplicationContext>();
+
+    DatabaseProvider databaseProvider = GetDatabaseProvider();
+    switch (databaseProvider)
+    {
+      case DatabaseProvider.SqlServer:
+        services.AddPokeCraftInfrastructureSqlServer(_configuration);
+        healthChecks.AddDbContextCheck<EventContext>();
+        healthChecks.AddDbContextCheck<PokemonContext>();
+        break;
+      default:
+        throw new DatabaseProviderNotSupportedException(databaseProvider);
+    }
+  }
+  private DatabaseProvider GetDatabaseProvider()
+  {
+    string? databaseProvider = Environment.GetEnvironmentVariable("DATABASE_PROVIDER");
+    return !string.IsNullOrWhiteSpace(databaseProvider)
+      ? Enum.Parse<DatabaseProvider>(databaseProvider)
+      : (_configuration.GetValue<DatabaseProvider?>("DatabaseProvider") ?? DatabaseProvider.SqlServer);
   }
 
   public override void Configure(IApplicationBuilder builder)

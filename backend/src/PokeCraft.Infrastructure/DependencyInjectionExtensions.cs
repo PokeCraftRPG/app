@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Logitar.EventSourcing.EntityFrameworkCore.Relational;
+using Logitar.EventSourcing.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using PokeCraft.Application.Abilities;
 using PokeCraft.Application.Moves;
 using PokeCraft.Application.Regions;
@@ -15,6 +17,8 @@ public static class DependencyInjectionExtensions
   public static IServiceCollection AddPokeCraftInfrastructure(this IServiceCollection services)
   {
     return services
+      .AddLogitarEventSourcingInfrastructure() // TODO(fpion): EventSerializer
+      .AddLogitarEventSourcingWithEntityFrameworkCoreRelational()
       .AddMemoryCache()
       .AddQueriers()
       .AddRepositories()
