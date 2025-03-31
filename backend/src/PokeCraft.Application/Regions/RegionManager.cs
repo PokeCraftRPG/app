@@ -14,18 +14,12 @@ public interface IRegionManager
 
 internal class RegionManager : IRegionManager
 {
-  private readonly IApplicationContext _applicationContext;
   private readonly IRegionQuerier _regionQuerier;
   private readonly IRegionRepository _regionRepository;
   private readonly IStorageService _storageService;
 
-  public RegionManager(
-    IApplicationContext applicationContext,
-    IRegionQuerier regionQuerier,
-    IRegionRepository regionRepository,
-    IStorageService storageService)
+  public RegionManager(IRegionQuerier regionQuerier, IRegionRepository regionRepository, IStorageService storageService)
   {
-    _applicationContext = applicationContext;
     _regionQuerier = regionQuerier;
     _regionRepository = regionRepository;
     _storageService = storageService;
