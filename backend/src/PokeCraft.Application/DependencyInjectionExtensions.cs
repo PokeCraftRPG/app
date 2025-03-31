@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Settings;
 using PokeCraft.Application.Storages;
-using PokeCraft.Application.Worlds;
 
 namespace PokeCraft.Application;
 
@@ -14,17 +13,10 @@ public static class DependencyInjectionExtensions
   {
     return services
       .AddLogitarEventSourcing()
-      .AddManagers()
       .AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
       .AddSingleton(InitializeAccountSettings)
       .AddTransient<IPermissionService, PermissionService>()
       .AddTransient<IStorageService, StorageService>();
-  }
-
-  private static IServiceCollection AddManagers(this IServiceCollection services)
-  {
-    return services
-      .AddTransient<IWorldManager, WorldManager>();
   }
 
   private static AccountSettings InitializeAccountSettings(this IServiceProvider serviceProvider)

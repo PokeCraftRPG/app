@@ -18,21 +18,21 @@ public record UpdateWorldCommand(Guid Id, UpdateWorldPayload Payload) : IRequest
 internal class UpdateWorldCommandHandler : IRequestHandler<UpdateWorldCommand, WorldModel?>
 {
   private readonly IApplicationContext _applicationContext;
+  private readonly IMediator _mediator;
   private readonly IPermissionService _permissionService;
-  private readonly IWorldManager _worldManager;
   private readonly IWorldQuerier _worldQuerier;
   private readonly IWorldRepository _worldRepository;
 
   public UpdateWorldCommandHandler(
     IApplicationContext applicationContext,
+    IMediator mediator,
     IPermissionService permissionService,
-    IWorldManager worldManager,
     IWorldQuerier worldQuerier,
     IWorldRepository worldRepository)
   {
     _applicationContext = applicationContext;
+    _mediator = mediator;
     _permissionService = permissionService;
-    _worldManager = worldManager;
     _worldQuerier = worldQuerier;
     _worldRepository = worldRepository;
   }
@@ -64,7 +64,7 @@ internal class UpdateWorldCommandHandler : IRequestHandler<UpdateWorldCommand, W
     }
 
     world.Update(_applicationContext.UserId);
-    await _worldManager.SaveAsync(world, cancellationToken);
+    await _mediator.Send(new SaveWorldCommand(world), cancellationToken);
 
     return await _worldQuerier.ReadAsync(world, cancellationToken);
   }

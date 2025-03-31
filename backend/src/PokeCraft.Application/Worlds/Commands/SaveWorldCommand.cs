@@ -1,32 +1,32 @@
 ﻿using Logitar.EventSourcing;
+using MediatR;
 using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Worlds;
 using PokeCraft.Domain.Worlds.Events;
 
-namespace PokeCraft.Application.Worlds;
+namespace PokeCraft.Application.Worlds.Commands;
 
-public interface IWorldManager
-{
-  Task SaveAsync(World world, CancellationToken cancellationToken = default);
-}
+internal record SaveWorldCommand(World World) : IRequest;
 
-internal class WorldManager : IWorldManager
+internal class SaveWorldCommandHandler : IRequestHandler<SaveWorldCommand>
 {
   private readonly IStorageService _storageService;
   private readonly IWorldQuerier _worldQuerier;
   private readonly IWorldRepository _worldRepository;
 
-  public WorldManager(IStorageService storageService, IWorldQuerier worldQuerier, IWorldRepository worldRepository)
+  public SaveWorldCommandHandler(IStorageService storageService, IWorldQuerier worldQuerier, IWorldRepository worldRepository)
   {
     _storageService = storageService;
     _worldQuerier = worldQuerier;
     _worldRepository = worldRepository;
   }
 
-  public async Task SaveAsync(World world, CancellationToken cancellationToken)
+  public async Task Handle(SaveWorldCommand command, CancellationToken cancellationToken)
   {
+    World world = command.World;
+
     Slug? uniqueSlug = null;
     foreach (IEvent change in world.Changes)
     {

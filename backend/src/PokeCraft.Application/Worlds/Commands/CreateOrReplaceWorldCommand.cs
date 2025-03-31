@@ -20,21 +20,21 @@ public record CreateOrReplaceWorldCommand(Guid? Id, CreateOrReplaceWorldPayload 
 internal class CreateOrReplaceWorldCommandHandler : IRequestHandler<CreateOrReplaceWorldCommand, CreateOrReplaceWorldResult>
 {
   private readonly IApplicationContext _applicationContext;
+  private readonly IMediator _mediator;
   private readonly IPermissionService _permissionService;
-  private readonly IWorldManager _worldManager;
   private readonly IWorldQuerier _worldQuerier;
   private readonly IWorldRepository _worldRepository;
 
   public CreateOrReplaceWorldCommandHandler(
     IApplicationContext applicationContext,
+    IMediator mediator,
     IPermissionService permissionService,
-    IWorldManager worldManager,
     IWorldQuerier worldQuerier,
     IWorldRepository worldRepository)
   {
     _applicationContext = applicationContext;
+    _mediator = mediator;
     _permissionService = permissionService;
-    _worldManager = worldManager;
     _worldQuerier = worldQuerier;
     _worldRepository = worldRepository;
   }
@@ -74,7 +74,7 @@ internal class CreateOrReplaceWorldCommandHandler : IRequestHandler<CreateOrRepl
     world.Description = Description.TryCreate(payload.Description);
 
     world.Update(ownerId);
-    await _worldManager.SaveAsync(world, cancellationToken);
+    await _mediator.Send(new SaveWorldCommand(world), cancellationToken);
 
     WorldModel model = await _worldQuerier.ReadAsync(world, cancellationToken);
     return new CreateOrReplaceWorldResult(model, created);
