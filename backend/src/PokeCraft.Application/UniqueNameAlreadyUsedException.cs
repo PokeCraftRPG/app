@@ -1,5 +1,4 @@
 ﻿using Logitar;
-using Logitar.Portal.Contracts;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Abilities;
 using PokeCraft.Domain.Moves;

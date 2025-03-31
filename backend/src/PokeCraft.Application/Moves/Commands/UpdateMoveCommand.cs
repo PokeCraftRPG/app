@@ -14,6 +14,7 @@ public record UpdateMoveCommand(Guid Id, UpdateMovePayload Payload) : IRequest<M
 
 /// <exception cref="NotEnoughAvailableStorageException"></exception>
 /// <exception cref="PermissionDeniedException"></exception>
+/// <exception cref="StatusMoveCannotHavePowerException"></exception>
 /// <exception cref="UniqueNameAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>
 internal class UpdateMoveCommandHandler : IRequestHandler<UpdateMoveCommand, MoveModel?>

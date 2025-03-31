@@ -81,8 +81,13 @@ public class Move : AggregateRoot, IResource
   public Power? Power
   {
     get => _power;
-    set // TODO(fpion): Status moves should not have power.
+    set
     {
+      if (Category == MoveCategory.Status && value is not null)
+      {
+        throw new StatusMoveCannotHavePowerException(this, value, nameof(Power));
+      }
+
       if (_power != value)
       {
         _power = value;

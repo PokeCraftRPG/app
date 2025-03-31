@@ -34,7 +34,7 @@ internal class SpeciesManager : ISpeciesManager
         SpeciesId? conflictId = await _speciesQuerier.FindIdAsync(created.Number, cancellationToken);
         if (conflictId.HasValue && !conflictId.Value.Equals(species.Id))
         {
-          // TODO(fpion): implement
+          throw new SpeciesNumberAlreadyUsedException(species, conflictId.Value);
         }
 
         uniqueName = created.UniqueName;
@@ -45,7 +45,11 @@ internal class SpeciesManager : ISpeciesManager
       }
       else if (change is SpeciesRegionalNumberChanged changed && changed.Number is not null)
       {
-        // TODO(fpion): implement
+        SpeciesId? conflictId = await _speciesQuerier.FindIdAsync(changed.Number, changed.RegionId, cancellationToken);
+        if (conflictId.HasValue && !conflictId.Value.Equals(species.Id))
+        {
+          throw new RegionalNumberAlreadyUsedException(species, conflictId.Value, changed.RegionId);
+        }
       }
     }
 

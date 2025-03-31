@@ -1,5 +1,5 @@
 ﻿using Logitar;
-using Logitar.Portal.Contracts;
+using PokeCraft.Domain;
 using PokeCraft.Domain.Storages;
 
 namespace PokeCraft.Application.Storages;

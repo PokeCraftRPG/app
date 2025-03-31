@@ -1,6 +1,4 @@
-﻿using Logitar.Portal.Contracts;
-
-namespace PokeCraft.Application;
+﻿namespace PokeCraft.Domain;
 
 public abstract class ErrorException : Exception
 {

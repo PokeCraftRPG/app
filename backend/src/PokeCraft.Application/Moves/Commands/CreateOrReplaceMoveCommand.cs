@@ -15,6 +15,7 @@ public record CreateOrReplaceMoveCommand(Guid? Id, CreateOrReplaceMovePayload Pa
 
 /// <exception cref="NotEnoughAvailableStorageException"></exception>
 /// <exception cref="PermissionDeniedException"></exception>
+/// <exception cref="StatusMoveCannotHavePowerException"></exception>
 /// <exception cref="UniqueNameAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>
 internal class CreateOrReplaceMoveCommandHandler : IRequestHandler<CreateOrReplaceMoveCommand, CreateOrReplaceMoveResult>

@@ -1,4 +1,6 @@
-﻿namespace PokeCraft.Application;
+﻿using PokeCraft.Domain;
+
+namespace PokeCraft.Application;
 
 public abstract class NotFoundException : ErrorException
 {
