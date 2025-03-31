@@ -5,6 +5,7 @@ using Logitar.Portal.Contracts.Actors;
 using PokeCraft.Application.Abilities.Models;
 using PokeCraft.Application.Moves.Models;
 using PokeCraft.Application.Regions.Models;
+using PokeCraft.Application.Speciez.Models;
 using PokeCraft.Application.Worlds.Models;
 using PokeCraft.Infrastructure.Entities;
 
@@ -111,6 +112,38 @@ internal class Mapper
       Link = source.Link,
       Notes = source.Notes
     };
+
+    MapAggregate(source, destination);
+
+    return destination;
+  }
+
+  public SpeciesModel ToSpecies(SpeciesEntity source)
+  {
+    if (source.World is null)
+    {
+      throw new ArgumentException($"The {nameof(source.World)} is required.", nameof(source));
+    }
+    WorldModel world = ToWorld(source.World);
+    return ToSpecies(source, world);
+  }
+  public SpeciesModel ToSpecies(SpeciesEntity source, WorldModel world)
+  {
+    SpeciesModel destination = new()
+    {
+      Id = source.Id,
+      World = world,
+      Number = source.Number,
+      Category = source.Category,
+      UniqueName = source.UniqueName,
+      DisplayName = source.DisplayName,
+      BaseFriendship = source.BaseFriendship,
+      CatchRate = source.CatchRate,
+      GrowthRate = source.GrowthRate,
+      Link = source.Link,
+      Notes = source.Notes
+    };
+    // TODO(fpion): regional numbers
 
     MapAggregate(source, destination);
 
