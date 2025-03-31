@@ -2,6 +2,7 @@
 using MediatR;
 using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Regions;
+using PokeCraft.Application.Regions.Queries;
 using PokeCraft.Application.Speciez.Models;
 using PokeCraft.Application.Speciez.Validators;
 using PokeCraft.Application.Storages;
@@ -17,28 +18,29 @@ public record CreateOrReplaceSpeciesCommand(Guid? Id, CreateOrReplaceSpeciesPayl
 
 /// <exception cref="NotEnoughAvailableStorageException"></exception>
 /// <exception cref="PermissionDeniedException"></exception>
+/// <exception cref="RegionsNotFoundException"></exception>
 /// <exception cref="UniqueNameAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>
 internal class CreateOrReplaceSpeciesCommandHandler : IRequestHandler<CreateOrReplaceSpeciesCommand, CreateOrReplaceSpeciesResult>
 {
   private readonly IApplicationContext _applicationContext;
+  private readonly IMediator _mediator;
   private readonly IPermissionService _permissionService;
-  private readonly IRegionManager _regionManager;
   private readonly ISpeciesManager _speciesManager;
   private readonly ISpeciesQuerier _speciesQuerier;
   private readonly ISpeciesRepository _speciesRepository;
 
   public CreateOrReplaceSpeciesCommandHandler(
     IApplicationContext applicationContext,
+    IMediator mediator,
     IPermissionService permissionService,
-    IRegionManager regionManager,
     ISpeciesManager speciesManager,
     ISpeciesQuerier speciesQuerier,
     ISpeciesRepository speciesRepository)
   {
     _applicationContext = applicationContext;
+    _mediator = mediator;
     _permissionService = permissionService;
-    _regionManager = regionManager;
     _speciesManager = speciesManager;
     _speciesQuerier = speciesQuerier;
     _speciesRepository = speciesRepository;
@@ -101,7 +103,8 @@ internal class CreateOrReplaceSpeciesCommandHandler : IRequestHandler<CreateOrRe
     await _permissionService.EnsureCanViewAsync(ResourceType.Region, cancellationToken);
 
     IEnumerable<string> idOrUniqueNames = payload.RegionalNumbers.Select(x => x.Region);
-    IReadOnlyDictionary<string, Region> regions = await _regionManager.FindAsync(idOrUniqueNames, nameof(payload.RegionalNumbers), cancellationToken);
+    string propertyName = string.Join('.', nameof(payload.RegionalNumbers), nameof(RegionalNumberPayload.Region));
+    IReadOnlyDictionary<string, Region> regions = await _mediator.Send(new FindRegionsQuery(idOrUniqueNames, propertyName), cancellationToken);
 
     HashSet<RegionId> regionIds = regions.Select(x => x.Value.Id).ToHashSet();
     foreach (RegionId regionId in species.RegionalNumbers.Keys)

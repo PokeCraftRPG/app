@@ -1,38 +1,25 @@
-﻿using Logitar.EventSourcing;
-using PokeCraft.Application.Storages;
-using PokeCraft.Domain;
+﻿using MediatR;
 using PokeCraft.Domain.Regions;
-using PokeCraft.Domain.Regions.Events;
 using PokeCraft.Domain.Worlds;
 
-namespace PokeCraft.Application.Regions;
+namespace PokeCraft.Application.Regions.Queries;
 
-public interface IRegionManager
-{
-  Task<IReadOnlyDictionary<string, Region>> FindAsync(IEnumerable<string> idOrUniqueNames, string propertyName, CancellationToken cancellationToken = default);
-  Task SaveAsync(Region region, CancellationToken cancellationToken = default);
-}
+internal record FindRegionsQuery(IEnumerable<string> IdOrUniqueNames, string PropertyName) : IRequest<IReadOnlyDictionary<string, Region>>;
 
-internal class RegionManager : IRegionManager
+internal class FindRegionsQueryHandler : IRequestHandler<FindRegionsQuery, IReadOnlyDictionary<string, Region>>
 {
   private readonly IApplicationContext _applicationContext;
   private readonly IRegionQuerier _regionQuerier;
   private readonly IRegionRepository _regionRepository;
-  private readonly IStorageService _storageService;
 
-  public RegionManager(
-    IApplicationContext applicationContext,
-    IRegionQuerier regionQuerier,
-    IRegionRepository regionRepository,
-    IStorageService storageService)
+  public FindRegionsQueryHandler(IApplicationContext applicationContext, IRegionQuerier regionQuerier, IRegionRepository regionRepository)
   {
     _applicationContext = applicationContext;
     _regionQuerier = regionQuerier;
     _regionRepository = regionRepository;
-    _storageService = storageService;
   }
 
-  public async Task<IReadOnlyDictionary<string, Region>> FindAsync(IEnumerable<string> idOrUniqueNames, string propertyName, CancellationToken cancellationToken)
+  public async Task<IReadOnlyDictionary<string, Region>> Handle(FindRegionsQuery query, CancellationToken cancellationToken)
   {
     IReadOnlyDictionary<Guid, string> uniqueNameByIds = await _regionQuerier.GetUniqueNameByIdsAsync(cancellationToken);
 
@@ -42,6 +29,7 @@ internal class RegionManager : IRegionManager
       idByUniqueNames[Normalize(uniqueNameById.Value)] = uniqueNameById.Key;
     }
 
+    IEnumerable<string> idOrUniqueNames = query.IdOrUniqueNames;
     int capacity = idOrUniqueNames.Count();
     HashSet<RegionId> ids = new(capacity);
     HashSet<string> notFound = new(capacity);
@@ -61,7 +49,7 @@ internal class RegionManager : IRegionManager
 
     if (notFound.Count > 0)
     {
-      throw new RegionsNotFoundException(worldId, notFound, propertyName);
+      throw new RegionsNotFoundException(worldId, notFound, query.PropertyName);
     }
 
     IReadOnlyCollection<Region> regions = await _regionRepository.LoadAsync(ids, cancellationToken);
@@ -83,37 +71,6 @@ internal class RegionManager : IRegionManager
       foundRegions[idOrUniqueName] = region;
     }
     return foundRegions.AsReadOnly();
-  }
-
-  public async Task SaveAsync(Region region, CancellationToken cancellationToken)
-  {
-    UniqueName? uniqueName = null;
-    foreach (IEvent change in region.Changes)
-    {
-      if (change is RegionCreated created)
-      {
-        uniqueName = created.UniqueName;
-      }
-      else if (change is RegionUpdated updated && updated.UniqueName is not null)
-      {
-        uniqueName = updated.UniqueName;
-      }
-    }
-
-    if (uniqueName is not null)
-    {
-      RegionId? conflictId = await _regionQuerier.FindIdAsync(uniqueName, cancellationToken);
-      if (conflictId.HasValue && !conflictId.Value.Equals(region.Id))
-      {
-        throw new UniqueNameAlreadyUsedException(region, conflictId.Value);
-      }
-    }
-
-    await _storageService.EnsureAvailableAsync(region, cancellationToken);
-
-    await _regionRepository.SaveAsync(region, cancellationToken);
-
-    await _storageService.UpdateAsync(region, cancellationToken);
   }
 
   private static string Normalize(string value) => value.Trim().ToUpperInvariant();

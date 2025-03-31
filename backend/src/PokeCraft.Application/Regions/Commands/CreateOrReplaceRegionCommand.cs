@@ -20,21 +20,21 @@ public record CreateOrReplaceRegionCommand(Guid? Id, CreateOrReplaceRegionPayloa
 internal class CreateOrReplaceRegionCommandHandler : IRequestHandler<CreateOrReplaceRegionCommand, CreateOrReplaceRegionResult>
 {
   private readonly IApplicationContext _applicationContext;
+  private readonly IMediator _mediator;
   private readonly IPermissionService _permissionService;
-  private readonly IRegionManager _regionManager;
   private readonly IRegionQuerier _regionQuerier;
   private readonly IRegionRepository _regionRepository;
 
   public CreateOrReplaceRegionCommandHandler(
     IApplicationContext applicationContext,
+    IMediator mediator,
     IPermissionService permissionService,
-    IRegionManager regionManager,
     IRegionQuerier regionQuerier,
     IRegionRepository regionRepository)
   {
     _applicationContext = applicationContext;
+    _mediator = mediator;
     _permissionService = permissionService;
-    _regionManager = regionManager;
     _regionQuerier = regionQuerier;
     _regionRepository = regionRepository;
   }
@@ -77,7 +77,7 @@ internal class CreateOrReplaceRegionCommandHandler : IRequestHandler<CreateOrRep
     region.Notes = Notes.TryCreate(payload.Notes);
 
     region.Update(userId);
-    await _regionManager.SaveAsync(region, cancellationToken);
+    await _mediator.Send(new SaveRegionCommand(region), cancellationToken);
 
     RegionModel model = await _regionQuerier.ReadAsync(region, cancellationToken);
     return new CreateOrReplaceRegionResult(model, created);

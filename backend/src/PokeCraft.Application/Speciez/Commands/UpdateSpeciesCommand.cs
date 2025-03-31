@@ -2,6 +2,7 @@
 using MediatR;
 using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Regions;
+using PokeCraft.Application.Regions.Queries;
 using PokeCraft.Application.Speciez.Models;
 using PokeCraft.Application.Speciez.Validators;
 using PokeCraft.Application.Storages;
@@ -15,28 +16,29 @@ public record UpdateSpeciesCommand(Guid Id, UpdateSpeciesPayload Payload) : IReq
 
 /// <exception cref="NotEnoughAvailableStorageException"></exception>
 /// <exception cref="PermissionDeniedException"></exception>
+/// <exception cref="RegionsNotFoundException"></exception>
 /// <exception cref="UniqueNameAlreadyUsedException"></exception>
 /// <exception cref="ValidationException"></exception>
 internal class UpdateSpeciesCommandHandler : IRequestHandler<UpdateSpeciesCommand, SpeciesModel?>
 {
   private readonly IApplicationContext _applicationContext;
+  private readonly IMediator _mediator;
   private readonly IPermissionService _permissionService;
-  private readonly IRegionManager _regionManager;
   private readonly ISpeciesManager _speciesManager;
   private readonly ISpeciesQuerier _speciesQuerier;
   private readonly ISpeciesRepository _speciesRepository;
 
   public UpdateSpeciesCommandHandler(
     IApplicationContext applicationContext,
+    IMediator mediator,
     IPermissionService permissionService,
-    IRegionManager regionManager,
     ISpeciesManager speciesManager,
     ISpeciesQuerier speciesQuerier,
     ISpeciesRepository speciesRepository)
   {
     _applicationContext = applicationContext;
+    _mediator = mediator;
     _permissionService = permissionService;
-    _regionManager = regionManager;
     _speciesManager = speciesManager;
     _speciesQuerier = speciesQuerier;
     _speciesRepository = speciesRepository;
@@ -104,7 +106,8 @@ internal class UpdateSpeciesCommandHandler : IRequestHandler<UpdateSpeciesComman
     await _permissionService.EnsureCanViewAsync(ResourceType.Region, cancellationToken);
 
     IEnumerable<string> idOrUniqueNames = payload.RegionalNumbers.Select(x => x.Region);
-    IReadOnlyDictionary<string, Region> regions = await _regionManager.FindAsync(idOrUniqueNames, nameof(payload.RegionalNumbers), cancellationToken);
+    string propertyName = string.Join('.', nameof(payload.RegionalNumbers), nameof(RegionalNumberUpdatePayload.Region));
+    IReadOnlyDictionary<string, Region> regions = await _mediator.Send(new FindRegionsQuery(idOrUniqueNames, propertyName), cancellationToken);
 
     foreach (RegionalNumberUpdatePayload regional in payload.RegionalNumbers)
     {
