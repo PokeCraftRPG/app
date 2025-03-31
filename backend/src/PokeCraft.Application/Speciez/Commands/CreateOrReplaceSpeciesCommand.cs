@@ -1,10 +1,12 @@
 ﻿using FluentValidation;
 using MediatR;
 using PokeCraft.Application.Permissions;
+using PokeCraft.Application.Regions;
 using PokeCraft.Application.Speciez.Models;
 using PokeCraft.Application.Speciez.Validators;
 using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
+using PokeCraft.Domain.Regions;
 using PokeCraft.Domain.Speciez;
 
 namespace PokeCraft.Application.Speciez.Commands;
@@ -21,6 +23,7 @@ internal class CreateOrReplaceSpeciesCommandHandler : IRequestHandler<CreateOrRe
 {
   private readonly IApplicationContext _applicationContext;
   private readonly IPermissionService _permissionService;
+  private readonly IRegionManager _regionManager;
   private readonly ISpeciesManager _speciesManager;
   private readonly ISpeciesQuerier _speciesQuerier;
   private readonly ISpeciesRepository _speciesRepository;
@@ -28,12 +31,14 @@ internal class CreateOrReplaceSpeciesCommandHandler : IRequestHandler<CreateOrRe
   public CreateOrReplaceSpeciesCommandHandler(
     IApplicationContext applicationContext,
     IPermissionService permissionService,
+    IRegionManager regionManager,
     ISpeciesManager speciesManager,
     ISpeciesQuerier speciesQuerier,
     ISpeciesRepository speciesRepository)
   {
     _applicationContext = applicationContext;
     _permissionService = permissionService;
+    _regionManager = regionManager;
     _speciesManager = speciesManager;
     _speciesQuerier = speciesQuerier;
     _speciesRepository = speciesRepository;
@@ -79,7 +84,7 @@ internal class CreateOrReplaceSpeciesCommandHandler : IRequestHandler<CreateOrRe
 
     species.DisplayName = DisplayName.TryCreate(payload.DisplayName);
 
-    // TODO(fpion): set regional numbers with permission check
+    await ReplaceRegionalNumbersAsync(species, payload, userId, cancellationToken);
 
     species.Link = Url.TryCreate(payload.Link);
     species.Notes = Notes.TryCreate(payload.Notes);
@@ -89,5 +94,29 @@ internal class CreateOrReplaceSpeciesCommandHandler : IRequestHandler<CreateOrRe
 
     SpeciesModel model = await _speciesQuerier.ReadAsync(species, cancellationToken);
     return new CreateOrReplaceSpeciesResult(model, created);
+  }
+
+  private async Task ReplaceRegionalNumbersAsync(Species species, CreateOrReplaceSpeciesPayload payload, UserId userId, CancellationToken cancellationToken)
+  {
+    await _permissionService.EnsureCanViewAsync(ResourceType.Region, cancellationToken);
+
+    IEnumerable<string> idOrUniqueNames = payload.RegionalNumbers.Select(x => x.Region);
+    IReadOnlyDictionary<string, Region> regions = await _regionManager.FindAsync(idOrUniqueNames, cancellationToken);
+
+    HashSet<RegionId> regionIds = regions.Select(x => x.Value.Id).ToHashSet();
+    foreach (RegionId regionId in species.RegionalNumbers.Keys)
+    {
+      if (!regionIds.Contains(regionId))
+      {
+        species.RemoveRegionalNumber(regionId, userId);
+      }
+    }
+
+    foreach (RegionalNumberPayload regional in payload.RegionalNumbers)
+    {
+      Region region = regions[regional.Region];
+      SpeciesNumber number = new(regional.Number);
+      species.SetRegionalNumber(region, number, userId);
+    }
   }
 }

@@ -8,20 +8,32 @@ namespace PokeCraft.Application.Regions;
 
 public interface IRegionManager
 {
+  Task<IReadOnlyDictionary<string, Region>> FindAsync(IEnumerable<string> idOrUniqueNames, CancellationToken cancellationToken = default);
   Task SaveAsync(Region region, CancellationToken cancellationToken = default);
 }
 
 internal class RegionManager : IRegionManager
 {
+  private readonly IApplicationContext _applicationContext;
   private readonly IRegionQuerier _regionQuerier;
   private readonly IRegionRepository _regionRepository;
   private readonly IStorageService _storageService;
 
-  public RegionManager(IRegionQuerier regionQuerier, IRegionRepository regionRepository, IStorageService storageService)
+  public RegionManager(
+    IApplicationContext applicationContext,
+    IRegionQuerier regionQuerier,
+    IRegionRepository regionRepository,
+    IStorageService storageService)
   {
+    _applicationContext = applicationContext;
     _regionQuerier = regionQuerier;
     _regionRepository = regionRepository;
     _storageService = storageService;
+  }
+
+  public Task<IReadOnlyDictionary<string, Region>> FindAsync(IEnumerable<string> idOrUniqueNames, CancellationToken cancellationToken)
+  {
+    throw new NotImplementedException(); // TODO(fpion): implement
   }
 
   public async Task SaveAsync(Region region, CancellationToken cancellationToken)
