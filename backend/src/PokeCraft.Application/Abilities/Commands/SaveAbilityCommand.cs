@@ -1,31 +1,31 @@
 ﻿using Logitar.EventSourcing;
+using MediatR;
 using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Abilities;
 using PokeCraft.Domain.Abilities.Events;
 
-namespace PokeCraft.Application.Abilities;
+namespace PokeCraft.Application.Abilities.Commands;
 
-public interface IAbilityManager
-{
-  Task SaveAsync(Ability ability, CancellationToken cancellationToken = default);
-}
+internal record SaveAbilityCommand(Ability Ability) : IRequest;
 
-internal class AbilityManager : IAbilityManager
+internal class SaveAbilityCommandHandler : IRequestHandler<SaveAbilityCommand>
 {
   private readonly IAbilityQuerier _abilityQuerier;
   private readonly IAbilityRepository _abilityRepository;
   private readonly IStorageService _storageService;
 
-  public AbilityManager(IAbilityQuerier abilityQuerier, IAbilityRepository abilityRepository, IStorageService storageService)
+  public SaveAbilityCommandHandler(IAbilityQuerier abilityQuerier, IAbilityRepository abilityRepository, IStorageService storageService)
   {
     _abilityQuerier = abilityQuerier;
     _abilityRepository = abilityRepository;
     _storageService = storageService;
   }
 
-  public async Task SaveAsync(Ability ability, CancellationToken cancellationToken)
+  public async Task Handle(SaveAbilityCommand command, CancellationToken cancellationToken)
   {
+    Ability ability = command.Ability;
+
     UniqueName? uniqueName = null;
     foreach (IEvent change in ability.Changes)
     {

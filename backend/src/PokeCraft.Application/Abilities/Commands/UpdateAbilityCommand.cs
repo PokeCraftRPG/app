@@ -17,23 +17,23 @@ public record UpdateAbilityCommand(Guid Id, UpdateAbilityPayload Payload) : IReq
 /// <exception cref="ValidationException"></exception>
 internal class UpdateAbilityCommandHandler : IRequestHandler<UpdateAbilityCommand, AbilityModel?>
 {
-  private readonly IAbilityManager _abilityManager;
   private readonly IAbilityQuerier _abilityQuerier;
   private readonly IAbilityRepository _abilityRepository;
   private readonly IApplicationContext _applicationContext;
+  private readonly IMediator _mediator;
   private readonly IPermissionService _permissionService;
 
   public UpdateAbilityCommandHandler(
-    IAbilityManager abilityManager,
     IAbilityQuerier abilityQuerier,
     IAbilityRepository abilityRepository,
     IApplicationContext applicationContext,
+    IMediator mediator,
     IPermissionService permissionService)
   {
-    _abilityManager = abilityManager;
     _abilityQuerier = abilityQuerier;
     _abilityRepository = abilityRepository;
     _applicationContext = applicationContext;
+    _mediator = mediator;
     _permissionService = permissionService;
   }
 
@@ -73,7 +73,7 @@ internal class UpdateAbilityCommandHandler : IRequestHandler<UpdateAbilityComman
     }
 
     ability.Update(_applicationContext.UserId);
-    await _abilityManager.SaveAsync(ability, cancellationToken);
+    await _mediator.Send(new SaveAbilityCommand(ability), cancellationToken);
 
     return await _abilityQuerier.ReadAsync(ability, cancellationToken);
   }

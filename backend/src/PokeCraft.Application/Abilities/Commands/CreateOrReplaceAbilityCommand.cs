@@ -19,23 +19,23 @@ public record CreateOrReplaceAbilityCommand(Guid? Id, CreateOrReplaceAbilityPayl
 /// <exception cref="ValidationException"></exception>
 internal class CreateOrReplaceAbilityCommandHandler : IRequestHandler<CreateOrReplaceAbilityCommand, CreateOrReplaceAbilityResult>
 {
-  private readonly IAbilityManager _abilityManager;
   private readonly IAbilityQuerier _abilityQuerier;
   private readonly IAbilityRepository _abilityRepository;
   private readonly IApplicationContext _applicationContext;
+  private readonly IMediator _mediator;
   private readonly IPermissionService _permissionService;
 
   public CreateOrReplaceAbilityCommandHandler(
-    IAbilityManager abilityManager,
     IAbilityQuerier abilityQuerier,
     IAbilityRepository abilityRepository,
     IApplicationContext applicationContext,
+    IMediator mediator,
     IPermissionService permissionService)
   {
-    _abilityManager = abilityManager;
     _abilityQuerier = abilityQuerier;
     _abilityRepository = abilityRepository;
     _applicationContext = applicationContext;
+    _mediator = mediator;
     _permissionService = permissionService;
   }
 
@@ -77,7 +77,7 @@ internal class CreateOrReplaceAbilityCommandHandler : IRequestHandler<CreateOrRe
     ability.Notes = Notes.TryCreate(payload.Notes);
 
     ability.Update(userId);
-    await _abilityManager.SaveAsync(ability, cancellationToken);
+    await _mediator.Send(new SaveAbilityCommand(ability), cancellationToken);
 
     AbilityModel model = await _abilityQuerier.ReadAsync(ability, cancellationToken);
     return new CreateOrReplaceAbilityResult(model, created);
