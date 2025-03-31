@@ -21,7 +21,7 @@ internal class SpeciesQuerier : ISpeciesQuerier
   private readonly IApplicationContext _applicationContext;
   private readonly DbSet<SpeciesEntity> _species;
 
-  public SpeciesQuerier(IActorService actorService, PokemonContext context, IApplicationContext applicationContext)
+  public SpeciesQuerier(IActorService actorService, IApplicationContext applicationContext, PokemonContext context)
   {
     _actorService = actorService;
     _applicationContext = applicationContext;

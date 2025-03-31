@@ -19,7 +19,7 @@ internal class AbilityQuerier : IAbilityQuerier
   private readonly IActorService _actorService;
   private readonly IApplicationContext _applicationContext;
 
-  public AbilityQuerier(IActorService actorService, PokemonContext context, IApplicationContext applicationContext)
+  public AbilityQuerier(IActorService actorService, IApplicationContext applicationContext, PokemonContext context)
   {
     _abilities = context.Abilities;
     _actorService = actorService;

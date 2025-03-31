@@ -24,7 +24,8 @@ public static class DependencyInjectionExtensions
       .AddQueriers()
       .AddRepositories()
       .AddSingleton<IActorService, ActorService>()
-      .AddSingleton<ICacheService, CacheService>();
+      .AddSingleton<ICacheService, CacheService>()
+      .AddScoped<IEventBus, EventBus>();
   }
 
   private static IServiceCollection AddQueriers(this IServiceCollection services)

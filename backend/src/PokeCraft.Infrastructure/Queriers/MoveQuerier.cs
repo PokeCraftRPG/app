@@ -19,7 +19,7 @@ internal class MoveQuerier : IMoveQuerier
   private readonly IApplicationContext _applicationContext;
   private readonly DbSet<MoveEntity> _moves;
 
-  public MoveQuerier(IActorService actorService, PokemonContext context, IApplicationContext applicationContext)
+  public MoveQuerier(IActorService actorService, IApplicationContext applicationContext, PokemonContext context)
   {
     _actorService = actorService;
     _applicationContext = applicationContext;
