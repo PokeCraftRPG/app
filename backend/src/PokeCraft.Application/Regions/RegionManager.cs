@@ -76,7 +76,11 @@ internal class RegionManager : IRegionManager
     Dictionary<string, Region> foundRegions = new(capacity);
     foreach (string idOrUniqueName in idOrUniqueNames)
     {
-      // TODO(fpion): implement
+      if (!Guid.TryParse(idOrUniqueName, out Guid id) || !regionsById.TryGetValue(id, out Region? region))
+      {
+        region = regionsByUniqueName[Normalize(idOrUniqueName)];
+      }
+      foundRegions[idOrUniqueName] = region;
     }
     return foundRegions.AsReadOnly();
   }
