@@ -3,6 +3,7 @@ using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Regions;
 using PokeCraft.Domain.Regions.Events;
+using PokeCraft.Domain.Worlds;
 
 namespace PokeCraft.Application.Regions;
 
@@ -14,12 +15,18 @@ public interface IRegionManager
 
 internal class RegionManager : IRegionManager
 {
+  private readonly IApplicationContext _applicationContext;
   private readonly IRegionQuerier _regionQuerier;
   private readonly IRegionRepository _regionRepository;
   private readonly IStorageService _storageService;
 
-  public RegionManager(IRegionQuerier regionQuerier, IRegionRepository regionRepository, IStorageService storageService)
+  public RegionManager(
+    IApplicationContext applicationContext,
+    IRegionQuerier regionQuerier,
+    IRegionRepository regionRepository,
+    IStorageService storageService)
   {
+    _applicationContext = applicationContext;
     _regionQuerier = regionQuerier;
     _regionRepository = regionRepository;
     _storageService = storageService;
@@ -28,6 +35,24 @@ internal class RegionManager : IRegionManager
   public async Task<IReadOnlyDictionary<string, Region>> FindAsync(IEnumerable<string> idOrUniqueNames, CancellationToken cancellationToken)
   {
     IReadOnlyDictionary<Guid, string> uniqueNameByIds = await _regionQuerier.GetUniqueNameByIdsAsync(cancellationToken);
+
+    Dictionary<string, Guid> idByUniqueNames = new(capacity: uniqueNameByIds.Count);
+    foreach (KeyValuePair<Guid, string> uniqueNameById in uniqueNameByIds)
+    {
+      idByUniqueNames[Normalize(uniqueNameById.Value)] = uniqueNameById.Key;
+    }
+
+    int capacity = idOrUniqueNames.Count();
+    HashSet<RegionId> ids = new(capacity);
+    WorldId worldId = _applicationContext.WorldId;
+    foreach (string idOrUniqueName in idOrUniqueNames)
+    {
+      if ((Guid.TryParse(idOrUniqueName, out Guid entityId) && uniqueNameByIds.ContainsKey(entityId))
+        || idByUniqueNames.TryGetValue(Normalize(idOrUniqueName), out entityId))
+      {
+        ids.Add(new RegionId(worldId, entityId));
+      }
+    }
 
     throw new NotImplementedException(); // TODO(fpion): implement
   }
@@ -62,4 +87,6 @@ internal class RegionManager : IRegionManager
 
     await _storageService.UpdateAsync(region, cancellationToken);
   }
+
+  private static string Normalize(string value) => value.Trim().ToUpperInvariant();
 }
