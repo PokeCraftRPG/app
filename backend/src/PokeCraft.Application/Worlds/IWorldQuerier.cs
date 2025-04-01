@@ -10,8 +10,6 @@ public interface IWorldQuerier
 
   Task<WorldId?> FindIdAsync(Slug uniqueSlug, CancellationToken cancellationToken = default);
 
-  Task<UserId> FindOwnerIdAsync(WorldId worldId, CancellationToken cancellationToken = default);
-
   Task<WorldModel> ReadAsync(World world, CancellationToken cancellationToken = default);
   Task<WorldModel?> ReadAsync(WorldId id, CancellationToken cancellationToken = default);
   Task<WorldModel?> ReadAsync(Guid id, CancellationToken cancellationToken = default);

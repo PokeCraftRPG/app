@@ -43,19 +43,6 @@ internal class WorldQuerier : IWorldQuerier
     return streamId is null ? null : new WorldId(streamId);
   }
 
-  public async Task<UserId> FindOwnerIdAsync(WorldId worldId, CancellationToken cancellationToken)
-  {
-    string streamId = worldId.Value;
-
-    Guid ownerId = await _worlds.AsNoTracking()
-      .Where(x => x.StreamId == streamId)
-      .Select(x => (Guid?)x.OwnerId)
-      .SingleOrDefaultAsync(cancellationToken)
-      ?? throw new InvalidOperationException($"The world entity 'StreamId={streamId}' could not be found.");
-
-    return new UserId(ownerId);
-  }
-
   public async Task<WorldModel> ReadAsync(World world, CancellationToken cancellationToken)
   {
     return await ReadAsync(world.Id, cancellationToken)

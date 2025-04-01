@@ -12,7 +12,7 @@ public static class DependencyInjectionExtensions
     string? connectionString = Environment.GetEnvironmentVariable("SQLCONNSTR_Pokemon");
     if (string.IsNullOrWhiteSpace(connectionString))
     {
-      connectionString = configuration.GetConnectionString("SqlServer");
+      connectionString = configuration.GetConnectionString(DatabaseProvider.SqlServer.ToString());
     }
     if (string.IsNullOrWhiteSpace(connectionString))
     {

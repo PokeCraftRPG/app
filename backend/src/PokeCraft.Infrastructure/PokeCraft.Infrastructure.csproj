@@ -27,5 +27,9 @@
     <Using Include="System.Text.Json" />
     <Using Include="System.Text.Json.Serialization" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <InternalsVisibleTo Include="PokeCraft.IntegrationTests" />
+  </ItemGroup>
 
 </Project>
