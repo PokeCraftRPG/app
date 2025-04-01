@@ -1,4 +1,9 @@
-﻿namespace PokeCraft;
+﻿using MediatR;
+using Microsoft.FeatureManagement;
+using PokeCraft.Constants;
+using PokeCraft.Infrastructure.Commands;
+
+namespace PokeCraft;
 
 internal static class Program
 {
@@ -12,6 +17,14 @@ internal static class Program
     WebApplication application = builder.Build();
 
     await startup.ConfigureAsync(application);
+
+    IFeatureManager featureManager = application.Services.GetRequiredService<IFeatureManager>();
+    if (await featureManager.IsEnabledAsync(Features.MigrateDatabase))
+    {
+      using IServiceScope scope = application.Services.CreateScope();
+      IMediator mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+      await mediator.Send(new MigrateDatabaseCommand());
+    }
 
     application.Run();
   }

@@ -20,6 +20,7 @@ public static class DependencyInjectionExtensions
   {
     return services
       .AddLogitarEventSourcingWithEntityFrameworkCoreRelational()
+      .AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
       .AddMemoryCache()
       .AddQueriers()
       .AddRepositories()
