@@ -5,6 +5,7 @@ using PokeCraft.Application.Abilities;
 using PokeCraft.Application.Moves;
 using PokeCraft.Application.Regions;
 using PokeCraft.Application.Speciez;
+using PokeCraft.Application.Storages;
 using PokeCraft.Application.Worlds;
 using PokeCraft.Infrastructure.Actors;
 using PokeCraft.Infrastructure.Caching;
@@ -45,6 +46,7 @@ public static class DependencyInjectionExtensions
       .AddScoped<IMoveRepository, MoveRepository>()
       .AddScoped<IRegionRepository, RegionRepository>()
       .AddScoped<ISpeciesRepository, SpeciesRepository>()
+      .AddScoped<IStorageRepository, StorageRepository>()
       .AddScoped<IWorldRepository, WorldRepository>();
   }
 }
