@@ -42,6 +42,11 @@ internal class ActorService : IActorService
       await Task.Delay(1, cancellationToken); // TODO(fpion): implement
     }
 
+    foreach (ActorModel actor in actors.Values)
+    {
+      _cacheService.SetActor(actor);
+    }
+
     return actors.Values;
   }
 }

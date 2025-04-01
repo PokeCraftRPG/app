@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft.IntegrationTests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft.Tests", "tests\PokeCraft.Tests\PokeCraft.Tests.csproj", "{9BC2E659-6AFA-42AC-9C4A-C9FC288CAF7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft.UnitTests", "tests\PokeCraft.UnitTests\PokeCraft.UnitTests.csproj", "{EB9F07F6-795C-476D-A683-A10D681DEA2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{9BC2E659-6AFA-42AC-9C4A-C9FC288CAF7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BC2E659-6AFA-42AC-9C4A-C9FC288CAF7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BC2E659-6AFA-42AC-9C4A-C9FC288CAF7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB9F07F6-795C-476D-A683-A10D681DEA2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB9F07F6-795C-476D-A683-A10D681DEA2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB9F07F6-795C-476D-A683-A10D681DEA2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB9F07F6-795C-476D-A683-A10D681DEA2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,5 +74,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{02673514-5DFE-438B-A0CC-C5BFE87BE2F2} = {3657C09D-931E-4255-B5A0-EEB045F28064}
 		{9BC2E659-6AFA-42AC-9C4A-C9FC288CAF7D} = {3657C09D-931E-4255-B5A0-EEB045F28064}
+		{EB9F07F6-795C-476D-A683-A10D681DEA2F} = {3657C09D-931E-4255-B5A0-EEB045F28064}
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,6 @@
 ﻿using Logitar.EventSourcing.EntityFrameworkCore.Relational;
 using Logitar.EventSourcing.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PokeCraft.Application.Abilities;
 using PokeCraft.Application.Moves;
@@ -11,6 +12,7 @@ using PokeCraft.Infrastructure.Actors;
 using PokeCraft.Infrastructure.Caching;
 using PokeCraft.Infrastructure.Queriers;
 using PokeCraft.Infrastructure.Repositories;
+using PokeCraft.Infrastructure.Settings;
 
 namespace PokeCraft.Infrastructure;
 
@@ -24,10 +26,17 @@ public static class DependencyInjectionExtensions
       .AddMemoryCache()
       .AddQueriers()
       .AddRepositories()
+      .AddSingleton(InitializeCachingSettings)
       .AddSingleton<IActorService, ActorService>()
       .AddSingleton<ICacheService, CacheService>()
       .AddSingleton<IEventSerializer, EventSerializer>()
       .AddScoped<IEventBus, EventBus>();
+  }
+
+  private static CachingSettings InitializeCachingSettings(this IServiceProvider serviceProvider)
+  {
+    IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    return CachingSettings.Initialize(configuration);
   }
 
   private static IServiceCollection AddQueriers(this IServiceCollection services)

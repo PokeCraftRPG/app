@@ -1,6 +1,5 @@
 ﻿using Logitar.EventSourcing;
 using MediatR;
-using PokeCraft.Application.Permissions;
 using PokeCraft.Application.Storages;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Worlds;
@@ -49,11 +48,10 @@ internal class SaveWorldCommandHandler : IRequestHandler<SaveWorldCommand>
       }
     }
 
-    Resource resource = Resource.From(world);
-    await _storageService.EnsureAvailableAsync(resource, cancellationToken);
+    await _storageService.EnsureAvailableAsync(world, cancellationToken);
 
     await _worldRepository.SaveAsync(world, cancellationToken);
 
-    await _storageService.UpdateAsync(resource, cancellationToken);
+    await _storageService.UpdateAsync(world, cancellationToken);
   }
 }
