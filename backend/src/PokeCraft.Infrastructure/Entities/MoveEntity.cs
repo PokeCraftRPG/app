@@ -4,8 +4,8 @@ using PokeCraft.Application.Moves.Models;
 using PokeCraft.Domain;
 using PokeCraft.Domain.Moves;
 using PokeCraft.Domain.Moves.Events;
+using PokeCraft.Infrastructure.Converters;
 using PokeCraft.Infrastructure.PokemonDb;
-using System.Text.Json.Serialization;
 
 namespace PokeCraft.Infrastructure.Entities;
 
@@ -15,7 +15,7 @@ internal class MoveEntity : AggregateEntity, ISegregatedEntity
   static MoveEntity()
   {
     _serializerOptions.Converters.Add(new JsonStringEnumConverter());
-    // TODO(fpion): VolatileConditionConverter
+    _serializerOptions.Converters.Add(new VolatileConditionConverter());
   }
 
   public int MoveId { get; private set; }

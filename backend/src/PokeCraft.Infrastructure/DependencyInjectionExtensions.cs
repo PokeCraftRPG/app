@@ -18,13 +18,13 @@ public static class DependencyInjectionExtensions
   public static IServiceCollection AddPokeCraftInfrastructure(this IServiceCollection services)
   {
     return services
-      .AddLogitarEventSourcingInfrastructure() // TODO(fpion): EventSerializer
       .AddLogitarEventSourcingWithEntityFrameworkCoreRelational()
       .AddMemoryCache()
       .AddQueriers()
       .AddRepositories()
       .AddSingleton<IActorService, ActorService>()
       .AddSingleton<ICacheService, CacheService>()
+      .AddSingleton<IEventSerializer, EventSerializer>()
       .AddScoped<IEventBus, EventBus>();
   }
 
