@@ -70,6 +70,29 @@ internal class SpeciesEntity : AggregateEntity, ISegregatedEntity
     return actorIds.ToList().AsReadOnly();
   }
 
+  public void SetRegionalNumber(RegionEntity? region, SpeciesRegionalNumberChanged @event)
+  {
+    base.Update(@event);
+
+    RegionalNumberEntity? entity = RegionalNumbers.SingleOrDefault(x => x.RegionUid == @event.RegionId.EntityId);
+    if (entity is null)
+    {
+      if (@event.Number is not null)
+      {
+        ArgumentNullException.ThrowIfNull(region, nameof(region));
+        entity = new RegionalNumberEntity(this, region, @event);
+      }
+    }
+    else if (@event.Number is null)
+    {
+      RegionalNumbers.Remove(entity);
+    }
+    else
+    {
+      entity.Update(@event);
+    }
+  }
+
   public void Update(SpeciesUpdated @event)
   {
     base.Update(@event);
