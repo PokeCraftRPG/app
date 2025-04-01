@@ -11,7 +11,6 @@ using PokeCraft.Domain.Regions;
 using PokeCraft.Domain.Speciez;
 using PokeCraft.Infrastructure.Actors;
 using PokeCraft.Infrastructure.Entities;
-using PokeCraft.Infrastructure.PokemonDb;
 
 namespace PokeCraft.Infrastructure.Queriers;
 
@@ -60,7 +59,7 @@ internal class SpeciesQuerier : ISpeciesQuerier
   }
   public async Task<SpeciesId?> FindIdAsync(UniqueName uniqueName, CancellationToken cancellationToken)
   {
-    string uniqueNameNormalized = Helper.Normalize(uniqueName);
+    string uniqueNameNormalized = PokemonDb.Helper.Normalize(uniqueName);
 
     string? streamId = await _species.AsNoTracking()
       .WhereWorld(_applicationContext.WorldId)
@@ -121,7 +120,7 @@ internal class SpeciesQuerier : ISpeciesQuerier
   }
   public async Task<SpeciesModel?> ReadAsync(string uniqueName, CancellationToken cancellationToken)
   {
-    string uniqueNameNormalized = Helper.Normalize(uniqueName);
+    string uniqueNameNormalized = PokemonDb.Helper.Normalize(uniqueName);
 
     SpeciesEntity? species = await _species.AsNoTracking()
       .Include(x => x.RegionalNumbers).ThenInclude(x => x.Region)
