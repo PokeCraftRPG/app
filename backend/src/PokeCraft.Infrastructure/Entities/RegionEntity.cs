@@ -28,6 +28,8 @@ internal class RegionEntity : AggregateEntity, ISegregatedEntity
   public string? Link { get; private set; }
   public string? Notes { get; private set; }
 
+  public List<RegionalNumberEntity> RegionalNumbers { get; private set; } = [];
+
   public RegionEntity(WorldEntity world, RegionCreated @event) : base(@event)
   {
     World = world;

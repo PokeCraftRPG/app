@@ -19,12 +19,14 @@ internal class SpeciesQuerier : ISpeciesQuerier
 {
   private readonly IActorService _actorService;
   private readonly IApplicationContext _applicationContext;
+  private readonly DbSet<RegionalNumberEntity> _regionalNumbers;
   private readonly DbSet<SpeciesEntity> _species;
 
   public SpeciesQuerier(IActorService actorService, IApplicationContext applicationContext, PokemonContext context)
   {
     _actorService = actorService;
     _applicationContext = applicationContext;
+    _regionalNumbers = context.RegionalNumbers;
     _species = context.Species;
   }
 
@@ -45,7 +47,16 @@ internal class SpeciesQuerier : ISpeciesQuerier
       return await FindIdAsync(number, cancellationToken);
     }
 
-    throw new NotImplementedException(); // TODO(fpion): implement
+    string regionStreamId = regionId.Value.Value;
+
+    string? streamId = await _regionalNumbers.AsNoTracking()
+      .Include(x => x.Region)
+      .Include(x => x.Species)
+      .Where(x => x.Region!.StreamId == regionStreamId)
+      .Select(x => x.Species!.StreamId)
+      .SingleOrDefaultAsync(cancellationToken);
+
+    return streamId is null ? null : new SpeciesId(streamId);
   }
   public async Task<SpeciesId?> FindIdAsync(UniqueName uniqueName, CancellationToken cancellationToken)
   {
@@ -70,6 +81,7 @@ internal class SpeciesQuerier : ISpeciesQuerier
     string streamId = id.Value;
 
     SpeciesEntity? species = await _species.AsNoTracking()
+      .Include(x => x.RegionalNumbers).ThenInclude(x => x.Region)
       .Include(x => x.World)
       .SingleOrDefaultAsync(x => x.StreamId == streamId, cancellationToken);
 
@@ -78,6 +90,7 @@ internal class SpeciesQuerier : ISpeciesQuerier
   public async Task<SpeciesModel?> ReadAsync(Guid id, CancellationToken cancellationToken)
   {
     SpeciesEntity? species = await _species.AsNoTracking()
+      .Include(x => x.RegionalNumbers).ThenInclude(x => x.Region)
       .WhereWorld(_applicationContext.WorldId)
       .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
@@ -86,6 +99,7 @@ internal class SpeciesQuerier : ISpeciesQuerier
   public async Task<SpeciesModel?> ReadAsync(int number, CancellationToken cancellationToken)
   {
     SpeciesEntity? species = await _species.AsNoTracking()
+      .Include(x => x.RegionalNumbers).ThenInclude(x => x.Region)
       .WhereWorld(_applicationContext.WorldId)
       .SingleOrDefaultAsync(x => x.Number == number, cancellationToken);
 
@@ -98,13 +112,19 @@ internal class SpeciesQuerier : ISpeciesQuerier
       return await ReadAsync(number, cancellationToken);
     }
 
-    throw new NotImplementedException(); // TODO(fpion): implement
+    SpeciesEntity? species = await _species.AsNoTracking()
+      .Include(x => x.RegionalNumbers).ThenInclude(x => x.Region)
+      .WhereWorld(_applicationContext.WorldId)
+      .SingleOrDefaultAsync(x => x.RegionalNumbers.Any(y => y.Region!.Id == region.Id && y.Number == number), cancellationToken);
+
+    return species is null ? null : await MapAsync(species, cancellationToken);
   }
   public async Task<SpeciesModel?> ReadAsync(string uniqueName, CancellationToken cancellationToken)
   {
     string uniqueNameNormalized = Helper.Normalize(uniqueName);
 
     SpeciesEntity? species = await _species.AsNoTracking()
+      .Include(x => x.RegionalNumbers).ThenInclude(x => x.Region)
       .WhereWorld(_applicationContext.WorldId)
       .SingleOrDefaultAsync(x => x.UniqueNameNormalized == uniqueNameNormalized, cancellationToken);
 

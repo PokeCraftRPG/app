@@ -143,7 +143,17 @@ internal class Mapper
       Link = source.Link,
       Notes = source.Notes
     };
-    // TODO(fpion): regional numbers
+
+    foreach (RegionalNumberEntity regionalNumber in source.RegionalNumbers)
+    {
+      if (regionalNumber.Region is null)
+      {
+        throw new ArgumentException("The region is required.", nameof(source));
+      }
+
+      RegionModel region = regionalNumber.Region.World is null ? ToRegion(regionalNumber.Region, world) : ToRegion(regionalNumber.Region);
+      destination.RegionalNumbers.Add(new RegionalNumberModel(region, regionalNumber.Number));
+    }
 
     MapAggregate(source, destination);
 

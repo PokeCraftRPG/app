@@ -35,6 +35,8 @@ internal class SpeciesEntity : AggregateEntity, ISegregatedEntity
   public string? Link { get; private set; }
   public string? Notes { get; private set; }
 
+  public List<RegionalNumberEntity> RegionalNumbers { get; private set; } = [];
+
   public SpeciesEntity(WorldEntity world, SpeciesCreated @event) : base(@event)
   {
     World = world;
