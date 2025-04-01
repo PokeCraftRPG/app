@@ -61,8 +61,15 @@ internal class SpeciesEntity : AggregateEntity, ISegregatedEntity
 
   public override IReadOnlyCollection<ActorId> GetActorIds()
   {
-    HashSet<ActorId> actorIds = new(capacity: 5);
+    HashSet<ActorId> actorIds = [];
     actorIds.AddRange(base.GetActorIds());
+    foreach (RegionalNumberEntity regionalNumber in RegionalNumbers)
+    {
+      if (regionalNumber.Region is not null)
+      {
+        actorIds.AddRange(regionalNumber.Region.GetActorIds());
+      }
+    }
     if (World is not null)
     {
       actorIds.AddRange(World.GetActorIds());
