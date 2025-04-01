@@ -7,7 +7,7 @@ using PokeCraft.Infrastructure.Entities;
 
 namespace PokeCraft.Infrastructure.Configurations;
 
-internal class SpeciesConfiguration : AggregateConfiguration<SpeciesEntity>
+internal class SpeciesConfiguration : AggregateConfiguration<SpeciesEntity>, IEntityTypeConfiguration<SpeciesEntity>
 {
   public override void Configure(EntityTypeBuilder<SpeciesEntity> builder)
   {

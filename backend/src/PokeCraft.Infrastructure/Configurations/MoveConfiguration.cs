@@ -8,7 +8,7 @@ using PokeCraft.Infrastructure.PokemonDb;
 
 namespace PokeCraft.Infrastructure.Configurations;
 
-internal class MoveConfiguration : AggregateConfiguration<MoveEntity>
+internal class MoveConfiguration : AggregateConfiguration<MoveEntity>, IEntityTypeConfiguration<MoveEntity>
 {
   public override void Configure(EntityTypeBuilder<MoveEntity> builder)
   {

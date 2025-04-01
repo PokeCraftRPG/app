@@ -6,7 +6,7 @@ using PokeCraft.Infrastructure.PokemonDb;
 
 namespace PokeCraft.Infrastructure.Configurations;
 
-internal class WorldConfiguration : AggregateConfiguration<WorldEntity>
+internal class WorldConfiguration : AggregateConfiguration<WorldEntity>, IEntityTypeConfiguration<WorldEntity>
 {
   public override void Configure(EntityTypeBuilder<WorldEntity> builder)
   {

@@ -6,7 +6,7 @@ using PokeCraft.Infrastructure.PokemonDb;
 
 namespace PokeCraft.Infrastructure.Configurations;
 
-internal class AbilityConfiguration : AggregateConfiguration<AbilityEntity>
+internal class AbilityConfiguration : AggregateConfiguration<AbilityEntity>, IEntityTypeConfiguration<AbilityEntity>
 {
   public override void Configure(EntityTypeBuilder<AbilityEntity> builder)
   {

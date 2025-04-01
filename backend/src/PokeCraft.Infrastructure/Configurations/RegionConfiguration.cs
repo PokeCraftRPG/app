@@ -6,7 +6,7 @@ using PokeCraft.Infrastructure.PokemonDb;
 
 namespace PokeCraft.Infrastructure.Configurations;
 
-internal class RegionConfiguration : AggregateConfiguration<RegionEntity>
+internal class RegionConfiguration : AggregateConfiguration<RegionEntity>, IEntityTypeConfiguration<RegionEntity>
 {
   public override void Configure(EntityTypeBuilder<RegionEntity> builder)
   {
