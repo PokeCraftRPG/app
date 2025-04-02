@@ -1,5 +1,17 @@
 name: pokecraft
 services:
+  pokecraft_mongo:
+    image: mongo
+    container_name: PokeCraft_mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: pokecraft
+      MONGO_INITDB_ROOT_PASSWORD: C8gUKJvdjRBt5AXz
+    ports:
+      - 27032:27017
+    volumes:
+      - mongo_data:/data/db
+
   pokecraft_mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: PokeCraft_mssql
@@ -15,7 +27,37 @@ services:
       - mssql_data:/var/opt/mssql/data
       - mssql_log:/var/opt/mssql/log
 
+  pokecraft_postgres:
+    image: postgres
+    container_name: PokeCraft_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: fc3QPtNVRWnse8ZH
+    ports:
+      - 5442:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pokecraft_portal:
+    image: fpion/portal
+    container_name: PokeCraft_portal
+    depends_on:
+      - pokecraft_mongo
+      - pokecraft_mssql
+      - pokecraft_postgres
+    restart: unless-stopped
+    environment:
+      EnableBasicAuthentication: "true"
+      EnableMigrations: "true"
+      MongoDB:ConnectionString: mongodb://pokecraft:C8gUKJvdjRBt5AXz@pokecraft_mongo:27017/
+      POSTGRESQLCONNSTR_Portal: "User ID=postgres;Password=fc3QPtNVRWnse8ZH;Host=pokecraft_postgres;Port=5432;Database=portal;"
+      SQLCONNSTR_Portal: "Server=pokecraft_mssql;Database=Portal;User Id=SA;Password=qQMHwru4jSd8KpaC;Persist Security Info=False;Encrypt=False;"
+    ports:
+      - 8892:8080
+
 volumes:
+  mongo_data:
   mssql_backup:
   mssql_data:
   mssql_log:
+  postgres_data:

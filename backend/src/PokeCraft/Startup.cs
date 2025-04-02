@@ -1,6 +1,8 @@
 ﻿using Logitar.EventSourcing.EntityFrameworkCore.Relational;
+using Logitar.Portal.Client;
 using Microsoft.FeatureManagement;
 using PokeCraft.Application;
+using PokeCraft.Authentication;
 using PokeCraft.Constants;
 using PokeCraft.Extensions;
 using PokeCraft.Infrastructure;
@@ -32,6 +34,7 @@ internal class Startup : StartupBase
     services.AddPokeCraftApplication();
     services.AddPokeCraftInfrastructure();
     services.AddSingleton<IApplicationContext, HttpApplicationContext>();
+    services.AddSingleton<IOpenAuthenticationService, OpenAuthenticationService>();
 
     DatabaseProvider databaseProvider = GetDatabaseProvider();
     switch (databaseProvider)
@@ -44,6 +47,8 @@ internal class Startup : StartupBase
       default:
         throw new DatabaseProviderNotSupportedException(databaseProvider);
     }
+
+    services.AddLogitarPortalClient(_configuration); // TODO(fpion): environment variables
   }
   private DatabaseProvider GetDatabaseProvider()
   {
