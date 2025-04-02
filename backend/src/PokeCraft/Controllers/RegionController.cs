@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using PokeCraft.Application.Regions.Commands;
 using PokeCraft.Application.Regions.Models;
 using PokeCraft.Application.Regions.Queries;
+using PokeCraft.Filters;
 
 namespace PokeCraft.Controllers;
 
 [ApiController]
-[Authorize] // TODO(fpion): RequireWorld
+[Authorize]
+[RequireWorld]
 [Route("regions")]
 public class RegionController : ControllerBase
 {

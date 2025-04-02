@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using PokeCraft.Application.Abilities.Commands;
 using PokeCraft.Application.Abilities.Models;
 using PokeCraft.Application.Abilities.Queries;
+using PokeCraft.Filters;
 
 namespace PokeCraft.Controllers;
 
 [ApiController]
-[Authorize] // TODO(fpion): RequireWorld
+[Authorize]
+[RequireWorld]
 [Route("abilities")]
 public class AbilityController : ControllerBase
 {

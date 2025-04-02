@@ -4,7 +4,7 @@ using PokeCraft.Domain.Storages.Events;
 
 namespace PokeCraft.Infrastructure.Handlers;
 
-internal class StorageEvents : INotificationHandler<ResourceStored>, INotificationHandler<StorageInitialized> // TODO(fpion): implement
+internal class StorageEvents : INotificationHandler<ResourceStored>, INotificationHandler<StorageInitialized> // TODO(fpion): storage
 {
   private readonly PokemonContext _context;
   private readonly ILogger<StorageEvents> _logger;

@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using PokeCraft.Application.Moves.Commands;
 using PokeCraft.Application.Moves.Models;
 using PokeCraft.Application.Moves.Queries;
+using PokeCraft.Filters;
 
 namespace PokeCraft.Controllers;
 
 [ApiController]
-[Authorize] // TODO(fpion): RequireWorld
+[Authorize]
+[RequireWorld]
 [Route("moves")]
 public class MoveController : ControllerBase
 {

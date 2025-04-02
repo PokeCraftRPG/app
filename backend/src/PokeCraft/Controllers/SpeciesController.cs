@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using PokeCraft.Application.Speciez.Commands;
 using PokeCraft.Application.Speciez.Models;
 using PokeCraft.Application.Speciez.Queries;
+using PokeCraft.Filters;
 
 namespace PokeCraft.Controllers;
 
 [ApiController]
-[Authorize] // TODO(fpion): RequireWorld
+[Authorize]
+[RequireWorld]
 [Route("species")]
 public class SpeciesController : ControllerBase
 {
