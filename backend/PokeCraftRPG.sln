@@ -19,6 +19,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft", "src\PokeCraft\PokeCraft.csproj", "{B1D1A320-8035-4C7B-B4FF-8DA949F6282E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft.Infrastructure.SqlServer", "src\PokeCraft.Infrastructure.SqlServer\PokeCraft.Infrastructure.SqlServer.csproj", "{255AEA8A-2E7E-428C-BBED-3CF85E042632}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3657C09D-931E-4255-B5A0-EEB045F28064}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft.IntegrationTests", "tests\PokeCraft.IntegrationTests\PokeCraft.IntegrationTests.csproj", "{02673514-5DFE-438B-A0CC-C5BFE87BE2F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft.Tests", "tests\PokeCraft.Tests\PokeCraft.Tests.csproj", "{9BC2E659-6AFA-42AC-9C4A-C9FC288CAF7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeCraft.UnitTests", "tests\PokeCraft.UnitTests\PokeCraft.UnitTests.csproj", "{EB9F07F6-795C-476D-A683-A10D681DEA2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,8 +51,29 @@ Global
 		{B1D1A320-8035-4C7B-B4FF-8DA949F6282E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1D1A320-8035-4C7B-B4FF-8DA949F6282E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1D1A320-8035-4C7B-B4FF-8DA949F6282E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{255AEA8A-2E7E-428C-BBED-3CF85E042632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{255AEA8A-2E7E-428C-BBED-3CF85E042632}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{255AEA8A-2E7E-428C-BBED-3CF85E042632}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{255AEA8A-2E7E-428C-BBED-3CF85E042632}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02673514-5DFE-438B-A0CC-C5BFE87BE2F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02673514-5DFE-438B-A0CC-C5BFE87BE2F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02673514-5DFE-438B-A0CC-C5BFE87BE2F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02673514-5DFE-438B-A0CC-C5BFE87BE2F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BC2E659-6AFA-42AC-9C4A-C9FC288CAF7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BC2E659-6AFA-42AC-9C4A-C9FC288CAF7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BC2E659-6AFA-42AC-9C4A-C9FC288CAF7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BC2E659-6AFA-42AC-9C4A-C9FC288CAF7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB9F07F6-795C-476D-A683-A10D681DEA2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB9F07F6-795C-476D-A683-A10D681DEA2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB9F07F6-795C-476D-A683-A10D681DEA2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB9F07F6-795C-476D-A683-A10D681DEA2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{02673514-5DFE-438B-A0CC-C5BFE87BE2F2} = {3657C09D-931E-4255-B5A0-EEB045F28064}
+		{9BC2E659-6AFA-42AC-9C4A-C9FC288CAF7D} = {3657C09D-931E-4255-B5A0-EEB045F28064}
+		{EB9F07F6-795C-476D-A683-A10D681DEA2F} = {3657C09D-931E-4255-B5A0-EEB045F28064}
 	EndGlobalSection
 EndGlobal

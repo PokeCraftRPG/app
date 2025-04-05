@@ -1,3 +1,18 @@
 # PokeCraftRPG Backend
 
 This is the backend of the PokéCraft Tabletop Role-Playing Game Web application.
+
+## Environment Variables
+
+- `ACCOUNT_ALLOCATED_BYTES`
+- `ACCOUNT_WORLD_LIMIT`
+- `CACHING_ACTOR_LIFETIME`
+- `DATABASE_PROVIDER`
+- `OPEN_AUTHENTICATION_ACCESS_TOKEN_LIFETIME`
+- `PORTAL_API_KEY`
+- `PORTAL_BASE_URL`
+- `PORTAL_PASSWORD`
+- `PORTAL_PHONE_SENDER_ID`
+- `PORTAL_REALM`
+- `PORTAL_USERNAME`
+- `SQLCONNSTR_Pokemon`
