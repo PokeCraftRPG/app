@@ -2,7 +2,7 @@
 
 namespace PokeCraft.Application.Accounts;
 
-internal static class TokenExtensions
+public static class TokenExtensions
 {
   public static Guid GetUserId(this ValidatedTokenModel token)
   {

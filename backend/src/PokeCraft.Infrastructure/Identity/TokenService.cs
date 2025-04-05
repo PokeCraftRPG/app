@@ -29,6 +29,23 @@ internal class TokenService : ITokenService
     return await _tokenClient.CreateAsync(payload, context);
   }
 
+  public async Task<CreatedTokenModel> CreateAsync(UserModel user, IEnumerable<Claim> claims, string type, int lifetimeSeconds, bool isConsumable, CancellationToken cancellationToken)
+  {
+    CreateTokenPayload payload = new()
+    {
+      IsConsumable = isConsumable,
+      LifetimeSeconds = lifetimeSeconds,
+      Type = type,
+      Subject = user.GetSubject()
+    };
+    foreach (Claim claim in claims)
+    {
+      payload.Claims.Add(new ClaimModel(claim.Type, claim.Value, claim.ValueType));
+    }
+    RequestContext context = new(cancellationToken);
+    return await _tokenClient.CreateAsync(payload, context);
+  }
+
   public async Task<ValidatedTokenModel> ValidateAsync(string token, string type, bool consume, CancellationToken cancellationToken)
   {
     ValidateTokenPayload payload = new(token)

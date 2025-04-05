@@ -1,7 +1,8 @@
 ﻿namespace PokeCraft.Application.Constants;
 
-internal static class TokenTypes
+public static class TokenTypes
 {
+  public const string Access = "at+jwt";
   public const string Authentication = "auth+jwt";
   public const string Profile = "profile+jwt";
 }

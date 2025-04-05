@@ -10,9 +10,9 @@ internal class SignInAccountValidator : AbstractValidator<SignInAccountPayload>
   {
     //RuleFor(x => x.Locale).Locale(); // TODO(fpion): validation
 
-    When(x => x.Credentials != null, () => RuleFor(x => x.Credentials!).SetValidator(new CredentialsValidator()));
-    When(x => x.OneTimePassword != null, () => RuleFor(x => x.OneTimePassword!).SetValidator(new OneTimePasswordValidator()));
-    When(x => x.Profile != null, () => RuleFor(x => x.Profile!).SetValidator(new CompleteProfileValidator(passwordSettings)));
+    When(x => x.Credentials is not null, () => RuleFor(x => x.Credentials!).SetValidator(new CredentialsValidator()));
+    When(x => x.OneTimePassword is not null, () => RuleFor(x => x.OneTimePassword!).SetValidator(new OneTimePasswordValidator()));
+    When(x => x.Profile is not null, () => RuleFor(x => x.Profile!).SetValidator(new CompleteProfileValidator(passwordSettings)));
 
     RuleFor(x => x).Must(BeAValidPayload).WithErrorCode(nameof(SignInAccountValidator))
       .WithMessage(x => $"Exactly one of the following must be specified: {nameof(x.Credentials)}, {nameof(x.AuthenticationToken)}, {nameof(x.OneTimePassword)}, {nameof(x.Profile)}.");
@@ -21,7 +21,7 @@ internal class SignInAccountValidator : AbstractValidator<SignInAccountPayload>
   private static bool BeAValidPayload(SignInAccountPayload payload)
   {
     int count = 0;
-    if (payload.Credentials != null)
+    if (payload.Credentials is not null)
     {
       count++;
     }
@@ -29,11 +29,11 @@ internal class SignInAccountValidator : AbstractValidator<SignInAccountPayload>
     {
       count++;
     }
-    if (payload.OneTimePassword != null)
+    if (payload.OneTimePassword is not null)
     {
       count++;
     }
-    if (payload.Profile != null)
+    if (payload.Profile is not null)
     {
       count++;
     }
