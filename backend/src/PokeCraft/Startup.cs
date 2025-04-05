@@ -48,7 +48,7 @@ internal class Startup : StartupBase
         throw new DatabaseProviderNotSupportedException(databaseProvider);
     }
 
-    services.AddLogitarPortalClient(_configuration); // TODO(fpion): environment variables
+    services.AddLogitarPortalClient(InitializePortalSettings());
   }
   private DatabaseProvider GetDatabaseProvider()
   {
@@ -56,6 +56,37 @@ internal class Startup : StartupBase
     return !string.IsNullOrWhiteSpace(databaseProvider)
       ? Enum.Parse<DatabaseProvider>(databaseProvider)
       : (_configuration.GetValue<DatabaseProvider?>("DatabaseProvider") ?? DatabaseProvider.SqlServer);
+  }
+  private PortalSettings InitializePortalSettings()
+  {
+    PortalSettings settings = _configuration.GetSection(PortalSettings.SectionKey).Get<PortalSettings>() ?? new();
+
+    string? apiKey = Environment.GetEnvironmentVariable("PORTAL_API_KEY");
+    if (!string.IsNullOrWhiteSpace(apiKey))
+    {
+      settings.ApiKey = apiKey;
+    }
+
+    string? baseUrl = Environment.GetEnvironmentVariable("PORTAL_BASE_URL");
+    if (!string.IsNullOrWhiteSpace(baseUrl))
+    {
+      settings.BaseUrl = baseUrl;
+    }
+
+    string? realm = Environment.GetEnvironmentVariable("PORTAL_REALM");
+    if (!string.IsNullOrWhiteSpace(realm))
+    {
+      settings.Realm = realm;
+    }
+
+    string? username = Environment.GetEnvironmentVariable("PORTAL_USERNAME");
+    string? password = Environment.GetEnvironmentVariable("PORTAL_PASSWORD");
+    if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
+    {
+      settings.Basic = new BasicCredentials(username, password);
+    }
+
+    return settings;
   }
 
   public override void Configure(IApplicationBuilder builder)
