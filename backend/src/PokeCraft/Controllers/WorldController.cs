@@ -9,7 +9,7 @@ namespace PokeCraft.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("worlds")]
+[Route("api/worlds")]
 public class WorldController : ControllerBase
 {
   private readonly IMediator _mediator;

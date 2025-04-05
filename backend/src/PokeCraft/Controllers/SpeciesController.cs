@@ -11,7 +11,7 @@ namespace PokeCraft.Controllers;
 [ApiController]
 [Authorize]
 [RequireWorld]
-[Route("species")]
+[Route("api/species")]
 public class SpeciesController : ControllerBase
 {
   private readonly IMediator _mediator;

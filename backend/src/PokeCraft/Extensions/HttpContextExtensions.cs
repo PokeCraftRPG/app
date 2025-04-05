@@ -94,15 +94,15 @@ internal static class HttpContextExtensions
 
     if (session.RefreshToken is not null)
     {
-      //CookiesSettings cookiesSettings = context.RequestServices.GetRequiredService<CookiesSettings>();
-      //CookieOptions options = new()
-      //{
-      //  HttpOnly = cookiesSettings.RefreshToken.HttpOnly,
-      //  MaxAge = cookiesSettings.RefreshToken.MaxAge,
-      //  SameSite = cookiesSettings.RefreshToken.SameSite,
-      //  Secure = cookiesSettings.RefreshToken.Secure
-      //};
-      //context.Response.Cookies.Append(Cookies.RefreshToken, session.RefreshToken, options); // TODO(fpion): session
+      CookiesSettings cookiesSettings = context.RequestServices.GetRequiredService<CookiesSettings>();
+      CookieOptions options = new()
+      {
+        HttpOnly = cookiesSettings.RefreshToken.HttpOnly,
+        MaxAge = cookiesSettings.RefreshToken.MaxAge,
+        SameSite = cookiesSettings.RefreshToken.SameSite,
+        Secure = cookiesSettings.RefreshToken.Secure
+      };
+      context.Response.Cookies.Append(Cookies.RefreshToken, session.RefreshToken, options);
     }
 
     context.SetSession(session);

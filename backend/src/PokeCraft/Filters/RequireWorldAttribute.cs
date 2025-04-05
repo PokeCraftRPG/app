@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
+using PokeCraft.Constants;
 using PokeCraft.Extensions;
 
 namespace PokeCraft.Filters;
@@ -9,7 +10,7 @@ internal class RequireWorldAttribute : ActionFilterAttribute
   {
     if (context.HttpContext.GetWorld() is null)
     {
-      throw new NotImplementedException(); // TODO(fpion): error handling
+      throw new WorldIsRequiredException(Headers.World);
     }
     else
     {

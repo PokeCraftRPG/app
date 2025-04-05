@@ -24,7 +24,7 @@ public class AccountController : ControllerBase
     _sessionService = sessionService;
   }
 
-  [HttpPost("/auth/sign/in")]
+  [HttpPost("api/auth/sign/in")]
   public async Task<ActionResult<SignInAccountResponse>> SignInAsync([FromBody] SignInAccountPayload payload, CancellationToken cancellationToken)
   {
     SignInAccountCommand command = new(payload, HttpContext.GetSessionCustomAttributes());
@@ -38,7 +38,7 @@ public class AccountController : ControllerBase
     return Ok(response);
   }
 
-  [HttpPost("/auth/token")]
+  [HttpPost("api/auth/token")]
   public async Task<ActionResult<GetTokenResponse>> GetTokenAsync([FromBody] GetTokenPayload payload, CancellationToken cancellationToken)
   {
     GetTokenResponse response;

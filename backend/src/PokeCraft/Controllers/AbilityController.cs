@@ -11,7 +11,7 @@ namespace PokeCraft.Controllers;
 [ApiController]
 [Authorize]
 [RequireWorld]
-[Route("abilities")]
+[Route("api/abilities")]
 public class AbilityController : ControllerBase
 {
   private readonly IMediator _mediator;

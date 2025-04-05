@@ -24,7 +24,7 @@ internal class SessionAuthenticationHandler : AuthenticationHandler<SessionAuthe
     if (sessionId.HasValue)
     {
       SessionModel? session = await _sessionService.FindAsync(sessionId.Value);
-      if (session == null)
+      if (session is null)
       {
         return Fail($"The session 'Id={sessionId}' could not be found.");
       }

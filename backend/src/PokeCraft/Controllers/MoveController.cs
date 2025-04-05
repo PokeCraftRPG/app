@@ -11,7 +11,7 @@ namespace PokeCraft.Controllers;
 [ApiController]
 [Authorize]
 [RequireWorld]
-[Route("moves")]
+[Route("api/moves")]
 public class MoveController : ControllerBase
 {
   private readonly IMediator _mediator;

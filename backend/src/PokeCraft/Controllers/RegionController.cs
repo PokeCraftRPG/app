@@ -11,7 +11,7 @@ namespace PokeCraft.Controllers;
 [ApiController]
 [Authorize]
 [RequireWorld]
-[Route("regions")]
+[Route("api/regions")]
 public class RegionController : ControllerBase
 {
   private readonly IMediator _mediator;

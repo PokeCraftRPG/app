@@ -4,7 +4,7 @@ using PokeCraft.Models.Index;
 namespace PokeCraft.Controllers;
 
 [ApiController]
-[Route("")]
+[Route("api")]
 public class IndexController : ControllerBase
 {
   [HttpGet]

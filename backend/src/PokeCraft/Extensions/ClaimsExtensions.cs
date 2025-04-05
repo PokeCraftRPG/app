@@ -40,42 +40,42 @@ internal static class ClaimsExtensions
     identity.AddClaim(new(Rfc7519ClaimNames.Username, user.UniqueName));
     identity.AddClaim(ClaimHelper.Create(Rfc7519ClaimNames.UpdatedAt, user.UpdatedOn));
 
-    if (user.Address != null)
+    if (user.Address is not null)
     {
       identity.AddClaim(user.Address.CreateClaim(Rfc7519ClaimNames.Address));
       identity.AddClaim(new(OtherClaimNames.IsAddressVerified, user.Address.IsVerified.ToString().ToLower(), ClaimValueTypes.Boolean));
     }
-    if (user.Email != null)
+    if (user.Email is not null)
     {
       identity.AddClaim(new(Rfc7519ClaimNames.EmailAddress, user.Email.Address));
       identity.AddClaim(new(Rfc7519ClaimNames.IsEmailVerified, user.Email.IsVerified.ToString().ToLower(), ClaimValueTypes.Boolean));
     }
-    if (user.Phone != null)
+    if (user.Phone is not null)
     {
       identity.AddClaim(new(Rfc7519ClaimNames.PhoneNumber, user.Phone.E164Formatted));
       identity.AddClaim(new(Rfc7519ClaimNames.IsPhoneVerified, user.Phone.IsVerified.ToString().ToLower(), ClaimValueTypes.Boolean));
     }
 
-    if (user.FullName != null)
+    if (user.FullName is not null)
     {
       identity.AddClaim(new(Rfc7519ClaimNames.FullName, user.FullName));
 
-      if (user.FirstName != null)
+      if (user.FirstName is not null)
       {
         identity.AddClaim(new(Rfc7519ClaimNames.FirstName, user.FirstName));
       }
 
-      if (user.MiddleName != null)
+      if (user.MiddleName is not null)
       {
         identity.AddClaim(new(Rfc7519ClaimNames.MiddleName, user.MiddleName));
       }
 
-      if (user.LastName != null)
+      if (user.LastName is not null)
       {
         identity.AddClaim(new(Rfc7519ClaimNames.LastName, user.LastName));
       }
     }
-    if (user.Nickname != null)
+    if (user.Nickname is not null)
     {
       identity.AddClaim(new(Rfc7519ClaimNames.Nickname, user.Nickname));
     }
@@ -84,28 +84,28 @@ internal static class ClaimsExtensions
     {
       identity.AddClaim(new(Rfc7519ClaimNames.Birthdate, user.Birthdate.Value.ToString("yyyy-MM-dd")));
     }
-    if (user.Gender != null)
+    if (user.Gender is not null)
     {
       identity.AddClaim(new(Rfc7519ClaimNames.Gender, user.Gender.ToLower()));
     }
-    if (user.Locale != null)
+    if (user.Locale is not null)
     {
       identity.AddClaim(new(Rfc7519ClaimNames.Locale, user.Locale.Code));
     }
-    if (user.TimeZone != null)
+    if (user.TimeZone is not null)
     {
       identity.AddClaim(new(Rfc7519ClaimNames.TimeZone, user.TimeZone));
     }
 
-    if (user.Picture != null)
+    if (user.Picture is not null)
     {
       identity.AddClaim(new(Rfc7519ClaimNames.Picture, user.Picture));
     }
-    if (user.Profile != null)
+    if (user.Profile is not null)
     {
       identity.AddClaim(new(Rfc7519ClaimNames.Profile, user.Profile));
     }
-    if (user.Website != null)
+    if (user.Website is not null)
     {
       identity.AddClaim(new(Rfc7519ClaimNames.Website, user.Website));
     }

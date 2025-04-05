@@ -57,9 +57,9 @@ internal class Startup : StartupBase
 
     services.AddApplicationInsightsTelemetry();
     services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-    //services.AddExceptionHandler<ExceptionHandler>(); // TODO(fpion): ExceptionHandler
+    services.AddExceptionHandler<ExceptionHandler>();
     services.AddFeatureManagement();
-    //services.AddProblemDetails(); // TODO(fpion): ExceptionHandler
+    services.AddProblemDetails();
     services.AddOpenApi();
     services.AddSwagger();
 
