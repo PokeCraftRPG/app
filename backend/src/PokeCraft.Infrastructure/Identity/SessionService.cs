@@ -21,6 +21,12 @@ internal class SessionService : ISessionService
     return await _sessionClient.CreateAsync(payload, context);
   }
 
+  public async Task<SessionModel> FindAsync(Guid id, CancellationToken cancellationToken)
+  {
+    RequestContext context = new(cancellationToken);
+    return await _sessionClient.ReadAsync(id, context) ?? throw new InvalidOperationException($"The session 'Id={id}' could not be found.");
+  }
+
   public async Task<SessionModel> RenewAsync(string refreshToken, IEnumerable<CustomAttribute> customAttributes, CancellationToken cancellationToken)
   {
     RenewSessionPayload payload = new(refreshToken, customAttributes);

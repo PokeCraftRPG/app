@@ -15,11 +15,15 @@ internal class UserService : IUserService
     _userClient = userClient;
   }
 
-  public async Task<UserModel> AuthenticateAsync(UserModel user, string password, CancellationToken cancellationToken)
+  public async Task<UserModel> AuthenticateAsync(string emailAddress, string password, CancellationToken cancellationToken)
   {
-    AuthenticateUserPayload payload = new(user.UniqueName, password);
+    AuthenticateUserPayload payload = new(emailAddress, password);
     RequestContext context = new(cancellationToken);
     return await _userClient.AuthenticateAsync(payload, context);
+  }
+  public async Task<UserModel> AuthenticateAsync(UserModel user, string password, CancellationToken cancellationToken)
+  {
+    return await AuthenticateAsync(user.UniqueName, password, cancellationToken);
   }
 
   public async Task<UserModel> CompleteProfileAsync(UserModel user, CompleteProfilePayload profile, CancellationToken cancellationToken)

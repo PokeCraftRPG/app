@@ -39,6 +39,7 @@ public static class DependencyInjectionExtensions
   private static IServiceCollection AddIdentityServices(this IServiceCollection services)
   {
     return services
+      .AddSingleton<IApiKeyService, ApiKeyService>()
       .AddSingleton<IMessageService, MessageService>()
       .AddSingleton<IOneTimePasswordService, OneTimePasswordService>()
       .AddSingleton<IRealmService, RealmService>()

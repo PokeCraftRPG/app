@@ -5,6 +5,7 @@ namespace PokeCraft.Application.Accounts;
 
 public interface IUserService
 {
+  Task<UserModel> AuthenticateAsync(string emailAddress, string password, CancellationToken cancellationToken = default);
   Task<UserModel> AuthenticateAsync(UserModel user, string password, CancellationToken cancellationToken = default);
   Task<UserModel> CompleteProfileAsync(UserModel user, CompleteProfilePayload payload, CancellationToken cancellationToken = default);
   Task<UserModel> CreateAsync(string emailAddress, CancellationToken cancellationToken = default);
