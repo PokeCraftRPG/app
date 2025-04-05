@@ -11,16 +11,16 @@ internal record AccountSettings
   {
     AccountSettings settings = configuration.GetSection("Account").Get<AccountSettings>() ?? new();
 
-    string? worldLimitValue = Environment.GetEnvironmentVariable("ACCOUNT_WORLD_LIMIT");
-    if (!string.IsNullOrWhiteSpace(worldLimitValue) && int.TryParse(worldLimitValue, out int worldLimit))
-    {
-      settings.WorldLimit = worldLimit;
-    }
-
     string? allocatedBytesValue = Environment.GetEnvironmentVariable("ACCOUNT_ALLOCATED_BYTES");
     if (!string.IsNullOrWhiteSpace(allocatedBytesValue) && long.TryParse(allocatedBytesValue, out long allocatedBytes))
     {
       settings.AllocatedBytes = allocatedBytes;
+    }
+
+    string? worldLimitValue = Environment.GetEnvironmentVariable("ACCOUNT_WORLD_LIMIT");
+    if (!string.IsNullOrWhiteSpace(worldLimitValue) && int.TryParse(worldLimitValue, out int worldLimit))
+    {
+      settings.WorldLimit = worldLimit;
     }
 
     return settings;

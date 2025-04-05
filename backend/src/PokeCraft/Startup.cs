@@ -52,36 +52,24 @@ internal class Startup : StartupBase
   }
   private DatabaseProvider GetDatabaseProvider()
   {
-    string? databaseProvider = Environment.GetEnvironmentVariable("DATABASE_PROVIDER");
-    return !string.IsNullOrWhiteSpace(databaseProvider)
-      ? Enum.Parse<DatabaseProvider>(databaseProvider)
-      : (_configuration.GetValue<DatabaseProvider?>("DatabaseProvider") ?? DatabaseProvider.SqlServer);
+    string? value = Environment.GetEnvironmentVariable("DATABASE_PROVIDER");
+    if (!string.IsNullOrWhiteSpace(value) && Enum.TryParse(value, out DatabaseProvider databaseProvider))
+    {
+      return databaseProvider;
+    }
+    return _configuration.GetValue<DatabaseProvider?>("DatabaseProvider") ?? DatabaseProvider.SqlServer;
   }
   private PortalSettings InitializePortalSettings()
   {
     PortalSettings settings = _configuration.GetSection(PortalSettings.SectionKey).Get<PortalSettings>() ?? new();
 
-    string? apiKey = Environment.GetEnvironmentVariable("PORTAL_API_KEY");
-    if (!string.IsNullOrWhiteSpace(apiKey))
-    {
-      settings.ApiKey = apiKey;
-    }
+    settings.ApiKey = EnvironmentHelper.TryGetVariable("PORTAL_API_KEY", settings.ApiKey);
+    settings.BaseUrl = EnvironmentHelper.TryGetVariable("PORTAL_BASE_URL", settings.BaseUrl);
+    settings.Realm = EnvironmentHelper.TryGetVariable("PORTAL_REALM", settings.Realm);
 
-    string? baseUrl = Environment.GetEnvironmentVariable("PORTAL_BASE_URL");
-    if (!string.IsNullOrWhiteSpace(baseUrl))
-    {
-      settings.BaseUrl = baseUrl;
-    }
-
-    string? realm = Environment.GetEnvironmentVariable("PORTAL_REALM");
-    if (!string.IsNullOrWhiteSpace(realm))
-    {
-      settings.Realm = realm;
-    }
-
-    string? username = Environment.GetEnvironmentVariable("PORTAL_USERNAME");
-    string? password = Environment.GetEnvironmentVariable("PORTAL_PASSWORD");
-    if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
+    string? username = EnvironmentHelper.TryGetVariable("PORTAL_USERNAME", settings.Basic?.Username);
+    string? password = EnvironmentHelper.TryGetVariable("PORTAL_PASSWORD", settings.Basic?.Password);
+    if (username is not null && password is not null)
     {
       settings.Basic = new BasicCredentials(username, password);
     }
