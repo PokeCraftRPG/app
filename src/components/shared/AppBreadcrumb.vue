@@ -37,9 +37,9 @@ const breadcrumbs = computed<Breadcrumb[]>(() => {
     breadcrumbs.push({ text: props.active });
   }
   if (breadcrumbs.length) {
-    breadcrumbs.splice(0, 0, { text: t("home"), to: { name: "Home" } });
+    breadcrumbs.splice(0, 0, { text: t("home.title"), to: { name: "Home" } });
   } else {
-    breadcrumbs.push({ text: t("home") });
+    breadcrumbs.push({ text: t("home.title") });
   }
   return breadcrumbs;
 });
