@@ -1,6 +1,6 @@
 # PokéCraft Application
 
-This template should help get you started developing with Vue 3 in Vite.
+A multi-tenant game Web application managing world-scoped data, character sheets, and real-time gameplay state for interactive Pokémon roleplaying experiences.
 
 ## Recommended IDE Setup
 
