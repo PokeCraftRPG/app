@@ -8,6 +8,7 @@ const router = createRouter({
       path: "/",
       name: "Home",
       component: HomeView,
+      meta: { isPublic: true },
     },
     // NotFound
     {
