@@ -28,6 +28,9 @@
             <!-- TODO(fpion): dark mode selector, which is a simple dropdown menu with Light, Dark and Auto -->
           </li>
           <!-- TODO(fpion): user avatar with profile and sign-out dropdown -->
+          <li class="nav-item">
+            <RouterLink :to="{ name: 'SignIn' }" class="nav-link"><font-awesome-icon icon="fas fa-user" />&nbsp;{{ t("account.signIn.title") }}</RouterLink>
+          </li>
         </ul>
       </div>
     </div>
