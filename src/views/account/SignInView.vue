@@ -49,7 +49,7 @@ function handleResponse(res: SignInAccountResponse) {
     if (redirect) {
       router.push(redirect);
     } else {
-      router.push({ name: "Home" });
+      router.push({ name: res.currentUser.defaultExperience === "Gamemaster" ? "Worlds" : "Home" });
     }
   } else if (res.profileCompletionToken) {
     router.push({ name: "Profile", query: { token: res.profileCompletionToken } });

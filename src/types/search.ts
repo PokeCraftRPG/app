@@ -1,10 +1,10 @@
-export type SearchOperator = "And" | "Or";
+export type SearchMode = "All" | "Any";
 
 export type SearchPayload = {
   ids: string[];
   search: TextSearch;
   sort: SortOption[];
-  skip: number;
+  offset: number;
   limit: number;
 };
 
@@ -24,5 +24,5 @@ export type SortOption = {
 
 export type TextSearch = {
   terms: SearchTerm[];
-  operator: SearchOperator;
+  operator: SearchMode;
 };

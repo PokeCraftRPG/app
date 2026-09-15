@@ -1,3 +1,20 @@
+export type Actor = {
+  realmId?: string | null;
+  type: ActorType;
+  id: string;
+  isDeleted: boolean;
+  displayName: string;
+  emailAddress?: string | null;
+  pictureUrl?: string | null;
+};
+
+export type ActorType = "ApiKey" | "System" | "User";
+
+export type Aggregate = Auditable & {
+  id: string;
+  version: number;
+};
+
 export type ApiError = {
   code: string;
   message: string;
@@ -19,8 +36,16 @@ export type ApiVersion = {
   version: string;
 };
 
+export type Auditable = {
+  createdBy: Actor;
+  createdOn: string;
+  updatedBy: Actor;
+  updatedOn: string;
+};
+
 export enum ErrorCodes {
   InvalidCredentials = "InvalidCredentials",
+  KeyAlreadyUsed = "KeyAlreadyUsed",
 }
 
 export type Optional<T> = {
@@ -42,3 +67,10 @@ export enum StatusCodes {
   NotFound = 404,
   Conflict = 409,
 }
+
+export const SYSTEM: Actor = {
+  type: "System",
+  id: "00000000-0000-0000-0000-000000000000",
+  isDeleted: false,
+  displayName: "System",
+};
