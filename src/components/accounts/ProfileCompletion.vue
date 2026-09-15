@@ -164,7 +164,7 @@ async function complete(): Promise<void> {
       const response: SignInAccountResponse = await signIn(request);
       if (response.currentUser) {
         account.signIn(response.currentUser);
-        router.push({ name: "Home" });
+        router.push({ name: response.currentUser.defaultExperience === "Gamemaster" ? "Worlds" : "Home" });
       }
     } catch (e: unknown) {
       emit("error", e);

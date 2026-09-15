@@ -1,6 +1,7 @@
 import { stringUtils } from "logitar-js";
 
 import type { ApiFailure, ApiResult, ApiVersion } from "@/types/api";
+import { useWorldStore } from "@/stores/world";
 
 const apiBaseUrl: string = import.meta.env.VITE_APP_API_BASE_URL ?? "";
 const contentType: string = "Content-Type";
@@ -13,6 +14,12 @@ async function execute<TData, TResult>(method: string, url: string, data?: TData
     body = JSON.stringify(data);
     headers.set(contentType, "application/json; charset=UTF-8");
   }
+
+  const world = useWorldStore();
+  if (world.current) {
+    headers.set("X-World", world.current.id);
+  }
+
   const input: string = isAbsoluteURL(url) ? url : combineURL(apiBaseUrl, url);
 
   const response: Response = await fetch(input, { method, headers, body, credentials: "include" });

@@ -31,6 +31,17 @@ const router = createRouter({
       component: () => import("./views/account/SignOutView.vue"),
       meta: { isPublic: true },
     },
+    // Worlds
+    {
+      name: "Worlds",
+      path: "/worlds",
+      component: () => import("./views/worlds/WorldsView.vue"),
+    },
+    {
+      name: "World",
+      path: "/worlds/:id",
+      component: () => import("./views/worlds/WorldView.vue"),
+    },
     // NotFound
     {
       name: "NotFound",

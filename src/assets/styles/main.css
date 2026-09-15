@@ -10,6 +10,12 @@ a {
   border-radius: 0.3rem;
 }
 
+.page {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
 @media (min-width: 576px) {
   .jumbotron {
     padding: 4rem 2rem;

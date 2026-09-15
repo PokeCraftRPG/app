@@ -4,12 +4,17 @@
     "cancel": "Cancel",
     "close": "Close",
     "complete": "Complete",
+    "create": "Create",
+    "edit": "Edit",
+    "enter": "Enter",
     "next": "Next",
     "previous": "Previous",
     "save": "Save",
     "verify": "Verify"
   },
   "brand": "PokéCraft",
+  "by": "By",
+  "content": "Content",
   "error": "An unexpected error occurred. Please try again later or contact our support team.",
   "home": {
     "go": "Go to Home",
@@ -17,13 +22,19 @@
     "title": "Home"
   },
   "loading": "Loading…",
+  "name": "Name",
   "notFound": {
     "help": "The requested page could not be found.",
     "lead": "Page Not Found"
   },
+  "saved": "Your changes have been saved.",
   "status": {
-    "now": "just now"
+    "createdOn": "Created on {date}",
+    "now": "just now",
+    "updatedOn": "Last updated {date}"
   },
+  "summary": "Summary",
+  "system": "System",
   "theme": {
     "title": "Theme",
     "auto": "Auto",
