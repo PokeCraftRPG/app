@@ -4,7 +4,7 @@ import vueJsx from "@vitejs/plugin-vue-jsx";
 import { defineConfig } from "vite";
 import { fileURLToPath, URL } from "node:url";
 
-import packageJson from "./package.json";
+import packageJson from "./package.json" with { type: "json" };
 
 // https://vite.dev/config/
 export default defineConfig({

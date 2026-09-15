@@ -1,0 +1,18 @@
+{
+  "brand": "PokéCraft",
+  "home": {
+    "go": "Aller à l’accueil",
+    "text": "Une application Web de jeu multi-locataire gérant des données par monde, des fiches de personnages et l’état de jeu en temps réel pour des expériences de jeu de rôle Pokémon interactives.",
+    "title": "Accueil"
+  },
+  "notFound": {
+    "help": "La page demandée est introuvable.",
+    "lead": "Page introuvable"
+  },
+  "theme": {
+    "title": "Thème",
+    "auto": "Auto",
+    "dark": "Sombre",
+    "light": "Clair"
+  }
+}
