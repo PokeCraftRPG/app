@@ -1,0 +1,198 @@
+{
+  "authenticatedOn": "Authenticated on",
+  "createdOn": "Registered on",
+  "dateOfBirth": {
+    "day": "Day",
+    "label": "Date of birth",
+    "month": {
+      "label": "Month",
+      "options": {
+        "01": "January",
+        "02": "February",
+        "03": "March",
+        "04": "April",
+        "05": "May",
+        "06": "June",
+        "07": "July",
+        "08": "August",
+        "09": "September",
+        "10": "October",
+        "11": "November",
+        "12": "December"
+      },
+      "placeholder": "Select"
+    },
+    "year": "Year"
+  },
+  "email": {
+    "address": "Email Address",
+    "verificationMessageSent": {
+      "help": "A verification email has been sent to your address. You can safely close this page.",
+      "reference": "Email reference:",
+      "title": "Email sent"
+    },
+    "verified": "Verified"
+  },
+  "gender": {
+    "label": "Gender",
+    "options": {
+      "female": "Female",
+      "male": "Male",
+      "other": "Other"
+    },
+    "placeholder": "Select your gender"
+  },
+  "locale": {
+    "label": "Communication language",
+    "placeholder": "Select your preferred communication language"
+  },
+  "multiFactorAuthentication": {
+    "code": "Code",
+    "disabled": "Disabled",
+    "email": {
+      "help": "Enter the 6-digit code sent to <strong>{contact}</strong>.",
+      "label": "Email"
+    },
+    "enabled": "Enabled",
+    "incorrectCode": {
+      "help": "Check the code you received, then try again.",
+      "lead": "Incorrect code."
+    },
+    "invalidCode": {
+      "help": "Request a new code, then try again.",
+      "lead": "This code is no longer valid."
+    },
+    "label": "Multi-Factor Authentication",
+    "phone": {
+      "help": "Enter the 6-digit code sent by text message to the number ending in <strong>{contact}</strong>.",
+      "label": "Text Message"
+    },
+    "reference": "Message reference:",
+    "verify": "Verify your identity"
+  },
+  "name": {
+    "first": "First Name",
+    "last": "Last Name"
+  },
+  "password": {
+    "changedOn": "Changed on",
+    "label": "Password",
+    "none": "No password set.",
+    "rules": {
+      "digit": "At least 1 digit",
+      "lower": "At least 1 lowercase letter",
+      "min": "Minimum 8 characters",
+      "special": "At least 1 special character",
+      "unique": "Minimum 8 different characters",
+      "upper": "At least 1 uppercase letter"
+    },
+    "strength": {
+      "medium": "Medium",
+      "strong": "Strong",
+      "weak": "Weak"
+    }
+  },
+  "profile": {
+    "abandon": {
+      "help": "The information you entered will not be saved. You will need to restart profile setup the next time you sign in.",
+      "lead": "Abandon profile setup?"
+    },
+    "complete": {
+      "help": "The remaining steps will be skipped. The information you’ve already entered will be saved, and you can add or update these details later on the <strong>My Profile</strong> page.",
+      "lead": "Finish setting up your profile?"
+    },
+    "experience": {
+      "help": "Choose which section will appear after you sign in.",
+      "label": "Default experience",
+      "note": "This choice only determines your default page after signing in. You will still be able to access both areas and change this preference from your profile.",
+      "options": {
+        "Gamemaster": {
+          "help": "Go directly to the Gamemaster portal: your list of worlds.",
+          "label": "Gamemaster"
+        },
+        "Player": {
+          "help": "Go directly to your character sheets.",
+          "label": "Player"
+        }
+      }
+    },
+    "personal": {
+      "help": "Enter your first and last name to personalize your profile.",
+      "label": "Personal information"
+    },
+    "preferences": {
+      "help": "Add a few optional details, then confirm your language and time zone.",
+      "label": "Profile and preferences"
+    },
+    "security": {
+      "help": "Choose how you want to sign in and protect your account.",
+      "label": "Account security",
+      "options": {
+        "multiFactor": {
+          "help": "Sign in with your password, then enter the verification code received by email.",
+          "label": "Password with two-factor verification",
+          "note": "One-time link sign-in will not be available."
+        },
+        "password": {
+          "help": "Sign in with your password or request a sign-in link by email.",
+          "label": "Password or email link"
+        },
+        "passwordLess": {
+          "help": "Receive a one-time sign-in link by email.",
+          "label": "Email link",
+          "note": "No password will be created."
+        }
+      }
+    },
+    "setup": {
+      "title": "Set Up My Profile"
+    },
+    "title": "My profile",
+    "updated": "Your profile has been updated."
+  },
+  "sessions": {
+    "createdOn": "Signed in:",
+    "current": "Current session",
+    "help": "Review the devices currently signed in to your account. Sign out any session you don’t recognize.",
+    "ipAddress": "IP Address:",
+    "list": "Sessions",
+    "on": "on",
+    "signedOut": "This session was signed out successfully.",
+    "updatedOn": "Last active:"
+  },
+  "signIn": {
+    "help": "Enter your email address to sign in or create an account.",
+    "invalidCredentials": {
+      "help": "Check your email address and password, then try again.",
+      "lead": "We couldn’t sign you in."
+    },
+    "passwordLess": {
+      "help": "We’ll send you a one-time sign-in link by email. No password will be required.",
+      "lead": "Email me a sign-in link"
+    },
+    "submit": "Sign in",
+    "title": "Sign In",
+    "welcome": "Welcome"
+  },
+  "signOut": {
+    "all": {
+      "help": "You’ll be signed out on all your devices, including this one. You’ll need to sign in again to access your account.",
+      "lead": "Sign out of all sessions?",
+      "submit": "Sign out of all sessions"
+    },
+    "closed": {
+      "help": "Your session was closed successfully.",
+      "lead": "You’re signed out."
+    },
+    "expired": {
+      "help": "Sign in again to continue.",
+      "lead": "Your session has expired."
+    },
+    "title": "Sign Out"
+  },
+  "timeZone": {
+    "label": "Time zone",
+    "placeholder": "Select your time zone"
+  },
+  "updatedOn": "Updated on"
+}

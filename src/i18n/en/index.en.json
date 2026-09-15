@@ -1,18 +1,38 @@
 {
+  "actions": {
+    "abandon": "Abandon",
+    "cancel": "Cancel",
+    "close": "Close",
+    "complete": "Complete",
+    "next": "Next",
+    "previous": "Previous",
+    "save": "Save",
+    "verify": "Verify"
+  },
   "brand": "PokéCraft",
+  "error": "An unexpected error occurred. Please try again later or contact our support team.",
   "home": {
     "go": "Go to Home",
     "text": "A multi-tenant game Web application managing world-scoped data, character sheets, and real-time gameplay state for interactive Pokémon roleplaying experiences.",
     "title": "Home"
   },
+  "loading": "Loading…",
   "notFound": {
     "help": "The requested page could not be found.",
     "lead": "Page Not Found"
+  },
+  "status": {
+    "now": "just now"
   },
   "theme": {
     "title": "Theme",
     "auto": "Auto",
     "dark": "Dark",
     "light": "Light"
+  },
+  "toasts": {
+    "error": "Error!",
+    "success": "Success!",
+    "warning": "Warning!"
   }
 }

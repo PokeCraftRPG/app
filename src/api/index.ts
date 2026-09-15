@@ -15,7 +15,7 @@ async function execute<TData, TResult>(method: string, url: string, data?: TData
   }
   const input: string = isAbsoluteURL(url) ? url : combineURL(apiBaseUrl, url);
 
-  const response: Response = await fetch(input, { method, headers, body, credentials: "omit" });
+  const response: Response = await fetch(input, { method, headers, body, credentials: "include" });
 
   let result: unknown = undefined;
   const resultType: string | null = response.headers.get(contentType);
