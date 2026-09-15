@@ -1,0 +1,32 @@
+name: Build PokéCraftRPG Application
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build PokéCraftRPG Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+
+      - name: Install dependencies
+        run: npm clean-install
+
+      - name: Build for Production
+        run: npm run build
+
+      # - name: Run Tests & Coverage
+      #   run: npm run test:unit

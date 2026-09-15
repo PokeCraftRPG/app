@@ -1,4 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
+import persistedState from "pinia-plugin-persistedstate";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 
@@ -11,6 +13,7 @@ import router from "./router";
 const app = createApp(App);
 
 const pinia = createPinia();
+pinia.use(persistedState);
 
 app.use(fontAwesome);
 app.use(i18n);
