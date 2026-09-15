@@ -6,7 +6,7 @@
     variant="danger"
     @update:model-value="$emit('update:model-value', $event)"
   >
-    <strong>{{ t("worlds.key.alreadyUsed.lead") }}</strong> {{ t("worlds.key.alreadyUsed.help") }}
+    <strong>{{ t(lead) }}</strong> {{ t(help) }}
   </TarAlert>
 </template>
 
@@ -18,9 +18,17 @@ import TarAlert from "@/components/tar/TarAlert.vue";
 
 const { t } = useI18n();
 
-const props = defineProps<{
-  modelValue?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    help?: string;
+    lead?: string;
+    modelValue?: boolean;
+  }>(),
+  {
+    help: "worlds.key.alreadyUsed.help",
+    lead: "worlds.key.alreadyUsed.lead",
+  },
+);
 
 defineEmits<{
   (e: "update:model-value", value: false): void;

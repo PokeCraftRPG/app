@@ -1,0 +1,26 @@
+{
+  "create": {
+    "help": "Donnez un nom à votre talent et choisissez une clé unique pour l’identifier.",
+    "lead": "Créer un talent"
+  },
+  "created": {
+    "help": "Vous pouvez maintenant compléter ses informations.",
+    "lead": "Le talent « {name} » a été créé."
+  },
+  "key": {
+    "alreadyUsed": {
+      "help": "Choisissez une autre clé unique pour ce talent, puis réessayez.",
+      "lead": "Cette clé est déjà utilisée."
+    },
+    "label": "Clé unique"
+  },
+  "sort": {
+    "options": {
+      "CreatedOn": "Date de création",
+      "Key": "Clé",
+      "Name": "Nom",
+      "UpdatedOn": "Dernière modification"
+    }
+  },
+  "title": "Talents"
+}

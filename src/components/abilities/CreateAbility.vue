@@ -1,12 +1,12 @@
 <template>
   <div>
     <TarButton icon="fas fa-plus" size="large" :text="t('actions.create')" @click="open" />
-    <TarModal centered :close="t('actions.close')" fade scrollable ref="modal" :title="t('worlds.create.lead')">
-      <p class="text-secondary">{{ t("worlds.create.help") }}</p>
-      <KeyAlreadyUsed v-model="keyAlreadyUsed" />
+    <TarModal centered :close="t('actions.close')" fade scrollable ref="modal" :title="t('abilities.create.lead')">
+      <p class="text-secondary">{{ t("abilities.create.help") }}</p>
+      <KeyAlreadyUsed v-model="keyAlreadyUsed" help="abilities.key.alreadyUsed.help" lead="abilities.key.alreadyUsed.lead" />
       <form @submit.prevent="handleSubmit(submit)">
         <NameField class="mb-3" :model-value="name" required @update:model-value="updateName" />
-        <KeyField class="mb-3" ref="keyField" required v-model="key" />
+        <KeyField class="mb-3" label="abilities.key.label" ref="keyField" required v-model="key" />
         <SummaryField class="mb-3" v-model="summary" />
       </form>
       <template #footer>
@@ -30,21 +30,21 @@ import { stringUtils } from "logitar-js";
 import { useI18n } from "vue-i18n";
 
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
-import KeyField from "./KeyField.vue";
+import KeyField from "@/components/worlds/KeyField.vue";
 import NameField from "@/components/shared/NameField.vue";
 import SummaryField from "@/components/shared/SummaryField.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import TarModal from "@/components/tar/TarModal.vue";
-import type { CreateOrReplaceWorldPayload, World } from "@/types/worlds";
+import type { Ability, CreateOrReplaceAbilityPayload } from "@/types/abilities";
 import { ErrorCodes, StatusCodes, type ApiFailure, type ProblemDetails } from "@/types/api";
-import { createWorld } from "@/api/worlds";
+import { createAbility } from "@/api/abilities";
 import { useForm } from "@/forms";
 
 const { slugify } = stringUtils;
 const { t } = useI18n();
 
 const emit = defineEmits<{
-  (e: "created", value: World): void;
+  (e: "created", value: Ability): void;
   (e: "error", value: unknown): void;
 }>();
 
@@ -77,14 +77,14 @@ async function submit(): Promise<void> {
     isLoading.value = true;
     keyAlreadyUsed.value = false;
     try {
-      const payload: CreateOrReplaceWorldPayload = {
+      const payload: CreateOrReplaceAbilityPayload = {
         key: key.value,
         name: name.value,
         summary: summary.value || null,
       };
-      const world: World = await createWorld(payload);
+      const ability: Ability = await createAbility(payload);
       modal.value?.hide();
-      emit("created", world);
+      emit("created", ability);
     } catch (e: unknown) {
       const failure = e as ApiFailure;
       if (failure.status === StatusCodes.Conflict) {

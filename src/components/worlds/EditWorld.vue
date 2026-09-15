@@ -35,7 +35,7 @@ import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import ContentField from "@/components/shared/ContentField.vue";
-import KeyAlreadyUsed from "./KeyAlreadyUsed.vue";
+import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
 import KeyField from "./KeyField.vue";
 import NameField from "@/components/shared/NameField.vue";
 import SummaryField from "@/components/shared/SummaryField.vue";
