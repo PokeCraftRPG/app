@@ -36,6 +36,39 @@
           <li class="nav-item">
             <LayoutTheme />
           </li>
+          <template v-if="user">
+            <li class="nav-item d-block d-lg-none">
+              <RouterLink class="nav-link" :to="{ name: 'Profile' }">
+                <TarAvatar :display-name="user.displayName" :email-address="user.emailAddress ?? undefined" :size="24" :url="user.pictureUrl ?? undefined" />
+                {{ user.displayName }}
+              </RouterLink>
+            </li>
+            <li class="nav-item d-block d-lg-none">
+              <RouterLink class="nav-link" :to="{ name: 'SignOut' }">
+                <font-awesome-icon icon="fas fa-arrow-right-from-bracket" />&nbsp;{{ t("account.signOut.title") }}
+              </RouterLink>
+            </li>
+            <li class="nav-item dropdown d-none d-lg-block">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <TarAvatar :display-name="user.displayName" :email-address="user.emailAddress ?? undefined" :size="24" :url="user.pictureUrl ?? undefined" />
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <RouterLink class="dropdown-item" :to="{ name: 'Profile' }"><font-awesome-icon icon="fas fa-user" />&nbsp;{{ user.displayName }}</RouterLink>
+                </li>
+                <li>
+                  <RouterLink class="dropdown-item" :to="{ name: 'SignOut' }">
+                    <font-awesome-icon icon="fas fa-arrow-right-from-bracket" />&nbsp;{{ t("account.signOut.title") }}
+                  </RouterLink>
+                </li>
+              </ul>
+            </li>
+          </template>
+          <li v-else class="nav-item">
+            <RouterLink :to="{ name: 'SignIn' }" class="nav-link">
+              <font-awesome-icon icon="fas fa-arrow-right-to-bracket" />&nbsp;{{ t("account.signIn.title") }}
+            </RouterLink>
+          </li>
         </ul>
       </div>
     </div>
@@ -48,11 +81,15 @@ import { computed, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 
 import LayoutTheme from "@/components/layout/LayoutTheme.vue";
+import TarAvatar from "@/components/tar/TarAvatar.vue";
 import TarBadge from "@/components/tar/TarBadge.vue";
 import locales from "@/assets/data/locales.json";
+import type { CurrentUser } from "@/types/account";
 import type { Locale } from "@/types/i18n";
+import { useAccountStore } from "@/stores/account";
 import { useI18nStore } from "@/stores/i18n";
 
+const account = useAccountStore();
 const environment: string = import.meta.env.MODE;
 const i18n = useI18nStore();
 const { availableLocales, locale, t } = useI18n();
@@ -65,6 +102,7 @@ const otherLocales = computed<Locale[]>(() => {
     .slice()
     .sort((a, b) => a.nativeName.localeCompare(b.nativeName));
 });
+const user = computed<CurrentUser | undefined>(() => account.currentUser);
 
 watchEffect(() => {
   if (i18n.locale) {

@@ -1,18 +1,38 @@
 {
+  "actions": {
+    "abandon": "Abandonner",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "complete": "Terminer",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "save": "Enregistrer",
+    "verify": "Vérifier"
+  },
   "brand": "PokéCraft",
+  "error": "Une erreur inattendue s’est produite. Veuillez réessayer plus tard ou contacter notre équipe de support.",
   "home": {
     "go": "Aller à l’accueil",
     "text": "Une application Web de jeu multi-locataire gérant des données par monde, des fiches de personnages et l’état de jeu en temps réel pour des expériences de jeu de rôle Pokémon interactives.",
     "title": "Accueil"
   },
+  "loading": "Chargement…",
   "notFound": {
     "help": "La page demandée est introuvable.",
     "lead": "Page introuvable"
+  },
+  "status": {
+    "now": "à l’instant"
   },
   "theme": {
     "title": "Thème",
     "auto": "Auto",
     "dark": "Sombre",
     "light": "Clair"
+  },
+  "toasts": {
+    "error": "Erreur !",
+    "success": "Succès !",
+    "warning": "Attention !"
   }
 }
