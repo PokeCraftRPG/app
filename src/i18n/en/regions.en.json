@@ -1,12 +1,12 @@
 {
-  "create": "Create an ability",
+  "create": "Create a region",
   "created": {
     "help": "You can now complete its details.",
-    "lead": "The ability “{name}” was created."
+    "lead": "The region “{name}” was created."
   },
   "key": {
     "alreadyUsed": {
-      "help": "Choose another unique key for this ability, then try again.",
+      "help": "Choose another unique key for this region, then try again.",
       "lead": "This key is already in use."
     },
     "label": "Unique Key"
@@ -19,5 +19,5 @@
       "UpdatedOn": "Last updated"
     }
   },
-  "title": "Abilities"
+  "title": "Regions"
 }
