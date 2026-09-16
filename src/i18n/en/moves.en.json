@@ -1,5 +1,8 @@
 {
-  "accuracy": "Accuracy",
+  "accuracy": {
+    "format": "Acc.: {accuracy}%",
+    "label": "Accuracy"
+  },
   "category": {
     "label": "Category",
     "options": {
@@ -14,8 +17,14 @@
     "help": "You can now complete its details.",
     "lead": "The move “{name}” was created."
   },
-  "power": "Power",
-  "powerPoints": "PP",
+  "power": {
+    "format": "Pow.: {power}",
+    "label": "Power"
+  },
+  "powerPoints": {
+    "format": "PP: {powerPoints}",
+    "label": "Power Points"
+  },
   "sort": {
     "options": {
       "Accuracy": "Accuracy",

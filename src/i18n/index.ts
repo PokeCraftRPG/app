@@ -21,4 +21,13 @@ export default createI18n<[MessageSchema], "en">({
       },
     },
   },
+  numberFormats: {
+    en: {
+      integer: {
+        style: "decimal",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      },
+    },
+  },
 });
