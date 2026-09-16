@@ -1,6 +1,6 @@
 import { urlUtils } from "logitar-js";
 
-import type { CreateOrReplaceTrainerPayload, SearchTrainersPayload, Trainer, UpdateTrainerPayload } from "@/types/trainers";
+import type { CreateOrReplaceTrainerPayload, SearchTrainersPayload, Trainer, TrainerFilters, UpdateTrainerPayload } from "@/types/trainers";
 import type { SearchResults } from "@/types/search";
 import { encodeSortOption } from "@/utils/search";
 import { get, patch, post, put } from ".";
@@ -8,6 +8,11 @@ import { get, patch, post, put } from ".";
 export async function createTrainer(payload: CreateOrReplaceTrainerPayload): Promise<Trainer> {
   const url: string = new urlUtils.UrlBuilder({ path: "/trainers" }).buildRelative();
   return (await post<CreateOrReplaceTrainerPayload, Trainer>(url, payload)).data;
+}
+
+export async function getTrainerFilters(): Promise<TrainerFilters> {
+  const url: string = new urlUtils.UrlBuilder({ path: "/trainers/filters" }).buildRelative();
+  return (await get<TrainerFilters>(url)).data;
 }
 
 export async function readTrainer(id: string): Promise<Trainer> {

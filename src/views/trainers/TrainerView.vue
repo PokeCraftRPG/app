@@ -16,24 +16,26 @@
         <KeyAlreadyUsed v-model="keyAlreadyUsed" />
         <KeyAlreadyUsed v-model="licenseAlreadyUsed" help="trainers.license.alreadyUsed.help" lead="trainers.license.alreadyUsed.lead" />
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-lg-6">
             <NameField class="mb-3" v-model="name" />
           </div>
-          <div class="col-md-4">
+          <div class="col-lg-6">
             <KeyField class="mb-3" ref="keyField" required v-model="key" />
           </div>
-          <div class="col-md-4">
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <GenderField class="mb-3" v-model="gender" />
+          </div>
+          <div class="col-lg-6">
             <LicenseField class="mb-3" ref="licenseField" v-model="license" />
           </div>
         </div>
         <div class="row">
-          <div class="col-md-4">
-            <GenderField class="mb-3" v-model="gender" />
+          <div class="col-lg-6">
+            <MemberField :members="members" :model-value="member?.id" @selected="member = $event" />
           </div>
-          <div class="col-md-4">
-            <MoneyField class="mb-3" v-model="money" />
-          </div>
-          <div class="col-md-4">
+          <div class="col-lg-6">
             <PartyLimitField class="mb-3" v-model="partyLimit" />
           </div>
         </div>
@@ -68,7 +70,7 @@ import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
 import KeyField from "@/components/shared/KeyField.vue";
 import LicenseField from "@/components/trainers/LicenseField.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
-import MoneyField from "@/components/trainers/MoneyField.vue";
+import MemberField from "@/components/membership/MemberField.vue";
 import NameField from "@/components/shared/NameField.vue";
 import PartyLimitField from "@/components/trainers/PartyLimitField.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
@@ -76,17 +78,16 @@ import SummaryField from "@/components/shared/SummaryField.vue";
 import TarAlert from "@/components/tar/TarAlert.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
-import type { ApiFailure, ProblemDetails } from "@/types/api";
+import type { Actor, ApiFailure, ProblemDetails } from "@/types/api";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
-import type { CreateOrReplaceTrainerPayload, Gender, Trainer } from "@/types/trainers";
+import type { CreateOrReplaceTrainerPayload, Gender, Trainer, TrainerFilters } from "@/types/trainers";
 import { ErrorCodes, StatusCodes } from "@/types/api";
 import { handleErrorKey } from "@/inject";
-import { readTrainer, replaceTrainer } from "@/api/trainers";
+import { getTrainerFilters, readTrainer, replaceTrainer } from "@/api/trainers";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
 import { useToastStore } from "@/stores/toast";
-import { fromHundredths, toHundredths } from "@/utils/number";
 
 const document = useDocument();
 const events = useEventStore();
@@ -106,7 +107,8 @@ const keyField = ref<InstanceType<typeof KeyField> | null>(null);
 const license = ref<string>("");
 const licenseAlreadyUsed = ref<boolean>(false);
 const licenseField = ref<InstanceType<typeof LicenseField> | null>(null);
-const money = ref<number>(0);
+const member = ref<Actor>();
+const members = ref<Actor[]>([]);
 const name = ref<string>("");
 const partyLimit = ref<number>(0);
 const summary = ref<string>("");
@@ -122,7 +124,7 @@ const hasChanges = computed<boolean>(() =>
       (trainer.value.content ?? "") !== content.value ||
       (trainer.value.license ?? "") !== license.value ||
       (trainer.value.gender ?? "") !== gender.value ||
-      fromHundredths(trainer.value.money) !== money.value ||
+      (trainer.value.member?.id ?? "") !== (member.value?.id ?? "") ||
       (trainer.value.partyLimit ?? 0) !== partyLimit.value),
   ),
 );
@@ -142,10 +144,10 @@ async function submit(): Promise<void> {
         content: content.value,
         license: license.value || undefined,
         gender: gender.value || undefined,
-        money: toHundredths(money.value) ?? 0,
+        money: trainer.value.money,
         partyLimit: partyLimit.value || undefined,
         spriteId: trainer.value.sprite?.id,
-        memberId: trainer.value.member?.id,
+        memberId: member.value?.id,
       };
       trainer.value = await replaceTrainer(trainer.value.id, payload);
       isCreated.value = false;
@@ -182,7 +184,7 @@ watch(
     content.value = trainer?.content ?? "";
     license.value = trainer?.license ?? "";
     gender.value = trainer?.gender ?? "";
-    money.value = fromHundredths(trainer?.money) ?? 0;
+    member.value = trainer?.member ? { ...trainer.member } : undefined;
     partyLimit.value = trainer?.partyLimit ?? 0;
   },
   { deep: true },
@@ -194,6 +196,9 @@ onMounted(async () => {
     trainer.value = await readTrainer(id);
     isCreated.value = events.shift() === "created";
     document.setTitle(title.value);
+
+    const filters: TrainerFilters = await getTrainerFilters();
+    members.value = [...filters.members];
   } catch (e: unknown) {
     const failure = e as ApiFailure;
     if (failure.status === StatusCodes.NotFound) {
@@ -203,6 +208,4 @@ onMounted(async () => {
     }
   }
 });
-
-// TODO(fpion): Member Field
 </script>

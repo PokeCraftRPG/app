@@ -104,7 +104,7 @@ const search = computed<string>(() => route.query.search?.toString() ?? "");
 const sort = computed<string>(() => route.query.sort?.toString() ?? "");
 const title = computed<string>(() => t("items.title"));
 
-const hasFilters = computed<boolean>(() => Boolean(search.value || category.value));
+const hasFilters = computed<boolean>(() => Boolean(category.value || search.value));
 
 const sortOptions = computed<SelectOption[]>(() =>
   orderBy(
@@ -119,7 +119,7 @@ function onCreate(item: Item): void {
 }
 
 function clearFilters(): void {
-  const query = { ...route.query, search: "", category: "", page: 1 };
+  const query = { ...route.query, category: "", search: "", page: 1 };
   router.replace({ ...route, query });
 }
 

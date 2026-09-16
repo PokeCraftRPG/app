@@ -36,6 +36,10 @@ export type Trainer = Aggregate & {
   partyLimit?: number | null;
 };
 
+export type TrainerFilters = {
+  members: Actor[];
+};
+
 export type TrainerSort = "CreatedOn" | "Key" | "License" | "Money" | "Name" | "UpdatedOn";
 
 export type UpdateTrainerPayload = {
