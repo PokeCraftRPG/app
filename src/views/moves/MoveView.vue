@@ -61,7 +61,9 @@ import ContentField from "@/components/shared/ContentField.vue";
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
 import KeyField from "@/components/shared/KeyField.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
+import MoveCategoryBadge from "@/components/moves/MoveCategoryBadge.vue";
 import NameField from "@/components/shared/NameField.vue";
+import PokemonTypeImage from "@/components/pokemon/PokemonTypeImage.vue";
 import PowerField from "@/components/moves/PowerField.vue";
 import PowerPointsField from "@/components/moves/PowerPointsField.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
@@ -71,16 +73,14 @@ import TarButton from "@/components/tar/TarButton.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
-import type { CreateOrReplaceMovePayload, Move } from "@/types/moves";
+import type { Move, UpdateMovePayload } from "@/types/moves";
 import { ErrorCodes, StatusCodes } from "@/types/api";
 import { handleErrorKey } from "@/inject";
-import { readMove, replaceMove } from "@/api/moves";
+import { readMove, updateMove } from "@/api/moves";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
 import { useToastStore } from "@/stores/toast";
-import PokemonTypeImage from "@/components/pokemon/PokemonTypeImage.vue";
-import MoveCategoryBadge from "@/components/moves/MoveCategoryBadge.vue";
 
 const document = useDocument();
 const events = useEventStore();
@@ -124,18 +124,16 @@ async function submit(): Promise<void> {
     isLoading.value = true;
     keyAlreadyUsed.value = false;
     try {
-      const payload: CreateOrReplaceMovePayload = {
-        type: move.value.type,
-        category: move.value.category,
+      const payload: UpdateMovePayload = {
         key: key.value,
-        name: name.value,
-        summary: summary.value,
-        content: content.value,
-        accuracy: accuracy.value || undefined,
-        power: power.value || undefined,
-        powerPoints: powerPoints.value || undefined,
+        name: { value: name.value },
+        summary: { value: summary.value },
+        content: { value: content.value },
+        accuracy: { value: accuracy.value || null },
+        power: { value: power.value || null },
+        powerPoints: { value: powerPoints.value || null },
       };
-      move.value = await replaceMove(move.value.id, payload);
+      move.value = await updateMove(move.value.id, payload);
       isCreated.value = false;
       reinitialize();
       toasts.success("saved");

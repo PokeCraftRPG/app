@@ -80,10 +80,10 @@ import TarButton from "@/components/tar/TarButton.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
 import type { Actor, ApiFailure, ProblemDetails } from "@/types/api";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
-import type { CreateOrReplaceTrainerPayload, Gender, Trainer, TrainerFilters } from "@/types/trainers";
+import type { Gender, Trainer, TrainerFilters, UpdateTrainerPayload } from "@/types/trainers";
 import { ErrorCodes, StatusCodes } from "@/types/api";
+import { getTrainerFilters, readTrainer, updateTrainer } from "@/api/trainers";
 import { handleErrorKey } from "@/inject";
-import { getTrainerFilters, readTrainer, replaceTrainer } from "@/api/trainers";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
@@ -137,19 +137,17 @@ async function submit(): Promise<void> {
     keyAlreadyUsed.value = false;
     licenseAlreadyUsed.value = false;
     try {
-      const payload: CreateOrReplaceTrainerPayload = {
+      const payload: UpdateTrainerPayload = {
         key: key.value,
-        name: name.value,
-        summary: summary.value,
-        content: content.value,
-        license: license.value || undefined,
-        gender: gender.value || undefined,
-        money: trainer.value.money,
-        partyLimit: partyLimit.value || undefined,
-        spriteId: trainer.value.sprite?.id,
-        memberId: member.value?.id,
+        name: { value: name.value },
+        summary: { value: summary.value },
+        content: { value: content.value },
+        license: { value: license.value },
+        gender: { value: gender.value || null },
+        partyLimit: { value: partyLimit.value || null },
+        memberId: { value: member.value?.id ?? null },
       };
-      trainer.value = await replaceTrainer(trainer.value.id, payload);
+      trainer.value = await updateTrainer(trainer.value.id, payload);
       isCreated.value = false;
       reinitialize();
       toasts.success("saved");

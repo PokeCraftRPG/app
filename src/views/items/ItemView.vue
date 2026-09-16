@@ -73,11 +73,11 @@ import WeightField from "@/components/items/WeightField.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
-import type { CreateOrReplaceItemPayload, Item } from "@/types/items";
+import type { Item, UpdateItemPayload } from "@/types/items";
 import { ErrorCodes, StatusCodes } from "@/types/api";
 import { fromHundredths, toHundredths } from "@/utils/number";
 import { handleErrorKey } from "@/inject";
-import { readItem, replaceItem } from "@/api/items";
+import { readItem, updateItem } from "@/api/items";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
@@ -123,17 +123,15 @@ async function submit(): Promise<void> {
     isLoading.value = true;
     keyAlreadyUsed.value = false;
     try {
-      const payload: CreateOrReplaceItemPayload = {
-        category: item.value.category,
+      const payload: UpdateItemPayload = {
         key: key.value,
-        name: name.value,
-        summary: summary.value,
-        content: content.value,
-        price: toHundredths(price.value) || undefined,
-        weight: toHundredths(price.value) || undefined,
-        spriteId: item.value.sprite?.id,
+        name: { value: name.value },
+        summary: { value: summary.value },
+        content: { value: content.value },
+        price: { value: toHundredths(price.value) || null },
+        weight: { value: toHundredths(weight.value) || null },
       };
-      item.value = await replaceItem(item.value.id, payload);
+      item.value = await updateItem(item.value.id, payload);
       isCreated.value = false;
       reinitialize();
       toasts.success("saved");

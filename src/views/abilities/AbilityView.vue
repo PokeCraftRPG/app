@@ -51,12 +51,12 @@ import SummaryField from "@/components/shared/SummaryField.vue";
 import TarAlert from "@/components/tar/TarAlert.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
-import type { Ability, CreateOrReplaceAbilityPayload } from "@/types/abilities";
+import type { Ability, UpdateAbilityPayload } from "@/types/abilities";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
 import { ErrorCodes, StatusCodes } from "@/types/api";
 import { handleErrorKey } from "@/inject";
-import { readAbility, replaceAbility } from "@/api/abilities";
+import { readAbility, updateAbility } from "@/api/abilities";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
@@ -98,13 +98,13 @@ async function submit(): Promise<void> {
     isLoading.value = true;
     keyAlreadyUsed.value = false;
     try {
-      const payload: CreateOrReplaceAbilityPayload = {
+      const payload: UpdateAbilityPayload = {
         key: key.value,
-        name: name.value,
-        summary: summary.value,
-        content: content.value,
+        name: { value: name.value },
+        summary: { value: summary.value },
+        content: { value: content.value },
       };
-      ability.value = await replaceAbility(ability.value.id, payload);
+      ability.value = await updateAbility(ability.value.id, payload);
       isCreated.value = false;
       reinitialize();
       toasts.success("saved");
