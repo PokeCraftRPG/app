@@ -1,0 +1,39 @@
+{
+  "create": "Create a trainer",
+  "created": {
+    "help": "You can now complete their details.",
+    "lead": "The trainer “{name}” was created."
+  },
+  "gender": {
+    "label": "Gender",
+    "options": {
+      "Female": "Female",
+      "Male": "Male"
+    },
+    "unknown": "Unknown"
+  },
+  "license": {
+    "alreadyUsed": {
+      "help": "Choose another unique license, then try again.",
+      "lead": "This license is already in use."
+    },
+    "label": "License"
+  },
+  "member": "Member",
+  "money": "Money",
+  "party": {
+    "format": "{count}/{limit}",
+    "limit": "Party Limit"
+  },
+  "sort": {
+    "options": {
+      "CreatedOn": "Created on",
+      "Key": "Key",
+      "License": "License",
+      "Money": "Money",
+      "Name": "Name",
+      "UpdatedOn": "Last updated"
+    }
+  },
+  "title": "Trainers"
+}

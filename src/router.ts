@@ -86,6 +86,17 @@ const router = createRouter({
       path: "/regions/:id",
       component: () => import("./views/regions/RegionView.vue"),
     },
+    // Trainers
+    {
+      name: "Trainers",
+      path: "/trainers",
+      component: () => import("./views/trainers/TrainersView.vue"),
+    },
+    {
+      name: "Trainer",
+      path: "/trainers/:id",
+      component: () => import("./views/trainers/TrainerView.vue"),
+    },
     // NotFound
     {
       name: "NotFound",

@@ -25,8 +25,6 @@
             <KeyField class="mb-3" ref="keyField" required v-model="key" />
           </div>
         </div>
-        <SummaryField class="mb-3" v-model="summary" />
-        <ContentField class="mb-3" v-model="content" />
         <div class="row">
           <div class="col-md-6">
             <PriceField class="mb-3" v-model="price" />
@@ -35,6 +33,8 @@
             <WeightField class="mb-3" v-model="weight" />
           </div>
         </div>
+        <SummaryField class="mb-3" v-model="summary" />
+        <ContentField class="mb-3" v-model="content" />
         <div class="d-flex justify-content-end mb-3">
           <TarButton
             :disabled="!hasChanges || isLoading"

@@ -7,7 +7,11 @@
     :step="step"
     type="number"
     @update:model-value="$emit('update:model-value', parseNumber($event) ?? 0)"
-  />
+  >
+    <template #append>
+      <span class="input-group-text">{{ t("unit.kilogram") }}</span>
+    </template>
+  </InputField>
 </template>
 
 <script setup lang="ts">

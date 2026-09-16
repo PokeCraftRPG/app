@@ -6,6 +6,7 @@ import items from "./items.en.json";
 import moves from "./moves.en.json";
 import pokemon from "./pokemon.en.json";
 import regions from "./regions.en.json";
+import trainers from "./trainers.en.json";
 import worlds from "./worlds.en.json";
 
 export default {
@@ -17,5 +18,6 @@ export default {
   moves,
   pokemon,
   regions,
+  trainers,
   worlds,
 };
