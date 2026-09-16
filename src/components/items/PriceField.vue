@@ -1,0 +1,41 @@
+<template>
+  <InputField
+    :id="id"
+    :label="label ? t(label) : undefined"
+    :min="min"
+    :model-value="modelValue?.toString() ?? ''"
+    :step="step"
+    type="number"
+    @update:model-value="$emit('update:model-value', parseNumber($event) ?? 0)"
+  />
+</template>
+
+<script setup lang="ts">
+import { parsingUtils } from "logitar-js";
+import { useI18n } from "vue-i18n";
+
+import InputField from "@/components/forms/InputField.vue";
+
+const { parseNumber } = parsingUtils;
+const { t } = useI18n();
+
+withDefaults(
+  defineProps<{
+    id?: string;
+    label?: string;
+    min?: number | string;
+    modelValue?: number | string;
+    step?: number | string;
+  }>(),
+  {
+    id: "price",
+    label: "items.price",
+    min: 0,
+    step: 0.01,
+  },
+);
+
+defineEmits<{
+  (e: "update:model-value", value: number): void;
+}>();
+</script>

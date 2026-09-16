@@ -2,6 +2,7 @@ import abilities from "./abilities.en.json";
 import account from "./account.en.json";
 import errors from "./errors.en.json";
 import index from "./index.en.json";
+import items from "./items.en.json";
 import moves from "./moves.en.json";
 import pokemon from "./pokemon.en.json";
 import regions from "./regions.en.json";
@@ -12,6 +13,7 @@ export default {
   abilities,
   account,
   errors,
+  items,
   moves,
   pokemon,
   regions,
