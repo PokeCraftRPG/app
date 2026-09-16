@@ -1,0 +1,77 @@
+{
+  "baseFriendship": "Base Friendship",
+  "catchRate": "Catch Rate",
+  "category": {
+    "label": "Category",
+    "options": {
+      "Baby": "Baby",
+      "Legendary": "Legendary",
+      "Mythical": "Mythical",
+      "Standard": "Standard"
+    },
+    "placeholder": "Select a category"
+  },
+  "create": "Create a species",
+  "created": {
+    "help": "You can now complete its details.",
+    "lead": "The species “{name}” was created."
+  },
+  "egg": {
+    "cycles": "Egg Cycles",
+    "group": {
+      "label": "Egg Group",
+      "options": {
+        "Amorphous": "Amorphous",
+        "Bug": "Bug",
+        "Ditto": "Ditto",
+        "Dragon": "Dragon",
+        "Fairy": "Fairy",
+        "Field": "Field",
+        "Flying": "Flying",
+        "Grass": "Grass",
+        "HumanLike": "Human-Like",
+        "Mineral": "Mineral",
+        "Monster": "Monster",
+        "NoEggsDiscovered": "No Eggs Discovered",
+        "Water1": "Water 1",
+        "Water2": "Water 2",
+        "Water3": "Water 3"
+      },
+      "placeholder": "Select an egg group"
+    },
+    "primary": "Primary Egg Group",
+    "secondary": "Secondary Egg Group"
+  },
+  "growthRate": {
+    "label": "Growth Rate",
+    "options": {
+      "Erratic": "Erratic",
+      "Fast": "Fast",
+      "Fluctuating": "Fluctuating",
+      "MediumFast": "Medium Fast",
+      "MediumSlow": "Medium Slow",
+      "Slow": "Slow"
+    },
+    "placeholder": "Select a growth rate"
+  },
+  "number": {
+    "alreadyUsed": {
+      "help": "Choose another unique number, then try again.",
+      "lead": "This number is already in use."
+    },
+    "label": "Number"
+  },
+  "sort": {
+    "options": {
+      "BaseFriendship": "Base friendship",
+      "CatchRate": "Catch rate",
+      "CreatedOn": "Created on",
+      "EggCycles": "Egg cycles",
+      "Key": "Key",
+      "Name": "Name",
+      "Number": "Number",
+      "UpdatedOn": "Last updated"
+    }
+  },
+  "title": "Species"
+}

@@ -1,3 +1,8 @@
+export type FilterOption = {
+  text: string;
+  value: string;
+};
+
 export type SearchMode = "All" | "Any";
 
 export type SearchPayload<T> = {

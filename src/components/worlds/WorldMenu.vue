@@ -22,7 +22,7 @@ type Tile = {
 };
 const tiles = computed<Tile[]>(() => [
   {
-    icon: "fas fa-bolt",
+    icon: "fas fa-hand-sparkles",
     text: t("abilities.title"),
     to: { name: "Abilities" },
   },
@@ -32,17 +32,22 @@ const tiles = computed<Tile[]>(() => [
     to: { name: "Items" },
   },
   {
-    icon: "fas fa-hand-fist",
+    icon: "fas fa-wand-sparkles",
     text: t("moves.title"),
     to: { name: "Moves" },
   },
   {
-    icon: "fas fa-map",
+    icon: "fas fa-earth-asia",
     text: t("regions.title"),
     to: { name: "Regions" },
   },
   {
-    icon: "fas fa-user",
+    icon: "fas fa-paw",
+    text: t("species.title"),
+    to: { name: "Species" },
+  },
+  {
+    icon: "fas fa-person",
     text: t("trainers.title"),
     to: { name: "Trainers" },
   },
