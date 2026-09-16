@@ -1,0 +1,26 @@
+{
+  "create": {
+    "help": "Give your ability a name and choose a unique key to identify it.",
+    "lead": "Create an ability"
+  },
+  "created": {
+    "help": "You can now complete its details.",
+    "lead": "The ability “{name}” was created."
+  },
+  "key": {
+    "alreadyUsed": {
+      "help": "Choose another unique key for this ability, then try again.",
+      "lead": "This key is already in use."
+    },
+    "label": "Unique Key"
+  },
+  "sort": {
+    "options": {
+      "CreatedOn": "Created on",
+      "Key": "Key",
+      "Name": "Name",
+      "UpdatedOn": "Last updated"
+    }
+  },
+  "title": "Abilities"
+}

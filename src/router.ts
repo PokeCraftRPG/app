@@ -42,6 +42,17 @@ const router = createRouter({
       path: "/worlds/:id",
       component: () => import("./views/worlds/WorldView.vue"),
     },
+    // Abilities
+    {
+      name: "Abilities",
+      path: "/abilities",
+      component: () => import("./views/abilities/AbilitiesView.vue"),
+    },
+    {
+      name: "Ability",
+      path: "/abilities/:id",
+      component: () => import("./views/abilities/AbilityView.vue"),
+    },
     // NotFound
     {
       name: "NotFound",

@@ -9,13 +9,23 @@
     "enter": "Enter",
     "next": "Next",
     "previous": "Previous",
+    "refresh": "Refresh",
     "save": "Save",
+    "search": "Search",
     "verify": "Verify"
   },
   "brand": "PokéCraft",
   "by": "By",
   "content": "Content",
+  "count": "Results per page",
+  "empty": {
+    "help": "No items match the current criteria.",
+    "lead": "No results"
+  },
   "error": "An unexpected error occurred. Please try again later or contact our support team.",
+  "filters": {
+    "clear": "Clear filters"
+  },
   "home": {
     "go": "Go to Home",
     "text": "A multi-tenant game Web application managing world-scoped data, character sheets, and real-time gameplay state for interactive Pokémon roleplaying experiences.",
@@ -27,7 +37,15 @@
     "help": "The requested page could not be found.",
     "lead": "Page Not Found"
   },
+  "pagination": {
+    "first": "First",
+    "label": "Pagination",
+    "last": "Last",
+    "next": "Next",
+    "previous": "Previous"
+  },
   "saved": "Your changes have been saved.",
+  "sort": "Sort by",
   "status": {
     "createdOn": "Created on {date}",
     "now": "just now",

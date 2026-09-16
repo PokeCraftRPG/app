@@ -2,12 +2,25 @@ a {
   text-decoration: none;
 }
 
+.clickable:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+[data-bs-theme="dark"] .clickable:hover {
+  background-color: #2a2a2a;
+}
+
 .jumbotron {
   padding: 2rem 1rem;
   margin-bottom: 2rem;
   background-color: var(--bs-secondary-bg);
   color: var(--bs-body-color);
   border-radius: 0.3rem;
+}
+
+.loading {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .page {
