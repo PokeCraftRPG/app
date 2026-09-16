@@ -20,6 +20,7 @@
       "Rock": "Rock",
       "Steel": "Steel",
       "Water": "Water"
-    }
+    },
+    "placeholder": "Select a type"
   }
 }

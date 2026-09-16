@@ -6,7 +6,8 @@
       "Physical": "Physical",
       "Special": "Special",
       "Status": "Status"
-    }
+    },
+    "placeholder": "Select a category"
   },
   "create": "Create a move",
   "created": {

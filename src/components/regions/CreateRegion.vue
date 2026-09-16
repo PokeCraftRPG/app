@@ -32,8 +32,9 @@ import KeyField from "@/components/shared/KeyField.vue";
 import NameField from "@/components/shared/NameField.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import TarModal from "@/components/tar/TarModal.vue";
+import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { CreateOrReplaceRegionPayload, Region } from "@/types/regions";
-import { ErrorCodes, StatusCodes, type ApiFailure, type ProblemDetails } from "@/types/api";
+import { ErrorCodes, StatusCodes } from "@/types/api";
 import { createRegion } from "@/api/regions";
 import { useForm } from "@/forms";
 

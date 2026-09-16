@@ -50,12 +50,13 @@
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-import InputField from "@/components/forms/InputField.vue";
 import IncorrectOneTimeCode from "./IncorrectOneTimeCode.vue";
+import InputField from "@/components/forms/InputField.vue";
 import InvalidOneTimeCode from "./InvalidOneTimeCode.vue";
 import TarButton from "@/components/tar/TarButton.vue";
+import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { MultiFactorAuthenticationChallenge, SignInAccountRequest, SignInAccountResponse } from "@/types/account";
-import { ErrorCodes, StatusCodes, type ApiFailure, type ProblemDetails } from "@/types/api";
+import { ErrorCodes, StatusCodes } from "@/types/api";
 import { signIn } from "@/api/account";
 import { useForm } from "@/forms";
 

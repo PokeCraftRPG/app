@@ -1,11 +1,13 @@
 <template>
   <div>
     <TarButton icon="fas fa-plus" size="large" :text="t('actions.create')" @click="open" />
-    <TarModal centered :close="t('actions.close')" fade scrollable ref="modal" :title="t('abilities.create')">
+    <TarModal centered :close="t('actions.close')" fade scrollable ref="modal" :title="t('moves.create')">
       <KeyAlreadyUsed v-model="keyAlreadyUsed" />
       <form @submit.prevent="handleSubmit(submit)">
         <NameField class="mb-3" :model-value="name" required @update:model-value="updateName" />
         <KeyField class="mb-3" ref="keyField" required v-model="key" />
+        <PokemonTypeField class="mb-3" required v-model="type" />
+        <MoveCategoryField class="mb-3" required v-model="category" />
       </form>
       <template #footer>
         <TarButton icon="fas fa-ban" :text="t('actions.cancel')" variant="secondary" @click="cancel" />
@@ -29,33 +31,42 @@ import { useI18n } from "vue-i18n";
 
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
 import KeyField from "@/components/shared/KeyField.vue";
+import MoveCategoryField from "./MoveCategoryField.vue";
 import NameField from "@/components/shared/NameField.vue";
+import PokemonTypeField from "@/components/pokemon/PokemonTypeField.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import TarModal from "@/components/tar/TarModal.vue";
-import type { Ability, CreateOrReplaceAbilityPayload } from "@/types/abilities";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
+import type { CreateOrReplaceMovePayload, Move, MoveCategory } from "@/types/moves";
+import type { PokemonType } from "@/types/pokemon";
 import { ErrorCodes, StatusCodes } from "@/types/api";
-import { createAbility } from "@/api/abilities";
+import { createMove } from "@/api/moves";
 import { useForm } from "@/forms";
 
 const { slugify } = stringUtils;
 const { t } = useI18n();
 
 const emit = defineEmits<{
-  (e: "created", value: Ability): void;
+  (e: "created", value: Move): void;
   (e: "error", value: unknown): void;
 }>();
 
+const category = ref<MoveCategory | "">("");
 const isLoading = ref<boolean>(false);
 const key = ref<string>("");
 const keyAlreadyUsed = ref<boolean>(false);
 const keyField = ref<InstanceType<typeof KeyField> | null>(null);
 const modal = ref<InstanceType<typeof TarModal> | null>(null);
 const name = ref<string>("");
+const type = ref<PokemonType | "">("");
 
-function cancel(): void {
+function clear(): void {
   reset();
   keyAlreadyUsed.value = false;
+}
+
+function cancel(): void {
+  clear();
   modal.value?.hide();
 }
 
@@ -70,17 +81,20 @@ function updateName(value: string): void {
 
 const { handleSubmit, reset } = useForm();
 async function submit(): Promise<void> {
-  if (!isLoading.value) {
+  if (!isLoading.value && type.value && category.value) {
     isLoading.value = true;
     keyAlreadyUsed.value = false;
     try {
-      const payload: CreateOrReplaceAbilityPayload = {
+      const payload: CreateOrReplaceMovePayload = {
+        type: type.value,
+        category: category.value,
         key: key.value,
         name: name.value,
       };
-      const ability: Ability = await createAbility(payload);
+      const move: Move = await createMove(payload);
+      clear();
       modal.value?.hide();
-      emit("created", ability);
+      emit("created", move);
     } catch (e: unknown) {
       const failure = e as ApiFailure;
       if (failure.status === StatusCodes.Conflict) {
