@@ -1,12 +1,12 @@
 {
-  "create": "Créer un talent",
+  "create": "Créer une région",
   "created": {
     "help": "Vous pouvez maintenant compléter ses informations.",
-    "lead": "Le talent « {name} » a été créé."
+    "lead": "La région « {name} » a été créée."
   },
   "key": {
     "alreadyUsed": {
-      "help": "Choisissez une autre clé unique pour ce talent, puis réessayez.",
+      "help": "Choisissez une autre clé unique pour cette région, puis réessayez.",
       "lead": "Cette clé est déjà utilisée."
     },
     "label": "Clé unique"
@@ -19,5 +19,5 @@
       "UpdatedOn": "Dernière modification"
     }
   },
-  "title": "Talents"
+  "title": "Régions"
 }

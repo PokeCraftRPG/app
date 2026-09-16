@@ -1,11 +1,11 @@
 <template>
   <div>
     <TarButton icon="fas fa-plus" size="large" :text="t('actions.create')" @click="open" />
-    <TarModal centered :close="t('actions.close')" fade scrollable ref="modal" :title="t('abilities.create')">
-      <KeyAlreadyUsed v-model="keyAlreadyUsed" help="abilities.key.alreadyUsed.help" lead="abilities.key.alreadyUsed.lead" />
+    <TarModal centered :close="t('actions.close')" fade scrollable ref="modal" :title="t('regions.create')">
+      <KeyAlreadyUsed v-model="keyAlreadyUsed" help="regions.key.alreadyUsed.help" lead="regions.key.alreadyUsed.lead" />
       <form @submit.prevent="handleSubmit(submit)">
         <NameField class="mb-3" :model-value="name" required @update:model-value="updateName" />
-        <KeyField class="mb-3" label="abilities.key.label" ref="keyField" required v-model="key" />
+        <KeyField class="mb-3" label="regions.key.label" ref="keyField" required v-model="key" />
       </form>
       <template #footer>
         <TarButton icon="fas fa-ban" :text="t('actions.cancel')" variant="secondary" @click="cancel" />
@@ -32,16 +32,16 @@ import KeyField from "@/components/worlds/KeyField.vue";
 import NameField from "@/components/shared/NameField.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import TarModal from "@/components/tar/TarModal.vue";
-import type { Ability, CreateOrReplaceAbilityPayload } from "@/types/abilities";
+import type { CreateOrReplaceRegionPayload, Region } from "@/types/regions";
 import { ErrorCodes, StatusCodes, type ApiFailure, type ProblemDetails } from "@/types/api";
-import { createAbility } from "@/api/abilities";
+import { createRegion } from "@/api/regions";
 import { useForm } from "@/forms";
 
 const { slugify } = stringUtils;
 const { t } = useI18n();
 
 const emit = defineEmits<{
-  (e: "created", value: Ability): void;
+  (e: "created", value: Region): void;
   (e: "error", value: unknown): void;
 }>();
 
@@ -73,13 +73,13 @@ async function submit(): Promise<void> {
     isLoading.value = true;
     keyAlreadyUsed.value = false;
     try {
-      const payload: CreateOrReplaceAbilityPayload = {
+      const payload: CreateOrReplaceRegionPayload = {
         key: key.value,
         name: name.value,
       };
-      const ability: Ability = await createAbility(payload);
+      const region: Region = await createRegion(payload);
       modal.value?.hide();
-      emit("created", ability);
+      emit("created", region);
     } catch (e: unknown) {
       const failure = e as ApiFailure;
       if (failure.status === StatusCodes.Conflict) {

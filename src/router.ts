@@ -53,6 +53,17 @@ const router = createRouter({
       path: "/abilities/:id",
       component: () => import("./views/abilities/AbilityView.vue"),
     },
+    // Regions
+    {
+      name: "Regions",
+      path: "/regions",
+      component: () => import("./views/regions/RegionsView.vue"),
+    },
+    {
+      name: "Region",
+      path: "/regions/:id",
+      component: () => import("./views/regions/RegionView.vue"),
+    },
     // NotFound
     {
       name: "NotFound",
