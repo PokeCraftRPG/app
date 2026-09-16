@@ -1,5 +1,5 @@
 import type { Aggregate, Optional } from "./api";
-import type { SearchPayload, SortOption } from "./search";
+import type { SearchPayload } from "./search";
 
 export type CreateOrReplaceRegionPayload = {
   key: string;
@@ -17,13 +17,7 @@ export type Region = Aggregate & {
 
 export type RegionSort = "CreatedOn" | "Key" | "Name" | "UpdatedOn";
 
-export type RegionSortOption = SortOption & {
-  field: RegionSort;
-};
-
-export type SearchRegionsPayload = SearchPayload & {
-  sort: RegionSortOption[];
-};
+export type SearchRegionsPayload = SearchPayload<RegionSort>;
 
 export type UpdateRegionPayload = {
   key?: string | null;

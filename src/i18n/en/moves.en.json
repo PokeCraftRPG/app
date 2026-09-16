@@ -1,0 +1,37 @@
+{
+  "accuracy": "Accuracy",
+  "category": {
+    "label": "Category",
+    "options": {
+      "Physical": "Physical",
+      "Special": "Special",
+      "Status": "Status"
+    }
+  },
+  "create": "Create a move",
+  "created": {
+    "help": "You can now complete its details.",
+    "lead": "The move “{name}” was created."
+  },
+  "key": {
+    "alreadyUsed": {
+      "help": "Choose another unique key for this move, then try again.",
+      "lead": "This key is already in use."
+    },
+    "label": "Unique Key"
+  },
+  "power": "Power",
+  "powerPoints": "PP",
+  "sort": {
+    "options": {
+      "Accuracy": "Accuracy",
+      "CreatedOn": "Created on",
+      "Key": "Key",
+      "Name": "Name",
+      "Power": "Power",
+      "PowerPoints": "PP",
+      "UpdatedOn": "Last updated"
+    }
+  },
+  "title": "Moves"
+}

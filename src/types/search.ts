@@ -1,9 +1,9 @@
 export type SearchMode = "All" | "Any";
 
-export type SearchPayload = {
+export type SearchPayload<T> = {
   ids: string[];
   search: TextSearch;
-  sort: SortOption[];
+  sort: SortOption<T>[];
   offset: number;
   limit: number;
 };
@@ -13,16 +13,14 @@ export type SearchResults<T> = {
   total: number;
 };
 
-export type SearchTerm = {
-  value: string;
-};
+export type SortDirection = "Ascending" | "Descending";
 
-export type SortOption = {
-  field: string;
-  isDescending: boolean;
+export type SortOption<T> = {
+  field: T;
+  direction: SortDirection;
 };
 
 export type TextSearch = {
-  terms: SearchTerm[];
-  operator: SearchMode;
+  terms: string[];
+  mode: SearchMode;
 };
