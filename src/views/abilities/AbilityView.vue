@@ -100,8 +100,8 @@ async function submit(): Promise<void> {
     try {
       const payload: CreateOrReplaceAbilityPayload = {
         key: key.value,
-        name: name.value || null,
-        summary: summary.value || null,
+        name: name.value,
+        summary: summary.value,
         content: content.value,
       };
       ability.value = await replaceAbility(ability.value.id, payload);

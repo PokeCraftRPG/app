@@ -21,7 +21,7 @@ import { arrayUtils } from "logitar-js";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-import SelectField from "../forms/SelectField.vue";
+import SelectField from "@/components/forms/SelectField.vue";
 import MoveCategoryIcon from "./MoveCategoryIcon.vue";
 import type { MoveCategory } from "@/types/moves";
 import type { SelectOption } from "@/types/tar/select";
