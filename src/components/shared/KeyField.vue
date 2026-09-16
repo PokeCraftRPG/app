@@ -31,7 +31,7 @@ withDefaults(
   {
     id: "key",
     max: 100,
-    label: "worlds.key.label",
+    label: "key.label",
   },
 );
 

@@ -8,13 +8,13 @@
       </TarAlert>
       <StatusDetail class="mb-3" :subject="region" />
       <form class="border-top border-secondary-subtle pt-4" @submit.prevent="handleSubmit(submit)">
-        <KeyAlreadyUsed v-model="keyAlreadyUsed" help="regions.key.alreadyUsed.help" lead="regions.key.alreadyUsed.lead" />
+        <KeyAlreadyUsed v-model="keyAlreadyUsed" />
         <div class="row">
           <div class="col-lg-6">
             <NameField class="mb-3" v-model="name" />
           </div>
           <div class="col-lg-6">
-            <KeyField class="mb-3" label="regions.key.label" ref="keyField" required v-model="key" />
+            <KeyField class="mb-3" ref="keyField" required v-model="key" />
           </div>
         </div>
         <SummaryField class="mb-3" v-model="summary" />
@@ -43,7 +43,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import ContentField from "@/components/shared/ContentField.vue";
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
-import KeyField from "@/components/worlds/KeyField.vue";
+import KeyField from "@/components/shared/KeyField.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
 import NameField from "@/components/shared/NameField.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";

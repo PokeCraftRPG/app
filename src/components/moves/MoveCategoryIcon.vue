@@ -16,6 +16,6 @@ const props = defineProps<{
   height?: number | string;
 }>();
 
-const alt = computed<string>(() => t(`moves.categories.options.${props.category}`));
+const alt = computed<string>(() => t(`moves.category.options.${props.category}`));
 const src = computed<string>(() => `/img/moves/${props.category.toLowerCase()}.png`);
 </script>

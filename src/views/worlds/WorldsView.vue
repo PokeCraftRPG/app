@@ -62,8 +62,8 @@ onMounted(async () => {
   try {
     const results: SearchResults<World> = await searchWorlds({
       ids: [],
-      search: { terms: [], operator: "All" },
-      sort: [{ field: "Name", isDescending: false }],
+      search: { terms: [], mode: "All" },
+      sort: [{ field: "Name", direction: "Ascending" }],
       offset: 0,
       limit: 96,
     });

@@ -19,7 +19,7 @@ const props = defineProps<{
   type: PokemonType;
 }>();
 
-const alt = computed<string>(() => t(`pokemon.types.options.${props.type}`));
+const alt = computed<string>(() => t(`pokemon.type.options.${props.type}`));
 const src = computed<string>(() =>
   parseBoolean(props.tera) ? `/img/types/tera/${props.type.toLowerCase()}.png` : `/img/types/${props.type.toLowerCase()}.png`,
 );

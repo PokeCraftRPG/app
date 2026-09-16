@@ -4,13 +4,6 @@
     "help": "You can now complete its details.",
     "lead": "The region “{name}” was created."
   },
-  "key": {
-    "alreadyUsed": {
-      "help": "Choose another unique key for this region, then try again.",
-      "lead": "This key is already in use."
-    },
-    "label": "Unique Key"
-  },
   "sort": {
     "options": {
       "CreatedOn": "Created on",

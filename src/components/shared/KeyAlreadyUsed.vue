@@ -25,8 +25,8 @@ const props = withDefaults(
     modelValue?: boolean;
   }>(),
   {
-    help: "worlds.key.alreadyUsed.help",
-    lead: "worlds.key.alreadyUsed.lead",
+    help: "key.alreadyUsed.help",
+    lead: "key.alreadyUsed.lead",
   },
 );
 

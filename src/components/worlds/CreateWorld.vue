@@ -29,7 +29,7 @@ import { stringUtils } from "logitar-js";
 import { useI18n } from "vue-i18n";
 
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
-import KeyField from "./KeyField.vue";
+import KeyField from "@/components/shared/KeyField.vue";
 import NameField from "@/components/shared/NameField.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import TarModal from "@/components/tar/TarModal.vue";

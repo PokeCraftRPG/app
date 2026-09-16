@@ -8,16 +8,8 @@
       <WorldBreadcrumb :current="title" />
       <section>
         <div class="d-flex gap-2 mb-3">
-          <TarButton
-            :disabled="isLoading"
-            icon="fas fa-arrows-rotate"
-            :loading="isLoading"
-            :status="t('loading')"
-            :text="t('actions.refresh')"
-            variant="secondary"
-            @click="refresh"
-          />
-          <TarButton v-if="hasFilters" icon="fas fa-arrow-rotate-left" outline :text="t('filters.clear')" variant="secondary" @click="clearFilters" />
+          <RefreshButton :loading="isLoading" @click="refresh" />
+          <ClearFiltersButton v-if="hasFilters" @click="clearFilters" />
         </div>
       </section>
       <section>
@@ -28,10 +20,10 @@
           <div class="col-md-4">
             <SortSelect
               class="mb-3"
-              :descending="isDescending"
+              :direction="direction"
               :model-value="sort"
               :options="sortOptions"
-              @descending="setQuery('descending', $event)"
+              @update:direction="setQuery('direction', $event)"
               @update:model-value="setQuery('sort', $event)"
             />
           </div>
@@ -52,15 +44,7 @@
         <font-awesome-icon icon="fas fa-magnifying-glass" class="display-4 text-body-secondary mb-3" aria-hidden="true" />
         <h2 class="h4 mb-2">{{ t("empty.lead") }}</h2>
         <p class="text-body-secondary mb-0">{{ t("empty.help") }}</p>
-        <TarButton
-          v-if="hasFilters"
-          class="mt-3"
-          icon="fas fa-arrow-rotate-left"
-          outline
-          :text="t('filters.clear')"
-          variant="secondary"
-          @click="clearFilters"
-        />
+        <ClearFiltersButton v-if="hasFilters" class="mt-3" @click="clearFilters" />
       </section>
     </div>
     <LoadingSpinner v-else />
@@ -73,19 +57,21 @@ import { computed, inject, ref, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
+import ClearFiltersButton from "@/components/shared/ClearFiltersButton.vue";
 import CountSelect from "@/components/shared/CountSelect.vue";
 import CreateRegion from "@/components/regions/CreateRegion.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
+import RefreshButton from "@/components/shared/RefreshButton.vue";
 import RegionLinkCard from "@/components/regions/RegionLinkCard.vue";
 import SearchInput from "@/components/shared/SearchInput.vue";
 import SearchPagination from "@/components/shared/SearchPagination.vue";
 import SortSelect from "@/components/shared/SortSelect.vue";
-import TarButton from "@/components/tar/TarButton.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
 import type { Region, RegionSort, SearchRegionsPayload } from "@/types/regions";
-import type { SearchResults } from "@/types/search";
+import type { SearchResults, SortDirection } from "@/types/search";
 import type { SelectOption } from "@/types/tar/select";
 import { handleErrorKey } from "@/inject";
+import { parseTextSearch } from "@/utils/search";
 import { searchRegions } from "@/api/regions";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
@@ -97,7 +83,7 @@ const route = useRoute();
 const router = useRouter();
 const { isEmpty } = objectUtils;
 const { orderBy } = arrayUtils;
-const { parseBoolean, parseNumber } = parsingUtils;
+const { parseNumber } = parsingUtils;
 const { rt, t, tm } = useI18n();
 
 const hasLoaded = ref<boolean>(false);
@@ -107,7 +93,7 @@ const timestamp = ref<number>(0);
 const total = ref<number>(0);
 
 const count = computed<number>(() => parseNumber(route.query.count?.toString()) || 12);
-const isDescending = computed<boolean>(() => parseBoolean(route.query.descending?.toString()) ?? false);
+const direction = computed<string>(() => route.query.direction?.toString() ?? "");
 const page = computed<number>(() => parseNumber(route.query.page?.toString()) || 1);
 const search = computed<string>(() => route.query.search?.toString() ?? "");
 const sort = computed<string>(() => route.query.sort?.toString() ?? "");
@@ -146,14 +132,8 @@ function setQuery(key: string, value?: boolean | null | number | string): void {
 async function refresh(): Promise<void> {
   const payload: SearchRegionsPayload = {
     ids: [],
-    search: {
-      terms: search.value
-        .split(" ")
-        .filter((term) => term.length)
-        .map((term) => ({ value: `%${term}%` })),
-      operator: "All",
-    },
-    sort: sort.value ? [{ field: sort.value as RegionSort, isDescending: isDescending.value }] : [],
+    search: parseTextSearch(search.value),
+    sort: sort.value ? [{ field: sort.value as RegionSort, direction: direction.value as SortDirection }] : [],
     offset: (page.value - 1) * count.value,
     limit: count.value,
   };
@@ -188,7 +168,7 @@ watch(
             ? {
                 search: "",
                 sort: "Name",
-                descending: "false",
+                direction: "Ascending",
                 page: 1,
                 count: 12,
               }
