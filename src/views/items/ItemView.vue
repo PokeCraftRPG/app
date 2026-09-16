@@ -1,14 +1,20 @@
 <template>
   <main class="container page">
     <div v-if="item">
-      <h1>{{ title }}</h1>
-      <!-- TODO(fpion): Category -->
-      <!-- TODO(fpion): Sprite -->
-      <WorldBreadcrumb :current="title" :parent="breadcrumb" />
-      <TarAlert :close="t('actions.close')" dismissible variant="success" v-model="isCreated">
-        <strong>{{ t("items.created.lead", { name: title }) }}</strong> {{ t("items.created.help") }}
-      </TarAlert>
-      <StatusDetail class="mb-3" :subject="item" />
+      <div class="d-flex justify-content-between align-items-start gap-4">
+        <div class="flex-grow-1">
+          <div class="d-flex flex-wrap align-items-center gap-3">
+            <h1>{{ title }}</h1>
+            <TarBadge class="fs-6" variant="secondary">{{ t(`items.category.options.${item.category}`) }}</TarBadge>
+          </div>
+          <WorldBreadcrumb :current="title" :parent="breadcrumb" />
+          <TarAlert :close="t('actions.close')" dismissible variant="success" v-model="isCreated">
+            <strong>{{ t("items.created.lead", { name: title }) }}</strong> {{ t("items.created.help") }}
+          </TarAlert>
+          <StatusDetail class="mb-3" :subject="item" />
+        </div>
+        <ImageAsset v-if="item.sprite" :alt="t('sprite.alt', { name: title })" :asset="item.sprite" height="144" />
+      </div>
       <form class="border-top border-secondary-subtle pt-4" @submit.prevent="handleSubmit(submit)">
         <KeyAlreadyUsed v-model="keyAlreadyUsed" />
         <div class="row">
@@ -52,6 +58,7 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 import ContentField from "@/components/shared/ContentField.vue";
+import ImageAsset from "@/components/shared/ImageAsset.vue";
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
 import KeyField from "@/components/shared/KeyField.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
@@ -60,6 +67,7 @@ import PriceField from "@/components/items/PriceField.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
 import SummaryField from "@/components/shared/SummaryField.vue";
 import TarAlert from "@/components/tar/TarAlert.vue";
+import TarBadge from "@/components/tar/TarBadge.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import WeightField from "@/components/items/WeightField.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";

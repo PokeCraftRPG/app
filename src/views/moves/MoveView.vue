@@ -1,8 +1,11 @@
 <template>
   <main class="container page">
     <div v-if="move">
-      <h1>{{ title }}</h1>
-      <!-- TODO(fpion): Type & Category -->
+      <div class="d-flex flex-wrap align-items-center gap-3">
+        <h1>{{ title }}</h1>
+        <PokemonTypeImage :type="move.type" height="32" />
+        <MoveCategoryBadge :category="move.category" height="32" />
+      </div>
       <WorldBreadcrumb :current="title" :parent="breadcrumb" />
       <TarAlert :close="t('actions.close')" dismissible variant="success" v-model="isCreated">
         <strong>{{ t("moves.created.lead", { name: title }) }}</strong> {{ t("moves.created.help") }}
@@ -76,6 +79,8 @@ import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
 import { useToastStore } from "@/stores/toast";
+import PokemonTypeImage from "@/components/pokemon/PokemonTypeImage.vue";
+import MoveCategoryBadge from "@/components/moves/MoveCategoryBadge.vue";
 
 const document = useDocument();
 const events = useEventStore();

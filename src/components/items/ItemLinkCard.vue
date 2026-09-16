@@ -1,6 +1,12 @@
 <template>
-  <LinkCard :subtitle="category" :title="item.name ?? item.key" :to="{ name: 'Item', params: { id: item.id } }">
-    <!-- TODO(fpion): Sprite -->
+  <LinkCard :to="{ name: 'Item', params: { id: item.id } }">
+    <div class="d-flex align-items-start gap-1">
+      <ImageAsset v-if="item.sprite" :alt="t('sprite.alt', { name: item.name ?? item.key })" :asset="item.sprite" height="48" />
+      <div class="flex-grow-1">
+        <h5 class="card-title">{{ item.name ?? item.key }}</h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">{{ category }}</h6>
+      </div>
+    </div>
     <div v-if="price || weight" class="d-flex justify-content-between align-items-center gap-2 mb-2 text-body-secondary">
       <div>
         <font-awesome-icon icon="fas fa-coins" aria-hidden="true" />&nbsp;<template v-if="item.price">{{ n(price, "price") }}</template
@@ -20,6 +26,7 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
+import ImageAsset from "@/components/shared/ImageAsset.vue";
 import LinkCard from "@/components/shared/LinkCard.vue";
 import StatusBlock from "@/components/shared/StatusBlock.vue";
 import type { Item } from "@/types/items";
