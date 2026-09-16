@@ -54,6 +54,10 @@
   },
   "saved": "Your changes have been saved.",
   "sort": "Sort by",
+  "sprite": {
+    "alt": "{name}’s Sprite",
+    "label": "Sprite"
+  },
   "status": {
     "createdOn": "Created on {date}",
     "now": "just now",
