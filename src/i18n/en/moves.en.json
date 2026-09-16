@@ -1,0 +1,40 @@
+{
+  "accuracy": {
+    "format": "Acc.: {accuracy}%",
+    "label": "Accuracy"
+  },
+  "category": {
+    "label": "Category",
+    "options": {
+      "Physical": "Physical",
+      "Special": "Special",
+      "Status": "Status"
+    },
+    "placeholder": "Select a category"
+  },
+  "create": "Create a move",
+  "created": {
+    "help": "You can now complete its details.",
+    "lead": "The move “{name}” was created."
+  },
+  "power": {
+    "format": "Pow.: {power}",
+    "label": "Power"
+  },
+  "powerPoints": {
+    "format": "PP: {powerPoints}",
+    "label": "Power Points"
+  },
+  "sort": {
+    "options": {
+      "Accuracy": "Accuracy",
+      "CreatedOn": "Created on",
+      "Key": "Key",
+      "Name": "Name",
+      "Power": "Power",
+      "PowerPoints": "PP",
+      "UpdatedOn": "Last updated"
+    }
+  },
+  "title": "Moves"
+}

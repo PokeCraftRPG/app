@@ -1,5 +1,5 @@
 import type { Actor, Aggregate, Optional } from "./api";
-import type { SearchPayload, SortOption } from "./search";
+import type { SearchPayload } from "./search";
 
 export type CreateOrReplaceWorldPayload = {
   key: string;
@@ -8,9 +8,13 @@ export type CreateOrReplaceWorldPayload = {
   content?: string | null;
 };
 
-export type SearchWorldsPayload = SearchPayload & {
-  sort: WorldSortOption[];
+export type Member = {
+  user: Actor;
+  grantedBy: Actor;
+  grantedOn: string;
 };
+
+export type SearchWorldsPayload = SearchPayload<WorldSort>;
 
 export type UpdateWorldPayload = {
   key?: string | null;
@@ -20,22 +24,12 @@ export type UpdateWorldPayload = {
 };
 
 export type World = Aggregate & {
-  owner: Actor;
   key: string;
   name?: string | null;
   summary?: string | null;
   content?: string | null;
-  members: WorldMember[];
-};
-
-export type WorldMember = {
-  user: Actor;
-  grantedBy: Actor;
-  grantedOn: string;
+  owner: Actor;
+  members: Member[];
 };
 
 export type WorldSort = "CreatedOn" | "Key" | "Name" | "UpdatedOn";
-
-export type WorldSortOption = SortOption & {
-  field: WorldSort;
-};

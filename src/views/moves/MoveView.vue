@@ -1,24 +1,35 @@
 <template>
   <main class="container page">
-    <div v-if="region">
+    <div v-if="move">
       <h1>{{ title }}</h1>
       <WorldBreadcrumb :current="title" :parent="breadcrumb" />
       <TarAlert :close="t('actions.close')" dismissible variant="success" v-model="isCreated">
-        <strong>{{ t("regions.created.lead", { name: title }) }}</strong> {{ t("regions.created.help") }}
+        <strong>{{ t("moves.created.lead", { name: title }) }}</strong> {{ t("moves.created.help") }}
       </TarAlert>
-      <StatusDetail class="mb-3" :subject="region" />
+      <StatusDetail class="mb-3" :subject="move" />
       <form class="border-top border-secondary-subtle pt-4" @submit.prevent="handleSubmit(submit)">
         <KeyAlreadyUsed v-model="keyAlreadyUsed" />
         <div class="row">
-          <div class="col-lg-6">
+          <div class="col-md-6">
             <NameField class="mb-3" v-model="name" />
           </div>
-          <div class="col-lg-6">
+          <div class="col-md-6">
             <KeyField class="mb-3" ref="keyField" required v-model="key" />
           </div>
         </div>
         <SummaryField class="mb-3" v-model="summary" />
         <ContentField class="mb-3" v-model="content" />
+        <div class="row">
+          <div class="col-md-4">
+            <AccuracyField class="mb-3" v-model="accuracy" />
+          </div>
+          <div class="col-md-4">
+            <PowerField class="mb-3" :disabled="move.category === 'Status'" v-model="power" />
+          </div>
+          <div class="col-md-4">
+            <PowerPointsField class="mb-3" v-model="powerPoints" />
+          </div>
+        </div>
         <div class="d-flex justify-content-end mb-3">
           <TarButton
             :disabled="!hasChanges || isLoading"
@@ -41,11 +52,14 @@ import { computed, inject, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
+import AccuracyField from "@/components/moves/AccuracyField.vue";
 import ContentField from "@/components/shared/ContentField.vue";
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
 import KeyField from "@/components/shared/KeyField.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
 import NameField from "@/components/shared/NameField.vue";
+import PowerField from "@/components/moves/PowerField.vue";
+import PowerPointsField from "@/components/moves/PowerPointsField.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
 import SummaryField from "@/components/shared/SummaryField.vue";
 import TarAlert from "@/components/tar/TarAlert.vue";
@@ -53,10 +67,10 @@ import TarButton from "@/components/tar/TarButton.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
-import type { CreateOrReplaceRegionPayload, Region } from "@/types/regions";
+import type { CreateOrReplaceMovePayload, Move } from "@/types/moves";
 import { ErrorCodes, StatusCodes } from "@/types/api";
 import { handleErrorKey } from "@/inject";
-import { readRegion, replaceRegion } from "@/api/regions";
+import { readMove, replaceMove } from "@/api/moves";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
@@ -70,41 +84,52 @@ const router = useRouter();
 const toasts = useToastStore();
 const { t } = useI18n();
 
+const accuracy = ref<number>(0);
 const content = ref<string>("");
 const isCreated = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
 const key = ref<string>("");
 const keyAlreadyUsed = ref<boolean>(false);
 const keyField = ref<InstanceType<typeof KeyField> | null>(null);
+const move = ref<Move>();
 const name = ref<string>("");
-const region = ref<Region>();
+const power = ref<number>(0);
+const powerPoints = ref<number>(0);
 const summary = ref<string>("");
 
-const breadcrumb = computed<Breadcrumb>(() => ({ text: t("regions.title"), to: { name: "Regions" } }));
+const breadcrumb = computed<Breadcrumb>(() => ({ text: t("moves.title"), to: { name: "Moves" } }));
 const hasChanges = computed<boolean>(() =>
   Boolean(
-    region.value &&
-    (region.value.key !== key.value ||
-      (region.value.name ?? "") !== name.value ||
-      (region.value.summary ?? "") !== summary.value ||
-      (region.value.content ?? "") !== content.value),
+    move.value &&
+    (move.value.key !== key.value ||
+      (move.value.name ?? "") !== name.value ||
+      (move.value.summary ?? "") !== summary.value ||
+      (move.value.content ?? "") !== content.value ||
+      (move.value.accuracy ?? 0) !== accuracy.value ||
+      (move.value.power ?? 0) !== power.value ||
+      (move.value.powerPoints ?? 0) !== powerPoints.value),
   ),
 );
-const title = computed<string>(() => region.value?.name ?? region.value?.key ?? "");
+const title = computed<string>(() => move.value?.name ?? move.value?.key ?? "");
 
 const { handleSubmit, reinitialize } = useForm();
 async function submit(): Promise<void> {
-  if (!isLoading.value && region.value) {
+  if (!isLoading.value && move.value) {
     isLoading.value = true;
     keyAlreadyUsed.value = false;
     try {
-      const payload: CreateOrReplaceRegionPayload = {
+      const payload: CreateOrReplaceMovePayload = {
+        type: move.value.type,
+        category: move.value.category,
         key: key.value,
         name: name.value,
         summary: summary.value,
         content: content.value,
+        accuracy: accuracy.value || undefined,
+        power: power.value || undefined,
+        powerPoints: powerPoints.value || undefined,
       };
-      region.value = await replaceRegion(region.value.id, payload);
+      move.value = await replaceMove(move.value.id, payload);
       isCreated.value = false;
       reinitialize();
       toasts.success("saved");
@@ -126,12 +151,15 @@ async function submit(): Promise<void> {
 }
 
 watch(
-  region,
-  (region) => {
-    key.value = region?.key ?? "";
-    name.value = region?.name ?? "";
-    summary.value = region?.summary ?? "";
-    content.value = region?.content ?? "";
+  move,
+  (move) => {
+    key.value = move?.key ?? "";
+    name.value = move?.name ?? "";
+    summary.value = move?.summary ?? "";
+    content.value = move?.content ?? "";
+    accuracy.value = move?.accuracy ?? 0;
+    power.value = move?.power ?? 0;
+    powerPoints.value = move?.powerPoints ?? 0;
   },
   { deep: true },
 );
@@ -139,7 +167,7 @@ watch(
 onMounted(async () => {
   try {
     const id: string = (Array.isArray(route.params.id) ? route.params.id[0] : route.params.id) ?? "";
-    region.value = await readRegion(id);
+    move.value = await readMove(id);
     isCreated.value = events.shift() === "created";
     document.setTitle(title.value);
   } catch (e: unknown) {

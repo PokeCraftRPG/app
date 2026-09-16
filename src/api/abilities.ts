@@ -1,7 +1,8 @@
 import { urlUtils } from "logitar-js";
 
-import type { CreateOrReplaceAbilityPayload, SearchAbilitiesPayload, UpdateAbilityPayload, Ability } from "@/types/abilities";
+import type { Ability, CreateOrReplaceAbilityPayload, SearchAbilitiesPayload, UpdateAbilityPayload } from "@/types/abilities";
 import type { SearchResults } from "@/types/search";
+import { encodeSortOption } from "@/utils/search";
 import { get, patch, post, put } from ".";
 
 export async function createAbility(payload: CreateOrReplaceAbilityPayload): Promise<Ability> {
@@ -22,15 +23,9 @@ export async function replaceAbility(id: string, payload: CreateOrReplaceAbility
 export async function searchAbilities(payload: SearchAbilitiesPayload): Promise<SearchResults<Ability>> {
   const url: string = new urlUtils.UrlBuilder({ path: "/abilities" })
     .setQuery("ids", payload.ids)
-    .setQuery(
-      "search",
-      payload.search.terms.map(({ value }) => value),
-    )
-    .setQuery("search_mode", payload.search.operator)
-    .setQuery(
-      "sort",
-      payload.sort.map(({ field, isDescending }) => (isDescending ? `-${field}` : field)),
-    )
+    .setQuery("search", payload.search.terms)
+    .setQuery("search_mode", payload.search.mode)
+    .setQuery("sort", payload.sort.map(encodeSortOption))
     .setQuery("offset", payload.offset.toString())
     .setQuery("limit", payload.limit.toString())
     .buildRelative();

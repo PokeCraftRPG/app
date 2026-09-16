@@ -13,13 +13,6 @@
     "lead": "No worlds yet"
   },
   "go": "Go to my worlds",
-  "key": {
-    "alreadyUsed": {
-      "help": "Choose another unique key for this world, then try again.",
-      "lead": "This key is already in use."
-    },
-    "label": "Unique Key"
-  },
   "help": "Create your worlds and access their portal.",
   "portal": {
     "comingSoon": "The world portal is coming soon."

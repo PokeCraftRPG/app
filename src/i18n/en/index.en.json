@@ -14,6 +14,7 @@
     "search": "Search",
     "verify": "Verify"
   },
+  "all": "All",
   "brand": "PokéCraft",
   "by": "By",
   "content": "Content",
@@ -30,6 +31,13 @@
     "go": "Go to Home",
     "text": "A multi-tenant game Web application managing world-scoped data, character sheets, and real-time gameplay state for interactive Pokémon roleplaying experiences.",
     "title": "Home"
+  },
+  "key": {
+    "alreadyUsed": {
+      "help": "Choose another unique key, then try again.",
+      "lead": "This key is already in use."
+    },
+    "label": "Unique Key"
   },
   "loading": "Loading…",
   "name": "Name",

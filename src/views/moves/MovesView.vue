@@ -3,7 +3,7 @@
     <div v-if="hasLoaded" class="d-flex flex-column flex-grow-1">
       <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3">
         <h1 class="mb-0">{{ title }}</h1>
-        <CreateAbility class="mb-3" @created="onCreate" @error="handleError" />
+        <CreateMove class="mb-3" @created="onCreate" @error="handleError" />
       </div>
       <WorldBreadcrumb :current="title" />
       <section>
@@ -13,6 +13,14 @@
         </div>
       </section>
       <section>
+        <div class="row">
+          <div class="col-md-6">
+            <PokemonTypeSelect class="mb-3" :model-value="type" @update:model-value="setQuery('type', $event)" />
+          </div>
+          <div class="col-md-6">
+            <MoveCategorySelect class="mb-3" :model-value="category" @update:model-value="setQuery('category', $event)" />
+          </div>
+        </div>
         <div class="row">
           <div class="col-md-4">
             <SearchInput class="mb-3" :model-value="search" @update:model-value="setQuery('search', $event)" />
@@ -34,8 +42,8 @@
       </section>
       <section v-if="total" class="border-top border-secondary-subtle pt-4" :class="{ loading: isLoading }">
         <div class="row">
-          <div v-for="ability in abilities" :key="ability.id" class="col-md-6 col-lg-4 col-xl-3 mb-3">
-            <AbilityLinkCard class="h-100" :ability="ability" />
+          <div v-for="move in moves" :key="move.id" class="col-md-6 col-lg-4 col-xl-3 mb-3">
+            <MoveLinkCard class="h-100" :move="move" />
           </div>
         </div>
         <SearchPagination v-if="total > count" class="mt-3" :count="count" :model-value="page" :total="total" @update:model-value="setQuery('page', $event)" />
@@ -57,24 +65,27 @@ import { computed, inject, ref, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
-import AbilityLinkCard from "@/components/abilities/AbilityLinkCard.vue";
 import ClearFiltersButton from "@/components/shared/ClearFiltersButton.vue";
 import CountSelect from "@/components/shared/CountSelect.vue";
-import CreateAbility from "@/components/abilities/CreateAbility.vue";
+import CreateMove from "@/components/moves/CreateMove.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
+import MoveLinkCard from "@/components/moves/MoveLinkCard.vue";
+import PokemonTypeSelect from "@/components/pokemon/PokemonTypeSelect.vue";
 import RefreshButton from "@/components/shared/RefreshButton.vue";
 import SearchInput from "@/components/shared/SearchInput.vue";
 import SearchPagination from "@/components/shared/SearchPagination.vue";
 import SortSelect from "@/components/shared/SortSelect.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
-import type { Ability, AbilitySort, SearchAbilitiesPayload } from "@/types/abilities";
+import type { Move, MoveCategory, MoveSort, SearchMovesPayload } from "@/types/moves";
+import type { PokemonType } from "@/types/pokemon";
 import type { SearchResults, SortDirection } from "@/types/search";
 import type { SelectOption } from "@/types/tar/select";
 import { handleErrorKey } from "@/inject";
 import { parseTextSearch } from "@/utils/search";
-import { searchAbilities } from "@/api/abilities";
+import { searchMoves } from "@/api/moves";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
+import MoveCategorySelect from "@/components/moves/MoveCategorySelect.vue";
 
 const document = useDocument();
 const events = useEventStore();
@@ -86,42 +97,46 @@ const { orderBy } = arrayUtils;
 const { parseNumber } = parsingUtils;
 const { rt, t, tm } = useI18n();
 
-const abilities = ref<Ability[]>([]);
 const hasLoaded = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
+const moves = ref<Move[]>([]);
 const timestamp = ref<number>(0);
 const total = ref<number>(0);
 
+const category = computed<MoveCategory | "">(() => route.query.category?.toString() as MoveCategory | "");
 const count = computed<number>(() => parseNumber(route.query.count?.toString()) || 12);
 const direction = computed<string>(() => route.query.direction?.toString() ?? "");
 const page = computed<number>(() => parseNumber(route.query.page?.toString()) || 1);
 const search = computed<string>(() => route.query.search?.toString() ?? "");
 const sort = computed<string>(() => route.query.sort?.toString() ?? "");
-const title = computed<string>(() => t("abilities.title"));
+const title = computed<string>(() => t("moves.title"));
+const type = computed<PokemonType | "">(() => route.query.type?.toString() as PokemonType | "");
 
-const hasFilters = computed<boolean>(() => Boolean(search.value));
+const hasFilters = computed<boolean>(() => Boolean(search.value || type.value || category.value));
 
 const sortOptions = computed<SelectOption[]>(() =>
   orderBy(
-    Object.entries(tm(rt("abilities.sort.options"))).map(([value, text]) => ({ text, value }) as SelectOption),
+    Object.entries(tm(rt("moves.sort.options"))).map(([value, text]) => ({ text, value }) as SelectOption),
     "text",
   ),
 );
 
-function onCreate(ability: Ability): void {
+function onCreate(move: Move): void {
   events.push("created");
-  router.push({ name: "Ability", params: { id: ability.id } });
+  router.push({ name: "Move", params: { id: move.id } });
 }
 
 function clearFilters(): void {
-  const query = { ...route.query, search: "", page: 1 };
+  const query = { ...route.query, search: "", type: "", category: "", page: 1 };
   router.replace({ ...route, query });
 }
 
 function setQuery(key: string, value?: boolean | null | number | string): void {
   const query = { ...route.query, [key]: value?.toString() ?? "" };
   switch (key) {
+    case "category":
     case "search":
+    case "type":
     case "count":
       query.page = "1";
       break;
@@ -130,10 +145,12 @@ function setQuery(key: string, value?: boolean | null | number | string): void {
 }
 
 async function refresh(): Promise<void> {
-  const payload: SearchAbilitiesPayload = {
+  const payload: SearchMovesPayload = {
+    category: category.value ? (category.value as MoveCategory) : undefined,
     ids: [],
     search: parseTextSearch(search.value),
-    sort: sort.value ? [{ field: sort.value as AbilitySort, direction: direction.value as SortDirection }] : [],
+    type: type.value ? (type.value as PokemonType) : undefined,
+    sort: sort.value ? [{ field: sort.value as MoveSort, direction: direction.value as SortDirection }] : [],
     offset: (page.value - 1) * count.value,
     limit: count.value,
   };
@@ -141,9 +158,9 @@ async function refresh(): Promise<void> {
   const now = Date.now();
   timestamp.value = now;
   try {
-    const results: SearchResults<Ability> = await searchAbilities(payload);
+    const results: SearchResults<Move> = await searchMoves(payload);
     if (now === timestamp.value) {
-      abilities.value = [...results.items];
+      moves.value = [...results.items];
       total.value = results.total;
     }
   } catch (e: unknown) {
@@ -159,14 +176,16 @@ async function refresh(): Promise<void> {
 watch(
   () => route,
   (route) => {
-    if (route.name === "Abilities") {
+    if (route.name === "Moves") {
       const { query } = route;
       if (!query.page || !query.count) {
         router.replace({
           ...route,
           query: isEmpty(query)
             ? {
+                category: "",
                 search: "",
+                type: "",
                 sort: "Name",
                 direction: "Ascending",
                 page: 1,

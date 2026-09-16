@@ -2,10 +2,10 @@
   <div>
     <TarButton icon="fas fa-plus" size="large" :text="t('actions.create')" @click="open" />
     <TarModal centered :close="t('actions.close')" fade scrollable ref="modal" :title="t('regions.create')">
-      <KeyAlreadyUsed v-model="keyAlreadyUsed" help="regions.key.alreadyUsed.help" lead="regions.key.alreadyUsed.lead" />
+      <KeyAlreadyUsed v-model="keyAlreadyUsed" />
       <form @submit.prevent="handleSubmit(submit)">
         <NameField class="mb-3" :model-value="name" required @update:model-value="updateName" />
-        <KeyField class="mb-3" label="regions.key.label" ref="keyField" required v-model="key" />
+        <KeyField class="mb-3" ref="keyField" required v-model="key" />
       </form>
       <template #footer>
         <TarButton icon="fas fa-ban" :text="t('actions.cancel')" variant="secondary" @click="cancel" />
@@ -28,12 +28,13 @@ import { stringUtils } from "logitar-js";
 import { useI18n } from "vue-i18n";
 
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
-import KeyField from "@/components/worlds/KeyField.vue";
+import KeyField from "@/components/shared/KeyField.vue";
 import NameField from "@/components/shared/NameField.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import TarModal from "@/components/tar/TarModal.vue";
+import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { CreateOrReplaceRegionPayload, Region } from "@/types/regions";
-import { ErrorCodes, StatusCodes, type ApiFailure, type ProblemDetails } from "@/types/api";
+import { ErrorCodes, StatusCodes } from "@/types/api";
 import { createRegion } from "@/api/regions";
 import { useForm } from "@/forms";
 

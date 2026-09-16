@@ -8,13 +8,13 @@
       </TarAlert>
       <StatusDetail class="mb-3" :subject="ability" />
       <form class="border-top border-secondary-subtle pt-4" @submit.prevent="handleSubmit(submit)">
-        <KeyAlreadyUsed v-model="keyAlreadyUsed" help="abilities.key.alreadyUsed.help" lead="abilities.key.alreadyUsed.lead" />
+        <KeyAlreadyUsed v-model="keyAlreadyUsed" />
         <div class="row">
           <div class="col-lg-6">
             <NameField class="mb-3" v-model="name" />
           </div>
           <div class="col-lg-6">
-            <KeyField class="mb-3" label="abilities.key.label" ref="keyField" required v-model="key" />
+            <KeyField class="mb-3" ref="keyField" required v-model="key" />
           </div>
         </div>
         <SummaryField class="mb-3" v-model="summary" />
@@ -43,7 +43,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import ContentField from "@/components/shared/ContentField.vue";
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
-import KeyField from "@/components/worlds/KeyField.vue";
+import KeyField from "@/components/shared/KeyField.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
 import NameField from "@/components/shared/NameField.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
@@ -52,8 +52,9 @@ import TarAlert from "@/components/tar/TarAlert.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
 import type { Ability, CreateOrReplaceAbilityPayload } from "@/types/abilities";
+import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
-import { ErrorCodes, StatusCodes, type ApiFailure, type ProblemDetails } from "@/types/api";
+import { ErrorCodes, StatusCodes } from "@/types/api";
 import { handleErrorKey } from "@/inject";
 import { readAbility, replaceAbility } from "@/api/abilities";
 import { useDocument } from "@/composables/document";
@@ -99,8 +100,8 @@ async function submit(): Promise<void> {
     try {
       const payload: CreateOrReplaceAbilityPayload = {
         key: key.value,
-        name: name.value || null,
-        summary: summary.value || null,
+        name: name.value,
+        summary: summary.value,
         content: content.value,
       };
       ability.value = await replaceAbility(ability.value.id, payload);

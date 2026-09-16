@@ -1,5 +1,5 @@
 import type { Aggregate, Optional } from "./api";
-import type { SearchPayload, SortOption } from "./search";
+import type { SearchPayload } from "./search";
 
 export type Ability = Aggregate & {
   key: string;
@@ -10,10 +10,6 @@ export type Ability = Aggregate & {
 
 export type AbilitySort = "CreatedOn" | "Key" | "Name" | "UpdatedOn";
 
-export type AbilitySortOption = SortOption & {
-  field: AbilitySort;
-};
-
 export type CreateOrReplaceAbilityPayload = {
   key: string;
   name?: string | null;
@@ -21,9 +17,7 @@ export type CreateOrReplaceAbilityPayload = {
   content?: string | null;
 };
 
-export type SearchAbilitiesPayload = SearchPayload & {
-  sort: AbilitySortOption[];
-};
+export type SearchAbilitiesPayload = SearchPayload<AbilitySort>;
 
 export type UpdateAbilityPayload = {
   key?: string | null;

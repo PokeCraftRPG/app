@@ -53,6 +53,17 @@ const router = createRouter({
       path: "/abilities/:id",
       component: () => import("./views/abilities/AbilityView.vue"),
     },
+    // Moves
+    {
+      name: "Moves",
+      path: "/moves",
+      component: () => import("./views/moves/MovesView.vue"),
+    },
+    {
+      name: "Move",
+      path: "/moves/:id",
+      component: () => import("./views/moves/MoveView.vue"),
+    },
     // Regions
     {
       name: "Regions",

@@ -2,6 +2,7 @@ import { urlUtils } from "logitar-js";
 
 import type { CreateOrReplaceWorldPayload, SearchWorldsPayload, UpdateWorldPayload, World } from "@/types/worlds";
 import type { SearchResults } from "@/types/search";
+import { encodeSortOption } from "@/utils/search";
 import { get, patch, post, put } from ".";
 
 export async function createWorld(payload: CreateOrReplaceWorldPayload): Promise<World> {
@@ -22,15 +23,9 @@ export async function replaceWorld(id: string, payload: CreateOrReplaceWorldPayl
 export async function searchWorlds(payload: SearchWorldsPayload): Promise<SearchResults<World>> {
   const url: string = new urlUtils.UrlBuilder({ path: "/worlds" })
     .setQuery("ids", payload.ids)
-    .setQuery(
-      "search",
-      payload.search.terms.map(({ value }) => value),
-    )
-    .setQuery("search_mode", payload.search.operator)
-    .setQuery(
-      "sort",
-      payload.sort.map(({ field, isDescending }) => (isDescending ? `-${field}` : field)),
-    )
+    .setQuery("search", payload.search.terms)
+    .setQuery("search_mode", payload.search.mode)
+    .setQuery("sort", payload.sort.map(encodeSortOption))
     .setQuery("offset", payload.offset.toString())
     .setQuery("limit", payload.limit.toString())
     .buildRelative();

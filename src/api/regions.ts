@@ -1,7 +1,8 @@
 import { urlUtils } from "logitar-js";
 
-import type { CreateOrReplaceRegionPayload, SearchRegionsPayload, UpdateRegionPayload, Region } from "@/types/regions";
+import type { CreateOrReplaceRegionPayload, Region, SearchRegionsPayload, UpdateRegionPayload } from "@/types/regions";
 import type { SearchResults } from "@/types/search";
+import { encodeSortOption } from "@/utils/search";
 import { get, patch, post, put } from ".";
 
 export async function createRegion(payload: CreateOrReplaceRegionPayload): Promise<Region> {
@@ -22,15 +23,9 @@ export async function replaceRegion(id: string, payload: CreateOrReplaceRegionPa
 export async function searchRegions(payload: SearchRegionsPayload): Promise<SearchResults<Region>> {
   const url: string = new urlUtils.UrlBuilder({ path: "/regions" })
     .setQuery("ids", payload.ids)
-    .setQuery(
-      "search",
-      payload.search.terms.map(({ value }) => value),
-    )
-    .setQuery("search_mode", payload.search.operator)
-    .setQuery(
-      "sort",
-      payload.sort.map(({ field, isDescending }) => (isDescending ? `-${field}` : field)),
-    )
+    .setQuery("search", payload.search.terms)
+    .setQuery("search_mode", payload.search.mode)
+    .setQuery("sort", payload.sort.map(encodeSortOption))
     .setQuery("offset", payload.offset.toString())
     .setQuery("limit", payload.limit.toString())
     .buildRelative();
