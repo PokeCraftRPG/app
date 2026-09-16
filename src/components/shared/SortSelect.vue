@@ -1,7 +1,7 @@
 <template>
   <TarSelect floating :id="id" :label="t(label)" :model-value="modelValue" :options="options" @update:model-value="$emit('update:model-value', $event ?? '')">
     <template #append>
-      <TarButton :icon="icon" outline variant="secondary" @click="changeDirection" />
+      <TarButton :icon="icon" outline variant="secondary" @click="$emit('update:direction', direction === 'Ascending' ? 'Descending' : 'Ascending')" />
     </template>
   </TarSelect>
 </template>
@@ -31,7 +31,7 @@ const props = withDefaults(
   },
 );
 
-const emit = defineEmits<{
+defineEmits<{
   (e: "update:direction", value: SortDirection): void;
   (e: "update:model-value", value: string): void;
 }>();
@@ -46,8 +46,4 @@ const icon = computed<string>(() => {
       return "";
   }
 });
-
-function changeDirection(): void {
-  emit("update:direction", props.direction === "Ascending" ? "Descending" : "Ascending");
-}
 </script>
