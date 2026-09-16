@@ -7,7 +7,7 @@
       </div>
       <WorldBreadcrumb :current="title" root />
       <TarAlert :close="t('actions.close')" dismissible variant="success" v-model="isCreated">
-        <strong>{{ t("worlds.created.lead") }}</strong> {{ t("worlds.created.help", { name: title }) }}
+        <strong>{{ t("worlds.created.lead", { name: title }) }}</strong> {{ t("worlds.created.help") }}
       </TarAlert>
       <StatusDetail class="mb-4" :subject="world" />
       <WorldMenu />

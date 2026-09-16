@@ -4,7 +4,7 @@
       <h1>{{ title }}</h1>
       <WorldBreadcrumb :current="title" :parent="breadcrumb" />
       <TarAlert :close="t('actions.close')" dismissible variant="success" v-model="isCreated">
-        <strong>{{ t("abilities.created.lead") }}</strong> {{ t("abilities.created.help", { name: title }) }}
+        <strong>{{ t("abilities.created.lead", { name: title }) }}</strong> {{ t("abilities.created.help") }}
       </TarAlert>
       <StatusDetail class="mb-3" :subject="ability" />
       <form class="border-top border-secondary-subtle pt-4" @submit.prevent="handleSubmit(submit)">

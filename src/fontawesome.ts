@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faAdjust,
+  faArrowDownLong,
   faArrowLeft,
   faArrowRight,
   faArrowRightFromBracket,
@@ -11,6 +12,7 @@ import {
   faArrowRotateLeft,
   faArrowsRotate,
   faArrowUp,
+  faArrowUpLong,
   faBan,
   faBolt,
   faCheck,
@@ -39,6 +41,7 @@ import {
 
 library.add(
   faAdjust,
+  faArrowDownLong,
   faArrowLeft,
   faArrowRight,
   faArrowRightFromBracket,
@@ -46,6 +49,7 @@ library.add(
   faArrowRotateLeft,
   faArrowsRotate,
   faArrowUp,
+  faArrowUpLong,
   faBan,
   faBolt,
   faCheck,

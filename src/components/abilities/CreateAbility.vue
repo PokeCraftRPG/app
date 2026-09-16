@@ -7,7 +7,6 @@
       <form @submit.prevent="handleSubmit(submit)">
         <NameField class="mb-3" :model-value="name" required @update:model-value="updateName" />
         <KeyField class="mb-3" label="abilities.key.label" ref="keyField" required v-model="key" />
-        <SummaryField class="mb-3" v-model="summary" />
       </form>
       <template #footer>
         <TarButton icon="fas fa-ban" :text="t('actions.cancel')" variant="secondary" @click="cancel" />
@@ -32,7 +31,6 @@ import { useI18n } from "vue-i18n";
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
 import KeyField from "@/components/worlds/KeyField.vue";
 import NameField from "@/components/shared/NameField.vue";
-import SummaryField from "@/components/shared/SummaryField.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import TarModal from "@/components/tar/TarModal.vue";
 import type { Ability, CreateOrReplaceAbilityPayload } from "@/types/abilities";
@@ -54,7 +52,6 @@ const keyAlreadyUsed = ref<boolean>(false);
 const keyField = ref<InstanceType<typeof KeyField> | null>(null);
 const modal = ref<InstanceType<typeof TarModal> | null>(null);
 const name = ref<string>("");
-const summary = ref<string>("");
 
 function cancel(): void {
   reset();
@@ -80,7 +77,6 @@ async function submit(): Promise<void> {
       const payload: CreateOrReplaceAbilityPayload = {
         key: key.value,
         name: name.value,
-        summary: summary.value || null,
       };
       const ability: Ability = await createAbility(payload);
       modal.value?.hide();

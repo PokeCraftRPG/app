@@ -27,7 +27,7 @@ withDefaults(
   }>(),
   {
     id: "search",
-    label: "search",
+    label: "actions.search",
     type: "search",
   },
 );

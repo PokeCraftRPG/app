@@ -11,12 +11,13 @@
     "previous": "Previous",
     "refresh": "Refresh",
     "save": "Save",
+    "search": "Rechercher",
     "verify": "Verify"
   },
   "brand": "PokéCraft",
   "by": "By",
   "content": "Content",
-  "count": "Count",
+  "count": "Results per page",
   "empty": {
     "help": "No items match the current criteria.",
     "lead": "No results"
@@ -44,14 +45,7 @@
     "previous": "Previous"
   },
   "saved": "Your changes have been saved.",
-  "search": "Search",
-  "sort": {
-    "isDescending": "Is descending",
-    "select": {
-      "label": "Sort",
-      "placeholder": "Select a sort"
-    }
-  },
+  "sort": "Sort by",
   "status": {
     "createdOn": "Created on {date}",
     "now": "just now",
