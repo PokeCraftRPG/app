@@ -15,8 +15,10 @@ import {
   faArrowUpLong,
   faBan,
   faBolt,
+  faCartShopping,
   faCheck,
   faClockRotateLeft,
+  faCoins,
   faCommentSms,
   faDesktop,
   faDice,
@@ -38,6 +40,7 @@ import {
   faSun,
   faTablet,
   faUser,
+  faWeightHanging,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -54,8 +57,10 @@ library.add(
   faArrowUpLong,
   faBan,
   faBolt,
+  faCartShopping,
   faCheck,
   faClockRotateLeft,
+  faCoins,
   faCommentSms,
   faDesktop,
   faDice,
@@ -77,6 +82,7 @@ library.add(
   faSun,
   faTablet,
   faUser,
+  faWeightHanging,
   faXmark,
 );
 

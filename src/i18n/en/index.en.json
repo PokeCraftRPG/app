@@ -37,7 +37,7 @@
       "help": "Choose another unique key, then try again.",
       "lead": "This key is already in use."
     },
-    "label": "Unique Key"
+    "label": "Key"
   },
   "loading": "Loading…",
   "name": "Name",

@@ -28,6 +28,16 @@ export default createI18n<[MessageSchema], "en">({
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       },
+      price: {
+        style: "decimal",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      },
+      weight: {
+        style: "decimal",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      },
     },
   },
 });

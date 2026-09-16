@@ -1,13 +1,14 @@
 <template>
   <main class="container page">
-    <div v-if="move">
+    <div v-if="item">
       <h1>{{ title }}</h1>
-      <!-- TODO(fpion): Type & Category -->
+      <!-- TODO(fpion): Category -->
+      <!-- TODO(fpion): Sprite -->
       <WorldBreadcrumb :current="title" :parent="breadcrumb" />
       <TarAlert :close="t('actions.close')" dismissible variant="success" v-model="isCreated">
-        <strong>{{ t("moves.created.lead", { name: title }) }}</strong> {{ t("moves.created.help") }}
+        <strong>{{ t("items.created.lead", { name: title }) }}</strong> {{ t("items.created.help") }}
       </TarAlert>
-      <StatusDetail class="mb-3" :subject="move" />
+      <StatusDetail class="mb-3" :subject="item" />
       <form class="border-top border-secondary-subtle pt-4" @submit.prevent="handleSubmit(submit)">
         <KeyAlreadyUsed v-model="keyAlreadyUsed" />
         <div class="row">
@@ -21,14 +22,11 @@
         <SummaryField class="mb-3" v-model="summary" />
         <ContentField class="mb-3" v-model="content" />
         <div class="row">
-          <div class="col-md-4">
-            <AccuracyField class="mb-3" v-model="accuracy" />
+          <div class="col-md-6">
+            <PriceField class="mb-3" v-model="price" />
           </div>
-          <div class="col-md-4">
-            <PowerField class="mb-3" :disabled="move.category === 'Status'" v-model="power" />
-          </div>
-          <div class="col-md-4">
-            <PowerPointsField class="mb-3" v-model="powerPoints" />
+          <div class="col-md-6">
+            <WeightField class="mb-3" v-model="weight" />
           </div>
         </div>
         <div class="d-flex justify-content-end mb-3">
@@ -53,25 +51,25 @@ import { computed, inject, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
-import AccuracyField from "@/components/moves/AccuracyField.vue";
 import ContentField from "@/components/shared/ContentField.vue";
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
 import KeyField from "@/components/shared/KeyField.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
 import NameField from "@/components/shared/NameField.vue";
-import PowerField from "@/components/moves/PowerField.vue";
-import PowerPointsField from "@/components/moves/PowerPointsField.vue";
+import PriceField from "@/components/items/PriceField.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
 import SummaryField from "@/components/shared/SummaryField.vue";
 import TarAlert from "@/components/tar/TarAlert.vue";
 import TarButton from "@/components/tar/TarButton.vue";
+import WeightField from "@/components/items/WeightField.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
-import type { CreateOrReplaceMovePayload, Move } from "@/types/moves";
+import type { CreateOrReplaceItemPayload, Item } from "@/types/items";
 import { ErrorCodes, StatusCodes } from "@/types/api";
+import { fromHundredths, toHundredths } from "@/utils/number";
 import { handleErrorKey } from "@/inject";
-import { readMove, replaceMove } from "@/api/moves";
+import { readItem, replaceItem } from "@/api/items";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
@@ -85,52 +83,49 @@ const router = useRouter();
 const toasts = useToastStore();
 const { t } = useI18n();
 
-const accuracy = ref<number>(0);
 const content = ref<string>("");
 const isCreated = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
+const item = ref<Item>();
 const key = ref<string>("");
 const keyAlreadyUsed = ref<boolean>(false);
 const keyField = ref<InstanceType<typeof KeyField> | null>(null);
-const move = ref<Move>();
 const name = ref<string>("");
-const power = ref<number>(0);
-const powerPoints = ref<number>(0);
+const price = ref<number>(0);
 const summary = ref<string>("");
+const weight = ref<number>(0);
 
-const breadcrumb = computed<Breadcrumb>(() => ({ text: t("moves.title"), to: { name: "Moves" } }));
+const breadcrumb = computed<Breadcrumb>(() => ({ text: t("items.title"), to: { name: "Items" } }));
 const hasChanges = computed<boolean>(() =>
   Boolean(
-    move.value &&
-    (move.value.key !== key.value ||
-      (move.value.name ?? "") !== name.value ||
-      (move.value.summary ?? "") !== summary.value ||
-      (move.value.content ?? "") !== content.value ||
-      (move.value.accuracy ?? 0) !== accuracy.value ||
-      (move.value.power ?? 0) !== power.value ||
-      (move.value.powerPoints ?? 0) !== powerPoints.value),
+    item.value &&
+    (item.value.key !== key.value ||
+      (item.value.name ?? "") !== name.value ||
+      (item.value.summary ?? "") !== summary.value ||
+      (item.value.content ?? "") !== content.value ||
+      (fromHundredths(item.value.price) ?? 0) !== price.value ||
+      (fromHundredths(item.value.weight) ?? 0) !== weight.value),
   ),
 );
-const title = computed<string>(() => move.value?.name ?? move.value?.key ?? "");
+const title = computed<string>(() => item.value?.name ?? item.value?.key ?? "");
 
 const { handleSubmit, reinitialize } = useForm();
 async function submit(): Promise<void> {
-  if (!isLoading.value && move.value) {
+  if (!isLoading.value && item.value) {
     isLoading.value = true;
     keyAlreadyUsed.value = false;
     try {
-      const payload: CreateOrReplaceMovePayload = {
-        type: move.value.type,
-        category: move.value.category,
+      const payload: CreateOrReplaceItemPayload = {
+        category: item.value.category,
         key: key.value,
         name: name.value,
         summary: summary.value,
         content: content.value,
-        accuracy: accuracy.value || undefined,
-        power: power.value || undefined,
-        powerPoints: powerPoints.value || undefined,
+        price: toHundredths(price.value) || undefined,
+        weight: toHundredths(price.value) || undefined,
+        spriteId: item.value.sprite?.id,
       };
-      move.value = await replaceMove(move.value.id, payload);
+      item.value = await replaceItem(item.value.id, payload);
       isCreated.value = false;
       reinitialize();
       toasts.success("saved");
@@ -152,15 +147,14 @@ async function submit(): Promise<void> {
 }
 
 watch(
-  move,
-  (move) => {
-    key.value = move?.key ?? "";
-    name.value = move?.name ?? "";
-    summary.value = move?.summary ?? "";
-    content.value = move?.content ?? "";
-    accuracy.value = move?.accuracy ?? 0;
-    power.value = move?.power ?? 0;
-    powerPoints.value = move?.powerPoints ?? 0;
+  item,
+  (item) => {
+    key.value = item?.key ?? "";
+    name.value = item?.name ?? "";
+    summary.value = item?.summary ?? "";
+    content.value = item?.content ?? "";
+    price.value = fromHundredths(item?.price) ?? 0;
+    weight.value = fromHundredths(item?.weight) ?? 0;
   },
   { deep: true },
 );
@@ -168,7 +162,7 @@ watch(
 onMounted(async () => {
   try {
     const id: string = (Array.isArray(route.params.id) ? route.params.id[0] : route.params.id) ?? "";
-    move.value = await readMove(id);
+    item.value = await readItem(id);
     isCreated.value = events.shift() === "created";
     document.setTitle(title.value);
   } catch (e: unknown) {

@@ -1,0 +1,37 @@
+<template>
+  <LinkCard :subtitle="category" :title="item.name ?? item.key" :to="{ name: 'Item', params: { id: item.id } }">
+    <!-- TODO(fpion): Sprite -->
+    <div v-if="price || weight" class="d-flex justify-content-between align-items-center gap-2 mb-2 text-body-secondary">
+      <div>
+        <font-awesome-icon icon="fas fa-coins" aria-hidden="true" />&nbsp;<template v-if="item.price">{{ n(price, "price") }}</template
+        ><span v-else class="text-secondary">{{ "—" }}</span>
+      </div>
+      <div>
+        <font-awesome-icon icon="fas fa-weight-hanging" aria-hidden="true" />&nbsp;<template v-if="item.weight">{{ n(weight, "weight") }}</template
+        ><span v-else class="text-secondary">{{ "—" }}</span>
+      </div>
+    </div>
+    <div v-if="item.summary" class="card-text">{{ item.summary }}</div>
+    <StatusBlock :actor="item.updatedBy" class="card-text mt-2 small text-secondary" :date="item.updatedOn" relative />
+  </LinkCard>
+</template>
+
+<script setup lang="ts">
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+
+import LinkCard from "@/components/shared/LinkCard.vue";
+import StatusBlock from "@/components/shared/StatusBlock.vue";
+import type { Item } from "@/types/items";
+import { fromHundredths } from "@/utils/number";
+
+const { n, t } = useI18n();
+
+const props = defineProps<{
+  item: Item;
+}>();
+
+const category = computed<string>(() => t(`items.category.options.${props.item.category}`));
+const price = computed<number>(() => fromHundredths(props.item.price) ?? 0);
+const weight = computed<number>(() => fromHundredths(props.item.weight) ?? 0);
+</script>

@@ -1,0 +1,35 @@
+{
+  "category": {
+    "label": "Category",
+    "options": {
+      "Battle": "Battle",
+      "Berry": "Berry",
+      "Key": "Key",
+      "Machine": "Machine",
+      "Material": "Material",
+      "Medicine": "Medicine",
+      "Other": "Other",
+      "PokeBall": "Poké Ball",
+      "Treasure": "Treasure"
+    },
+    "placeholder": "Select a category"
+  },
+  "create": "Create an item",
+  "created": {
+    "help": "You can now complete its details.",
+    "lead": "The item “{name}” was created."
+  },
+  "price": "Price",
+  "sort": {
+    "options": {
+      "CreatedOn": "Created on",
+      "Key": "Key",
+      "Name": "Name",
+      "Price": "Price",
+      "UpdatedOn": "Last updated",
+      "Weight": "Weight"
+    }
+  },
+  "title": "Items",
+  "weight": "Weight"
+}
