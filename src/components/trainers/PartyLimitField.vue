@@ -2,16 +2,13 @@
   <InputField
     :id="id"
     :label="label ? t(label) : undefined"
+    :max="max"
     :min="min"
     :model-value="modelValue?.toString() ?? ''"
     :step="step"
     type="number"
     @update:model-value="$emit('update:model-value', parseNumber($event) ?? 0)"
-  >
-    <template #append>
-      <span class="input-group-text">{{ t("unit.dollar") }}</span>
-    </template>
-  </InputField>
+  />
 </template>
 
 <script setup lang="ts">
@@ -27,15 +24,17 @@ withDefaults(
   defineProps<{
     id?: string;
     label?: string;
+    max?: number | string;
     min?: number | string;
     modelValue?: number | string;
     step?: number | string;
   }>(),
   {
-    id: "price",
-    label: "items.price",
+    id: "party-limit",
+    label: "trainers.party.limit",
+    max: 6,
     min: 0,
-    step: 0.01,
+    step: 1,
   },
 );
 

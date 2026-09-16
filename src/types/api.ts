@@ -46,6 +46,7 @@ export type Auditable = {
 export enum ErrorCodes {
   InvalidCredentials = "InvalidCredentials",
   KeyAlreadyUsed = "KeyAlreadyUsed",
+  LicenseAlreadyUsed = "LicenseAlreadyUsed",
 }
 
 export type Optional<T> = {

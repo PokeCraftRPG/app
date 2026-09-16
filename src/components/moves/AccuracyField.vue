@@ -10,7 +10,7 @@
     @update:model-value="$emit('update:model-value', parseNumber($event) ?? 0)"
   >
     <template #append>
-      <span class="input-group-text">{{ "%" }}</span>
+      <span class="input-group-text">{{ t("unit.percentage") }}</span>
     </template>
   </InputField>
 </template>

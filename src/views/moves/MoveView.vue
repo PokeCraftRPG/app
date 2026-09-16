@@ -21,8 +21,6 @@
             <KeyField class="mb-3" ref="keyField" required v-model="key" />
           </div>
         </div>
-        <SummaryField class="mb-3" v-model="summary" />
-        <ContentField class="mb-3" v-model="content" />
         <div class="row">
           <div class="col-md-4">
             <AccuracyField class="mb-3" v-model="accuracy" />
@@ -34,6 +32,8 @@
             <PowerPointsField class="mb-3" v-model="powerPoints" />
           </div>
         </div>
+        <SummaryField class="mb-3" v-model="summary" />
+        <ContentField class="mb-3" v-model="content" />
         <div class="d-flex justify-content-end mb-3">
           <TarButton
             :disabled="!hasChanges || isLoading"

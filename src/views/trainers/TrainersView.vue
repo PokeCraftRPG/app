@@ -1,9 +1,9 @@
 <template>
   <main class="container page">
-    <div v-if="hasLoaded" class="d-flex flex-column flex-grow-1">
+    <div v-if="filters" class="d-flex flex-column flex-grow-1">
       <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3">
         <h1 class="mb-0">{{ title }}</h1>
-        <CreateItem class="mb-3" @created="onCreate" @error="handleError" />
+        <CreateTrainer class="mb-3" @created="onCreate" @error="handleError" />
       </div>
       <WorldBreadcrumb :current="title" />
       <section>
@@ -14,13 +14,18 @@
       </section>
       <section>
         <div class="row">
-          <div class="col-md-6 col-lg-3">
-            <ItemCategorySelect class="mb-3" :model-value="category" @update:model-value="setQuery('category', $event)" />
+          <div class="col-md-6">
+            <GenderSelect class="mb-3" :model-value="gender" @update:model-value="setQuery('gender', $event)" />
           </div>
-          <div class="col-md-6 col-lg-3">
+          <div class="col-md-6">
+            <MemberSelect class="mb-3" :members="filters.members" :model-value="memberId" @update:model-value="setQuery('member', $event)" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
             <SearchInput class="mb-3" :model-value="search" @update:model-value="setQuery('search', $event)" />
           </div>
-          <div class="col-md-6 col-lg-3">
+          <div class="col-md-4">
             <SortSelect
               class="mb-3"
               :direction="direction"
@@ -30,15 +35,15 @@
               @update:model-value="setQuery('sort', $event)"
             />
           </div>
-          <div class="col-md-6 col-lg-3">
+          <div class="col-md-4">
             <CountSelect class="mb-3" :model-value="count" @update:model-value="setQuery('count', $event)" />
           </div>
         </div>
       </section>
       <section v-if="total" class="border-top border-secondary-subtle pt-4" :class="{ loading: isLoading }">
         <div class="row">
-          <div v-for="item in items" :key="item.id" class="col-md-6 col-lg-4 col-xl-3 mb-3">
-            <ItemLinkCard class="h-100" :item="item" />
+          <div v-for="trainer in trainers" :key="trainer.id" class="col-md-6 col-lg-4 col-xl-3 mb-3">
+            <TrainerLinkCard class="h-100" :trainer="trainer" />
           </div>
         </div>
         <SearchPagination v-if="total > count" class="mt-3" :count="count" :model-value="page" :total="total" @update:model-value="setQuery('page', $event)" />
@@ -62,21 +67,22 @@ import { useRoute, useRouter } from "vue-router";
 
 import ClearFiltersButton from "@/components/shared/ClearFiltersButton.vue";
 import CountSelect from "@/components/shared/CountSelect.vue";
-import CreateItem from "@/components/items/CreateItem.vue";
-import ItemCategorySelect from "@/components/items/ItemCategorySelect.vue";
-import ItemLinkCard from "@/components/items/ItemLinkCard.vue";
+import CreateTrainer from "@/components/trainers/CreateTrainer.vue";
+import GenderSelect from "@/components/trainers/GenderSelect.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
+import MemberSelect from "@/components/membership/MemberSelect.vue";
 import RefreshButton from "@/components/shared/RefreshButton.vue";
 import SearchInput from "@/components/shared/SearchInput.vue";
 import SearchPagination from "@/components/shared/SearchPagination.vue";
 import SortSelect from "@/components/shared/SortSelect.vue";
+import TrainerLinkCard from "@/components/trainers/TrainerLinkCard.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
-import type { Item, ItemCategory, ItemSort, SearchItemsPayload } from "@/types/items";
+import type { Gender, SearchTrainersPayload, Trainer, TrainerFilters, TrainerSort } from "@/types/trainers";
 import type { SearchResults, SortDirection } from "@/types/search";
 import type { SelectOption } from "@/types/tar/select";
+import { getTrainerFilters, searchTrainers } from "@/api/trainers";
 import { handleErrorKey } from "@/inject";
 import { parseTextSearch } from "@/utils/search";
-import { searchItems } from "@/api/items";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 
@@ -90,43 +96,45 @@ const { orderBy } = arrayUtils;
 const { parseNumber } = parsingUtils;
 const { rt, t, tm } = useI18n();
 
-const hasLoaded = ref<boolean>(false);
+const filters = ref<TrainerFilters>();
 const isLoading = ref<boolean>(false);
-const items = ref<Item[]>([]);
 const timestamp = ref<number>(0);
 const total = ref<number>(0);
+const trainers = ref<Trainer[]>([]);
 
-const category = computed<ItemCategory | "">(() => route.query.category?.toString() as ItemCategory | "");
 const count = computed<number>(() => parseNumber(route.query.count?.toString()) || 12);
 const direction = computed<string>(() => route.query.direction?.toString() ?? "");
+const gender = computed<Gender | "">(() => route.query.gender?.toString() as Gender | "");
+const memberId = computed<string>(() => route.query.member?.toString() ?? "");
 const page = computed<number>(() => parseNumber(route.query.page?.toString()) || 1);
 const search = computed<string>(() => route.query.search?.toString() ?? "");
 const sort = computed<string>(() => route.query.sort?.toString() ?? "");
-const title = computed<string>(() => t("items.title"));
+const title = computed<string>(() => t("trainers.title"));
 
-const hasFilters = computed<boolean>(() => Boolean(category.value || search.value));
+const hasFilters = computed<boolean>(() => Boolean(gender.value || memberId.value || search.value));
 
 const sortOptions = computed<SelectOption[]>(() =>
   orderBy(
-    Object.entries(tm(rt("items.sort.options"))).map(([value, text]) => ({ text, value }) as SelectOption),
+    Object.entries(tm(rt("trainers.sort.options"))).map(([value, text]) => ({ text, value }) as SelectOption),
     "text",
   ),
 );
 
-function onCreate(item: Item): void {
+function onCreate(trainer: Trainer): void {
   events.push("created");
-  router.push({ name: "Item", params: { id: item.id } });
+  router.push({ name: "Trainer", params: { id: trainer.id } });
 }
 
 function clearFilters(): void {
-  const query = { ...route.query, category: "", search: "", page: 1 };
+  const query = { ...route.query, gender: "", member: "", search: "", page: 1 };
   router.replace({ ...route, query });
 }
 
 function setQuery(key: string, value?: boolean | null | number | string): void {
   const query = { ...route.query, [key]: value?.toString() ?? "" };
   switch (key) {
-    case "category":
+    case "gender":
+    case "member":
     case "search":
     case "count":
       query.page = "1";
@@ -135,12 +143,24 @@ function setQuery(key: string, value?: boolean | null | number | string): void {
   router.replace({ ...route, query });
 }
 
-async function refresh(): Promise<void> {
-  const payload: SearchItemsPayload = {
-    category: category.value ? (category.value as ItemCategory) : undefined,
+async function loadFilters(): Promise<void> {
+  try {
+    filters.value = await getTrainerFilters();
+  } catch (e: unknown) {
+    handleError(e);
+  }
+
+  if (memberId.value && !filters.value?.members.some((member) => member.id === memberId.value)) {
+    setQuery("member", "");
+  }
+}
+async function loadResults(): Promise<void> {
+  const payload: SearchTrainersPayload = {
+    gender: gender.value ? (gender.value as Gender) : undefined,
     ids: [],
+    memberId: memberId.value || undefined,
     search: parseTextSearch(search.value),
-    sort: sort.value ? [{ field: sort.value as ItemSort, direction: direction.value as SortDirection }] : [],
+    sort: sort.value ? [{ field: sort.value as TrainerSort, direction: direction.value as SortDirection }] : [],
     offset: (page.value - 1) * count.value,
     limit: count.value,
   };
@@ -148,9 +168,9 @@ async function refresh(): Promise<void> {
   const now = Date.now();
   timestamp.value = now;
   try {
-    const results: SearchResults<Item> = await searchItems(payload);
+    const results: SearchResults<Trainer> = await searchTrainers(payload);
     if (now === timestamp.value) {
-      items.value = [...results.items];
+      trainers.value = [...results.items];
       total.value = results.total;
     }
   } catch (e: unknown) {
@@ -159,21 +179,25 @@ async function refresh(): Promise<void> {
     if (now === timestamp.value) {
       isLoading.value = false;
     }
-    hasLoaded.value = true;
   }
+}
+async function refresh(): Promise<void> {
+  await loadFilters();
+  await loadResults();
 }
 
 watch(
   () => route,
   (route) => {
-    if (route.name === "Items") {
+    if (route.name === "Trainers") {
       const { query } = route;
       if (!query.page || !query.count) {
         router.replace({
           ...route,
           query: isEmpty(query)
             ? {
-                category: "",
+                gender: "",
+                member: "",
                 search: "",
                 sort: "Name",
                 direction: "Ascending",
@@ -186,8 +210,10 @@ watch(
                 ...query,
               },
         });
-      } else {
+      } else if (!filters.value) {
         refresh();
+      } else {
+        loadResults();
       }
     }
   },

@@ -28,7 +28,7 @@ export default createI18n<[MessageSchema], "en">({
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       },
-      price: {
+      money: {
         style: "decimal",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,

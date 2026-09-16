@@ -1,36 +1,42 @@
 <template>
   <main class="container page">
-    <div v-if="item">
+    <div v-if="trainer">
       <div class="d-flex justify-content-between align-items-start gap-4">
         <div class="flex-grow-1">
-          <div class="d-flex flex-wrap align-items-center gap-3">
-            <h1>{{ title }}</h1>
-            <TarBadge class="fs-6" variant="secondary">{{ t(`items.category.options.${item.category}`) }}</TarBadge>
-          </div>
+          <h1>{{ title }}</h1>
           <WorldBreadcrumb :current="title" :parent="breadcrumb" />
           <TarAlert :close="t('actions.close')" dismissible variant="success" v-model="isCreated">
-            <strong>{{ t("items.created.lead", { name: title }) }}</strong> {{ t("items.created.help") }}
+            <strong>{{ t("trainers.created.lead", { name: title }) }}</strong> {{ t("trainers.created.help") }}
           </TarAlert>
-          <StatusDetail class="mb-3" :subject="item" />
+          <StatusDetail class="mb-3" :subject="trainer" />
         </div>
-        <ImageAsset v-if="item.sprite" :alt="t('sprite.alt', { name: title })" :asset="item.sprite" height="144" />
+        <ImageAsset v-if="trainer.sprite" :alt="t('sprite.alt', { name: title })" :asset="trainer.sprite" height="144" />
       </div>
       <form class="border-top border-secondary-subtle pt-4" @submit.prevent="handleSubmit(submit)">
         <KeyAlreadyUsed v-model="keyAlreadyUsed" />
+        <KeyAlreadyUsed v-model="licenseAlreadyUsed" help="trainers.license.alreadyUsed.help" lead="trainers.license.alreadyUsed.lead" />
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <NameField class="mb-3" v-model="name" />
           </div>
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <KeyField class="mb-3" ref="keyField" required v-model="key" />
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6">
-            <PriceField class="mb-3" v-model="price" />
+          <div class="col-lg-6">
+            <GenderField class="mb-3" v-model="gender" />
           </div>
-          <div class="col-md-6">
-            <WeightField class="mb-3" v-model="weight" />
+          <div class="col-lg-6">
+            <LicenseField class="mb-3" ref="licenseField" v-model="license" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <MemberField :members="members" :model-value="member?.id" @selected="member = $event" />
+          </div>
+          <div class="col-lg-6">
+            <PartyLimitField class="mb-3" v-model="partyLimit" />
           </div>
         </div>
         <SummaryField class="mb-3" v-model="summary" />
@@ -58,26 +64,26 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 import ContentField from "@/components/shared/ContentField.vue";
+import GenderField from "@/components/trainers/GenderField.vue";
 import ImageAsset from "@/components/shared/ImageAsset.vue";
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
 import KeyField from "@/components/shared/KeyField.vue";
+import LicenseField from "@/components/trainers/LicenseField.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
+import MemberField from "@/components/membership/MemberField.vue";
 import NameField from "@/components/shared/NameField.vue";
-import PriceField from "@/components/items/PriceField.vue";
+import PartyLimitField from "@/components/trainers/PartyLimitField.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
 import SummaryField from "@/components/shared/SummaryField.vue";
 import TarAlert from "@/components/tar/TarAlert.vue";
-import TarBadge from "@/components/tar/TarBadge.vue";
 import TarButton from "@/components/tar/TarButton.vue";
-import WeightField from "@/components/items/WeightField.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
-import type { ApiFailure, ProblemDetails } from "@/types/api";
+import type { Actor, ApiFailure, ProblemDetails } from "@/types/api";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
-import type { CreateOrReplaceItemPayload, Item } from "@/types/items";
+import type { CreateOrReplaceTrainerPayload, Gender, Trainer, TrainerFilters } from "@/types/trainers";
 import { ErrorCodes, StatusCodes } from "@/types/api";
-import { fromHundredths, toHundredths } from "@/utils/number";
 import { handleErrorKey } from "@/inject";
-import { readItem, replaceItem } from "@/api/items";
+import { getTrainerFilters, readTrainer, replaceTrainer } from "@/api/trainers";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
@@ -92,48 +98,58 @@ const toasts = useToastStore();
 const { t } = useI18n();
 
 const content = ref<string>("");
+const gender = ref<Gender | "">("");
 const isCreated = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
-const item = ref<Item>();
 const key = ref<string>("");
 const keyAlreadyUsed = ref<boolean>(false);
 const keyField = ref<InstanceType<typeof KeyField> | null>(null);
+const license = ref<string>("");
+const licenseAlreadyUsed = ref<boolean>(false);
+const licenseField = ref<InstanceType<typeof LicenseField> | null>(null);
+const member = ref<Actor>();
+const members = ref<Actor[]>([]);
 const name = ref<string>("");
-const price = ref<number>(0);
+const partyLimit = ref<number>(0);
 const summary = ref<string>("");
-const weight = ref<number>(0);
+const trainer = ref<Trainer>();
 
-const breadcrumb = computed<Breadcrumb>(() => ({ text: t("items.title"), to: { name: "Items" } }));
+const breadcrumb = computed<Breadcrumb>(() => ({ text: t("trainers.title"), to: { name: "Trainers" } }));
 const hasChanges = computed<boolean>(() =>
   Boolean(
-    item.value &&
-    (item.value.key !== key.value ||
-      (item.value.name ?? "") !== name.value ||
-      (item.value.summary ?? "") !== summary.value ||
-      (item.value.content ?? "") !== content.value ||
-      (fromHundredths(item.value.price) ?? 0) !== price.value ||
-      (fromHundredths(item.value.weight) ?? 0) !== weight.value),
+    trainer.value &&
+    (trainer.value.key !== key.value ||
+      (trainer.value.name ?? "") !== name.value ||
+      (trainer.value.summary ?? "") !== summary.value ||
+      (trainer.value.content ?? "") !== content.value ||
+      (trainer.value.license ?? "") !== license.value ||
+      (trainer.value.gender ?? "") !== gender.value ||
+      (trainer.value.member?.id ?? "") !== (member.value?.id ?? "") ||
+      (trainer.value.partyLimit ?? 0) !== partyLimit.value),
   ),
 );
-const title = computed<string>(() => item.value?.name ?? item.value?.key ?? "");
+const title = computed<string>(() => trainer.value?.name ?? trainer.value?.key ?? "");
 
 const { handleSubmit, reinitialize } = useForm();
 async function submit(): Promise<void> {
-  if (!isLoading.value && item.value) {
+  if (!isLoading.value && trainer.value) {
     isLoading.value = true;
     keyAlreadyUsed.value = false;
+    licenseAlreadyUsed.value = false;
     try {
-      const payload: CreateOrReplaceItemPayload = {
-        category: item.value.category,
+      const payload: CreateOrReplaceTrainerPayload = {
         key: key.value,
         name: name.value,
         summary: summary.value,
         content: content.value,
-        price: toHundredths(price.value) || undefined,
-        weight: toHundredths(price.value) || undefined,
-        spriteId: item.value.sprite?.id,
+        license: license.value || undefined,
+        gender: gender.value || undefined,
+        money: trainer.value.money,
+        partyLimit: partyLimit.value || undefined,
+        spriteId: trainer.value.sprite?.id,
+        memberId: member.value?.id,
       };
-      item.value = await replaceItem(item.value.id, payload);
+      trainer.value = await replaceTrainer(trainer.value.id, payload);
       isCreated.value = false;
       reinitialize();
       toasts.success("saved");
@@ -141,9 +157,14 @@ async function submit(): Promise<void> {
       const failure = e as ApiFailure;
       if (failure.status === StatusCodes.Conflict) {
         const problemDetails = failure.data as ProblemDetails;
-        if (problemDetails.error && problemDetails.error.code === ErrorCodes.KeyAlreadyUsed) {
+        if (problemDetails.error?.code === ErrorCodes.KeyAlreadyUsed) {
           keyAlreadyUsed.value = true;
           keyField.value?.focus();
+          return;
+        }
+        if (problemDetails.error?.code === ErrorCodes.LicenseAlreadyUsed) {
+          licenseAlreadyUsed.value = true;
+          licenseField.value?.focus();
           return;
         }
       }
@@ -155,14 +176,16 @@ async function submit(): Promise<void> {
 }
 
 watch(
-  item,
-  (item) => {
-    key.value = item?.key ?? "";
-    name.value = item?.name ?? "";
-    summary.value = item?.summary ?? "";
-    content.value = item?.content ?? "";
-    price.value = fromHundredths(item?.price) ?? 0;
-    weight.value = fromHundredths(item?.weight) ?? 0;
+  trainer,
+  (trainer) => {
+    key.value = trainer?.key ?? "";
+    name.value = trainer?.name ?? "";
+    summary.value = trainer?.summary ?? "";
+    content.value = trainer?.content ?? "";
+    license.value = trainer?.license ?? "";
+    gender.value = trainer?.gender ?? "";
+    member.value = trainer?.member ? { ...trainer.member } : undefined;
+    partyLimit.value = trainer?.partyLimit ?? 0;
   },
   { deep: true },
 );
@@ -170,9 +193,12 @@ watch(
 onMounted(async () => {
   try {
     const id: string = (Array.isArray(route.params.id) ? route.params.id[0] : route.params.id) ?? "";
-    item.value = await readItem(id);
+    trainer.value = await readTrainer(id);
     isCreated.value = events.shift() === "created";
     document.setTitle(title.value);
+
+    const filters: TrainerFilters = await getTrainerFilters();
+    members.value = [...filters.members];
   } catch (e: unknown) {
     const failure = e as ApiFailure;
     if (failure.status === StatusCodes.NotFound) {

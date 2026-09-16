@@ -32,8 +32,8 @@ withDefaults(
     step?: number | string;
   }>(),
   {
-    id: "price",
-    label: "items.price",
+    id: "money",
+    label: "trainers.money",
     min: 0,
     step: 0.01,
   },

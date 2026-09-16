@@ -112,7 +112,7 @@ const sort = computed<string>(() => route.query.sort?.toString() ?? "");
 const title = computed<string>(() => t("moves.title"));
 const type = computed<PokemonType | "">(() => route.query.type?.toString() as PokemonType | "");
 
-const hasFilters = computed<boolean>(() => Boolean(search.value || type.value || category.value));
+const hasFilters = computed<boolean>(() => Boolean(category.value || search.value || type.value));
 
 const sortOptions = computed<SelectOption[]>(() =>
   orderBy(
@@ -127,7 +127,7 @@ function onCreate(move: Move): void {
 }
 
 function clearFilters(): void {
-  const query = { ...route.query, search: "", type: "", category: "", page: 1 };
+  const query = { ...route.query, category: "", search: "", type: "", page: 1 };
   router.replace({ ...route, query });
 }
 
