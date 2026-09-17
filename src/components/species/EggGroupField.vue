@@ -23,9 +23,10 @@ import type { SelectOption } from "@/types/tar/select";
 const { orderBy } = arrayUtils;
 const { rt, t, tm } = useI18n();
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     disabled?: boolean | string;
+    exclude?: EggGroup[];
     id?: string;
     label?: string;
     modelValue?: EggGroup | "";
@@ -33,6 +34,7 @@ withDefaults(
     required?: boolean | string;
   }>(),
   {
+    exclude: () => [],
     id: "egg-group",
     label: "species.egg.group.label",
     placeholder: "species.egg.group.placeholder",
@@ -43,10 +45,13 @@ defineEmits<{
   (e: "update:model-value", value: EggGroup | ""): void;
 }>();
 
-const options = computed<SelectOption[]>(() =>
-  orderBy(
-    Object.entries(tm(rt("species.egg.group.options"))).map(([value, text]) => ({ text, value }) as SelectOption),
+const options = computed<SelectOption[]>(() => {
+  const excluded = new Set(props.exclude);
+  return orderBy(
+    Object.entries(tm(rt("species.egg.group.options")))
+      .filter(([value]) => !excluded.has(value as EggGroup))
+      .map(([value, text]) => ({ text, value }) as SelectOption),
     "text",
-  ),
-);
+  );
+});
 </script>

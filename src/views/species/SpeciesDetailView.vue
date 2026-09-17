@@ -39,7 +39,14 @@
             <EggGroupField class="mb-3" id="primary-egg-group" label="species.egg.primary" required v-model="primaryEggGroup" />
           </div>
           <div class="col-md-4">
-            <EggGroupField class="mb-3" :disabled="isSecondaryEggDisabled" id="secondary-egg-group" label="species.egg.secondary" v-model="secondaryEggGroup" />
+            <EggGroupField
+              class="mb-3"
+              :disabled="isSecondaryEggDisabled"
+              :exclude="secondaryEggExclusions"
+              id="secondary-egg-group"
+              label="species.egg.secondary"
+              v-model="secondaryEggGroup"
+            />
           </div>
         </div>
         <SummaryField class="mb-3" v-model="summary" />
@@ -119,6 +126,13 @@ const summary = ref<string>("");
 
 const breadcrumb = computed<Breadcrumb>(() => ({ text: t("species.title"), to: { name: "Species" } }));
 const isSecondaryEggDisabled = computed<boolean>(() => primaryEggGroup.value === "NoEggsDiscovered" || primaryEggGroup.value === "Ditto");
+const secondaryEggExclusions = computed<EggGroup[]>(() => {
+  const exclusions: EggGroup[] = ["NoEggsDiscovered", "Ditto"];
+  if (primaryEggGroup.value) {
+    exclusions.push(primaryEggGroup.value);
+  }
+  return exclusions;
+});
 const hasChanges = computed<boolean>(() =>
   Boolean(
     species.value &&
@@ -180,7 +194,7 @@ async function submit(): Promise<void> {
 }
 
 watch(primaryEggGroup, (value) => {
-  if (value === "NoEggsDiscovered" || value === "Ditto") {
+  if (value === "NoEggsDiscovered" || value === "Ditto" || value === secondaryEggGroup.value) {
     secondaryEggGroup.value = "";
   }
 });
