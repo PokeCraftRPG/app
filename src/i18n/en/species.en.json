@@ -61,6 +61,16 @@
     },
     "label": "Number"
   },
+  "regionalNumbers": {
+    "add": "Add a regional number",
+    "edit": "Edit #{number} ({region})",
+    "empty": "No regional numbers yet.",
+    "remove": {
+      "help": "This will remove #{number} from {region}. This action cannot be undone.",
+      "lead": "Remove regional number?"
+    },
+    "title": "Regional Numbers"
+  },
   "sort": {
     "options": {
       "BaseFriendship": "Base friendship",

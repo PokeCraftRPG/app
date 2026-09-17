@@ -58,7 +58,7 @@ const keyAlreadyUsed = ref<boolean>(false);
 const keyField = ref<InstanceType<typeof KeyField> | null>(null);
 const modal = ref<InstanceType<typeof TarModal> | null>(null);
 const name = ref<string>("");
-const number = ref<number>(1);
+const number = ref<number>(0);
 const numberAlreadyUsed = ref<boolean>(false);
 const numberField = ref<InstanceType<typeof NumberField> | null>(null);
 

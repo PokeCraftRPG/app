@@ -1,9 +1,16 @@
 import { urlUtils } from "logitar-js";
 
-import type { CreateOrReplaceSpeciesPayload, SearchSpeciesPayload, Species, SpeciesFilters, UpdateSpeciesPayload } from "@/types/species";
+import type {
+  CreateOrReplaceSpeciesPayload,
+  SearchSpeciesPayload,
+  SetRegionalNumberPayload,
+  Species,
+  SpeciesFilters,
+  UpdateSpeciesPayload,
+} from "@/types/species";
 import type { SearchResults } from "@/types/search";
 import { encodeSortOption } from "@/utils/search";
-import { get, patch, post } from ".";
+import { _delete, get, patch, post, put } from ".";
 
 export async function createSpecies(payload: CreateOrReplaceSpeciesPayload): Promise<Species> {
   const url: string = new urlUtils.UrlBuilder({ path: "/species" }).buildRelative();
@@ -20,6 +27,14 @@ export async function readSpecies(id: string): Promise<Species> {
   return (await get<Species>(url)).data;
 }
 
+export async function removeRegionalNumber(speciesId: string, regionId: string): Promise<Species> {
+  const url: string = new urlUtils.UrlBuilder({ path: "/species/{speciesId}/regions/{regionId}" })
+    .setParameter("speciesId", speciesId)
+    .setParameter("regionId", regionId)
+    .buildRelative();
+  return (await _delete<Species>(url)).data;
+}
+
 export async function searchSpecies(payload: SearchSpeciesPayload): Promise<SearchResults<Species>> {
   const url: string = new urlUtils.UrlBuilder({ path: "/species" })
     .setQuery("category", payload.category ?? "")
@@ -34,6 +49,14 @@ export async function searchSpecies(payload: SearchSpeciesPayload): Promise<Sear
     .setQuery("limit", payload.limit.toString())
     .buildRelative();
   return (await get<SearchResults<Species>>(url)).data;
+}
+
+export async function setRegionalNumber(speciesId: string, regionId: string, payload: SetRegionalNumberPayload): Promise<Species> {
+  const url: string = new urlUtils.UrlBuilder({ path: "/species/{speciesId}/regions/{regionId}" })
+    .setParameter("speciesId", speciesId)
+    .setParameter("regionId", regionId)
+    .buildRelative();
+  return (await put<SetRegionalNumberPayload, Species>(url, payload)).data;
 }
 
 export async function updateSpecies(id: string, payload: UpdateSpeciesPayload): Promise<Species> {

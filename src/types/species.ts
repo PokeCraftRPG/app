@@ -1,5 +1,6 @@
-import type { Aggregate, Optional } from "./api";
-import type { FilterOption, SearchPayload } from "./search";
+import type { Aggregate, Auditable, Optional } from "./api";
+import type { Region, RegionSummary } from "./regions";
+import type { SearchPayload } from "./search";
 
 export type CreateOrReplaceSpeciesPayload = {
   number: number;
@@ -51,6 +52,7 @@ export type Species = Aggregate & {
   catchRate: number;
   growthRate: GrowthRate;
   eggs: SpeciesEggs;
+  regionalNumbers: RegionalNumber[];
 };
 
 export type SpeciesCategory = "Standard" | "Baby" | "Legendary" | "Mythical";
@@ -62,7 +64,16 @@ export type SpeciesEggs = {
 };
 
 export type SpeciesFilters = {
-  regions: FilterOption[];
+  regions: RegionSummary[];
+};
+
+export type RegionalNumber = Auditable & {
+  region: Region;
+  number: number;
+};
+
+export type SetRegionalNumberPayload = {
+  number: number;
 };
 
 export type SpeciesSort = "BaseFriendship" | "CatchRate" | "CreatedOn" | "EggCycles" | "Key" | "Name" | "Number" | "UpdatedOn";

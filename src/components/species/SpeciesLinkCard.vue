@@ -20,5 +20,5 @@ const props = defineProps<{
 }>();
 
 const category = computed<string>(() => t(`species.category.options.${props.species.category}`));
-const title = computed<string>(() => `#${n(props.species.number, "integer")} ${props.species.name ?? props.species.key}`);
+const title = computed<string>(() => `#${n(props.species.number, "pokemonNumber")} ${props.species.name ?? props.species.key}`);
 </script>

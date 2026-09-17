@@ -78,7 +78,7 @@ import EggGroupSelect from "@/components/species/EggGroupSelect.vue";
 import GrowthRateSelect from "@/components/species/GrowthRateSelect.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
 import RefreshButton from "@/components/shared/RefreshButton.vue";
-import RegionSelect from "@/components/species/RegionSelect.vue";
+import RegionSelect from "@/components/regions/RegionSelect.vue";
 import SearchInput from "@/components/shared/SearchInput.vue";
 import SearchPagination from "@/components/shared/SearchPagination.vue";
 import SortSelect from "@/components/shared/SortSelect.vue";
@@ -162,7 +162,7 @@ async function loadFilters(): Promise<void> {
     handleError(e);
   }
 
-  if (region.value && !filters.value?.regions.some((option) => option.value === region.value)) {
+  if (region.value && !filters.value?.regions.some(({ id }) => id === region.value)) {
     setQuery("region", "");
   }
 }
