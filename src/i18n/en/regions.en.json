@@ -4,6 +4,8 @@
     "help": "You can now complete its details.",
     "lead": "The region “{name}” was created."
   },
+  "label": "Region",
+  "placeholder": "Select a region",
   "sort": {
     "options": {
       "CreatedOn": "Created on",

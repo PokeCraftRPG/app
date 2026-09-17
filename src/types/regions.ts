@@ -17,6 +17,12 @@ export type Region = Aggregate & {
 
 export type RegionSort = "CreatedOn" | "Key" | "Name" | "UpdatedOn";
 
+export type RegionSummary = {
+  id: string;
+  key: string;
+  name?: string | null;
+};
+
 export type SearchRegionsPayload = SearchPayload<RegionSort>;
 
 export type UpdateRegionPayload = {

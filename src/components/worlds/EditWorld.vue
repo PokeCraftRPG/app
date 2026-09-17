@@ -42,9 +42,9 @@ import SummaryField from "@/components/shared/SummaryField.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import TarModal from "@/components/tar/TarModal.vue";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
-import type { CreateOrReplaceWorldPayload, World } from "@/types/worlds";
+import type { UpdateWorldPayload, World } from "@/types/worlds";
 import { ErrorCodes, StatusCodes } from "@/types/api";
-import { replaceWorld } from "@/api/worlds";
+import { updateWorld } from "@/api/worlds";
 import { useForm } from "@/forms";
 
 const { t } = useI18n();
@@ -99,13 +99,13 @@ async function submit(): Promise<void> {
     isLoading.value = true;
     keyAlreadyUsed.value = false;
     try {
-      const payload: CreateOrReplaceWorldPayload = {
+      const payload: UpdateWorldPayload = {
         key: key.value,
-        name: name.value,
-        summary: summary.value || null,
-        content: content.value,
+        name: { value: name.value },
+        summary: { value: summary.value },
+        content: { value: content.value },
       };
-      const world: World = await replaceWorld(props.world.id, payload);
+      const world: World = await updateWorld(props.world.id, payload);
       reinitialize();
       modal.value?.hide();
       emit("updated", world);

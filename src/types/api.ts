@@ -47,6 +47,7 @@ export enum ErrorCodes {
   InvalidCredentials = "InvalidCredentials",
   KeyAlreadyUsed = "KeyAlreadyUsed",
   LicenseAlreadyUsed = "LicenseAlreadyUsed",
+  NumberAlreadyUsed = "NumberAlreadyUsed",
 }
 
 export type Optional<T> = {

@@ -1,6 +1,7 @@
 {
   "actions": {
     "abandon": "Abandon",
+    "add": "Add",
     "cancel": "Cancel",
     "close": "Close",
     "complete": "Complete",
@@ -10,6 +11,7 @@
     "next": "Next",
     "previous": "Previous",
     "refresh": "Refresh",
+    "remove": "Remove",
     "save": "Save",
     "search": "Search",
     "verify": "Verify"
@@ -52,6 +54,7 @@
     "next": "Next",
     "previous": "Previous"
   },
+  "properties": "Properties",
   "saved": "Your changes have been saved.",
   "sort": "Sort by",
   "sprite": {

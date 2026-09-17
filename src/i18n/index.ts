@@ -33,6 +33,12 @@ export default createI18n<[MessageSchema], "en">({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       },
+      pokemonNumber: {
+        style: "decimal",
+        minimumIntegerDigits: 4,
+        maximumFractionDigits: 0,
+        useGrouping: false,
+      },
       weight: {
         style: "decimal",
         minimumFractionDigits: 2,

@@ -53,10 +53,10 @@ import TarButton from "@/components/tar/TarButton.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
-import type { CreateOrReplaceRegionPayload, Region } from "@/types/regions";
+import type { Region, UpdateRegionPayload } from "@/types/regions";
 import { ErrorCodes, StatusCodes } from "@/types/api";
 import { handleErrorKey } from "@/inject";
-import { readRegion, replaceRegion } from "@/api/regions";
+import { readRegion, updateRegion } from "@/api/regions";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
@@ -98,13 +98,13 @@ async function submit(): Promise<void> {
     isLoading.value = true;
     keyAlreadyUsed.value = false;
     try {
-      const payload: CreateOrReplaceRegionPayload = {
+      const payload: UpdateRegionPayload = {
         key: key.value,
-        name: name.value,
-        summary: summary.value,
-        content: content.value,
+        name: { value: name.value },
+        summary: { value: summary.value },
+        content: { value: content.value },
       };
-      region.value = await replaceRegion(region.value.id, payload);
+      region.value = await updateRegion(region.value.id, payload);
       isCreated.value = false;
       reinitialize();
       toasts.success("saved");
