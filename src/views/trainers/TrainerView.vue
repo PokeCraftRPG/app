@@ -83,6 +83,7 @@ import type { Breadcrumb } from "@/types/tar/breadcrumb";
 import type { Gender, Trainer, TrainerFilters, UpdateTrainerPayload } from "@/types/trainers";
 import { ErrorCodes, StatusCodes } from "@/types/api";
 import { getTrainerFilters, readTrainer, updateTrainer } from "@/api/trainers";
+import { formatTrainer } from "@/utils/format";
 import { handleErrorKey } from "@/inject";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
@@ -128,7 +129,7 @@ const hasChanges = computed<boolean>(() =>
       (trainer.value.partyLimit ?? 0) !== partyLimit.value),
   ),
 );
-const title = computed<string>(() => trainer.value?.name ?? trainer.value?.key ?? "");
+const title = computed<string>(() => (trainer.value ? formatTrainer(trainer.value) : ""));
 
 const { handleSubmit, reinitialize } = useForm();
 async function submit(): Promise<void> {

@@ -57,6 +57,7 @@ import type { Breadcrumb } from "@/types/tar/breadcrumb";
 import { ErrorCodes, StatusCodes } from "@/types/api";
 import { handleErrorKey } from "@/inject";
 import { readAbility, updateAbility } from "@/api/abilities";
+import { formatAbility } from "@/utils/format";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
@@ -90,7 +91,7 @@ const hasChanges = computed<boolean>(() =>
       (ability.value.content ?? "") !== content.value),
   ),
 );
-const title = computed<string>(() => ability.value?.name ?? ability.value?.key ?? "");
+const title = computed<string>(() => (ability.value ? formatAbility(ability.value) : ""));
 
 const { handleSubmit, reinitialize } = useForm();
 async function submit(): Promise<void> {

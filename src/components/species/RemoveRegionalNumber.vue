@@ -25,6 +25,7 @@ import { useI18n } from "vue-i18n";
 import TarButton from "@/components/tar/TarButton.vue";
 import TarModal from "@/components/tar/TarModal.vue";
 import type { RegionalNumber, Species } from "@/types/species";
+import { formatPokemonNumber, formatRegion } from "@/utils/format";
 import { removeRegionalNumber } from "@/api/species";
 
 const { n, t } = useI18n();
@@ -44,8 +45,8 @@ const regionalNumber = ref<RegionalNumber>();
 
 const help = computed<string>(() =>
   t("species.regionalNumbers.remove.help", {
-    number: n(regionalNumber.value?.number ?? 0, "pokemonNumber"),
-    region: regionalNumber.value ? (regionalNumber.value.region.name ?? regionalNumber.value.region.key) : "",
+    number: formatPokemonNumber(regionalNumber.value?.number ?? 0, n),
+    region: regionalNumber.value ? formatRegion(regionalNumber.value.region) : "",
   }),
 );
 

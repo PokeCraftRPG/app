@@ -76,6 +76,7 @@ import type { Breadcrumb } from "@/types/tar/breadcrumb";
 import type { Item, UpdateItemPayload } from "@/types/items";
 import { ErrorCodes, StatusCodes } from "@/types/api";
 import { fromHundredths, toHundredths } from "@/utils/number";
+import { formatItem } from "@/utils/format";
 import { handleErrorKey } from "@/inject";
 import { readItem, updateItem } from "@/api/items";
 import { useDocument } from "@/composables/document";
@@ -115,7 +116,7 @@ const hasChanges = computed<boolean>(() =>
       (fromHundredths(item.value.weight) ?? 0) !== weight.value),
   ),
 );
-const title = computed<string>(() => item.value?.name ?? item.value?.key ?? "");
+const title = computed<string>(() => (item.value ? formatItem(item.value) : ""));
 
 const { handleSubmit, reinitialize } = useForm();
 async function submit(): Promise<void> {

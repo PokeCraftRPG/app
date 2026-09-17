@@ -1,21 +1,19 @@
 <template>
   <main class="container page">
-    <div v-if="species">
+    <div v-if="variety">
       <div class="d-flex flex-wrap align-items-center gap-3">
         <h1>{{ title }}</h1>
-        <TarBadge class="fs-6" variant="secondary">{{ t(`species.category.options.${species.category}`) }}</TarBadge>
+        <TarBadge class="fs-6" variant="secondary">{{ formatSpecies(variety.species, n) }}</TarBadge>
+        <DefaultBadge v-if="variety.isDefault" class="fs-6" />
       </div>
       <WorldBreadcrumb :current="title" :parent="breadcrumb" />
       <TarAlert :close="t('actions.close')" dismissible variant="success" v-model="isCreated">
-        <strong>{{ t("species.created.lead", { name: title }) }}</strong> {{ t("species.created.help") }}
+        <strong>{{ t("varieties.created.lead", { name: title }) }}</strong> {{ t("varieties.created.help") }}
       </TarAlert>
-      <StatusDetail class="mb-3" :subject="species" />
-      <TarTabs :key="species.id" class="border-top border-secondary-subtle pt-4">
+      <StatusDetail class="mb-3" :subject="variety" />
+      <TarTabs :key="variety.id" class="border-top border-secondary-subtle pt-4">
         <TarTab active id="properties" :title="t('properties')">
-          <SpeciesProperties :species="species" @error="handleError" @updated="onUpdated" />
-        </TarTab>
-        <TarTab id="regional-numbers" :title="t('species.regionalNumbers.title')">
-          <RegionalNumbers :species="species" @error="handleError" @updated="onUpdated" />
+          <VarietyProperties :variety="variety" @error="handleError" @updated="onUpdated" />
         </TarTab>
       </TarTabs>
     </div>
@@ -28,22 +26,22 @@ import { computed, inject, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
+import DefaultBadge from "@/components/varieties/DefaultBadge.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
-import RegionalNumbers from "@/components/species/RegionalNumbers.vue";
-import SpeciesProperties from "@/components/species/SpeciesProperties.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
 import TarAlert from "@/components/tar/TarAlert.vue";
 import TarBadge from "@/components/tar/TarBadge.vue";
 import TarTab from "@/components/tar/TarTab.vue";
 import TarTabs from "@/components/tar/TarTabs.vue";
+import VarietyProperties from "@/components/varieties/VarietyProperties.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
 import type { ApiFailure } from "@/types/api";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
-import type { Species } from "@/types/species";
+import type { Variety } from "@/types/varieties";
 import { StatusCodes } from "@/types/api";
+import { formatSpecies, formatVariety } from "@/utils/format";
 import { handleErrorKey } from "@/inject";
-import { readSpecies } from "@/api/species";
-import { formatSpecies } from "@/utils/format";
+import { readVariety } from "@/api/varieties";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useToastStore } from "@/stores/toast";
@@ -57,13 +55,13 @@ const toasts = useToastStore();
 const { n, t } = useI18n();
 
 const isCreated = ref<boolean>(false);
-const species = ref<Species>();
+const variety = ref<Variety>();
 
-const breadcrumb = computed<Breadcrumb>(() => ({ text: t("species.title"), to: { name: "Species" } }));
-const title = computed<string>(() => (species.value ? formatSpecies(species.value, n) : ""));
+const breadcrumb = computed<Breadcrumb>(() => ({ text: t("varieties.title"), to: { name: "Varieties" } }));
+const title = computed<string>(() => (variety.value ? formatVariety(variety.value) : ""));
 
-function onUpdated(updated: Species): void {
-  species.value = updated;
+function onUpdated(updated: Variety): void {
+  variety.value = updated;
   isCreated.value = false;
   document.setTitle(title.value);
   toasts.success("saved");
@@ -72,7 +70,7 @@ function onUpdated(updated: Species): void {
 onMounted(async () => {
   try {
     const id: string = (Array.isArray(route.params.id) ? route.params.id[0] : route.params.id) ?? "";
-    species.value = await readSpecies(id);
+    variety.value = await readVariety(id);
     isCreated.value = events.shift() === "created";
     document.setTitle(title.value);
   } catch (e: unknown) {

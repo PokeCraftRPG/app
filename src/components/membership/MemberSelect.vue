@@ -54,8 +54,9 @@ const options = computed<SelectOption[]>(() => props.members.map((actor) => ({ t
 
 function onModelValueUpdate(id: string): void {
   emit("update:model-value", id);
-
-  const member: Actor | undefined = props.members.find((member) => member.id === id);
-  emit("selected", member);
+  emit(
+    "selected",
+    props.members.find((member) => member.id === id),
+  );
 }
 </script>

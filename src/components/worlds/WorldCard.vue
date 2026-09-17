@@ -15,6 +15,7 @@ import { useRouter } from "vue-router";
 import TarButton from "@/components/tar/TarButton.vue";
 import TarCard from "@/components/tar/TarCard.vue";
 import type { World } from "@/types/worlds";
+import { formatWorld } from "@/utils/format";
 import { useWorldStore } from "@/stores/world";
 
 const router = useRouter();
@@ -25,7 +26,7 @@ const props = defineProps<{
   world: World;
 }>();
 
-const title = computed<string>(() => props.world.name ?? props.world.key);
+const title = computed<string>(() => formatWorld(props.world));
 
 function enter(): void {
   worldStore.enter(props.world);

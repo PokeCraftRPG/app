@@ -9,8 +9,8 @@ import type {
   UpdateSpeciesPayload,
 } from "@/types/species";
 import type { SearchResults } from "@/types/search";
-import { encodeSortOption } from "@/utils/search";
 import { _delete, get, patch, post, put } from ".";
+import { encodeSortOption } from "@/utils/search";
 
 export async function createSpecies(payload: CreateOrReplaceSpeciesPayload): Promise<Species> {
   const url: string = new urlUtils.UrlBuilder({ path: "/species" }).buildRelative();

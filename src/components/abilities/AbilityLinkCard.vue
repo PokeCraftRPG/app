@@ -1,7 +1,7 @@
 <template>
-  <LinkCard :title="ability.name ?? ability.key" :to="{ name: 'Ability', params: { id: ability.id } }">
-    <div v-if="ability.summary" class="card-text">{{ ability.summary }}</div>
-    <StatusBlock :actor="ability.updatedBy" class="card-text mt-2 small text-secondary" :date="ability.updatedOn" relative />
+  <LinkCard :title="formatAbility(ability)" :to="{ name: 'Ability', params: { id: ability.id } }">
+    <div v-if="ability.summary" class="card-text mb-2">{{ ability.summary }}</div>
+    <StatusBlock :actor="ability.updatedBy" class="card-text small text-secondary" :date="ability.updatedOn" relative />
   </LinkCard>
 </template>
 
@@ -9,6 +9,7 @@
 import LinkCard from "@/components/shared/LinkCard.vue";
 import StatusBlock from "@/components/shared/StatusBlock.vue";
 import type { Ability } from "@/types/abilities";
+import { formatAbility } from "@/utils/format";
 
 defineProps<{
   ability: Ability;

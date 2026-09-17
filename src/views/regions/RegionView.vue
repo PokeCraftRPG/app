@@ -57,6 +57,7 @@ import type { Region, UpdateRegionPayload } from "@/types/regions";
 import { ErrorCodes, StatusCodes } from "@/types/api";
 import { handleErrorKey } from "@/inject";
 import { readRegion, updateRegion } from "@/api/regions";
+import { formatRegion } from "@/utils/format";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
@@ -90,7 +91,7 @@ const hasChanges = computed<boolean>(() =>
       (region.value.content ?? "") !== content.value),
   ),
 );
-const title = computed<string>(() => region.value?.name ?? region.value?.key ?? "");
+const title = computed<string>(() => (region.value ? formatRegion(region.value) : ""));
 
 const { handleSubmit, reinitialize } = useForm();
 async function submit(): Promise<void> {

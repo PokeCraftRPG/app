@@ -32,6 +32,7 @@ import type { World } from "@/types/worlds";
 import { StatusCodes } from "@/types/api";
 import { handleErrorKey } from "@/inject";
 import { readWorld } from "@/api/worlds";
+import { formatWorld } from "@/utils/format";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useToastStore } from "@/stores/toast";
@@ -49,7 +50,7 @@ const { t } = useI18n();
 const isCreated = ref<boolean>(false);
 const world = ref<World>();
 
-const title = computed<string>(() => (world.value ? (world.value.name ?? world.value.key) : ""));
+const title = computed<string>(() => (world.value ? formatWorld(world.value) : ""));
 
 function onUpdate(value: World): void {
   world.value = value;

@@ -77,6 +77,7 @@ import type { Move, UpdateMovePayload } from "@/types/moves";
 import { ErrorCodes, StatusCodes } from "@/types/api";
 import { handleErrorKey } from "@/inject";
 import { readMove, updateMove } from "@/api/moves";
+import { formatMove } from "@/utils/format";
 import { useDocument } from "@/composables/document";
 import { useEventStore } from "@/stores/event";
 import { useForm } from "@/forms";
@@ -116,7 +117,7 @@ const hasChanges = computed<boolean>(() =>
       (move.value.powerPoints ?? 0) !== powerPoints.value),
   ),
 );
-const title = computed<string>(() => move.value?.name ?? move.value?.key ?? "");
+const title = computed<string>(() => (move.value ? formatMove(move.value) : ""));
 
 const { handleSubmit, reinitialize } = useForm();
 async function submit(): Promise<void> {

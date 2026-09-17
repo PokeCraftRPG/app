@@ -9,6 +9,7 @@ import pokemon from "./pokemon.en.json";
 import regions from "./regions.en.json";
 import species from "./species.en.json";
 import trainers from "./trainers.en.json";
+import varieties from "./varieties.en.json";
 import worlds from "./worlds.en.json";
 
 export default {
@@ -23,5 +24,6 @@ export default {
   regions,
   species,
   trainers,
+  varieties,
   worlds,
 };
