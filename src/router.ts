@@ -49,9 +49,14 @@ const router = createRouter({
       component: () => import("./views/abilities/AbilitiesView.vue"),
     },
     {
-      name: "Ability",
+      name: "AbilityCreate",
+      path: "/abilities/new",
+      component: () => import("./views/abilities/AbilityCreateView.vue"),
+    },
+    {
+      name: "AbilityEdit",
       path: "/abilities/:id",
-      component: () => import("./views/abilities/AbilityView.vue"),
+      component: () => import("./views/abilities/AbilityEditView.vue"),
     },
     // Items
     {
@@ -71,14 +76,14 @@ const router = createRouter({
       component: () => import("./views/moves/MovesView.vue"),
     },
     {
-      name: "MoveEdit",
-      path: "/moves/:id",
-      component: () => import("./views/moves/MoveEditView.vue"),
-    },
-    {
       name: "MoveCreate",
       path: "/moves/new",
       component: () => import("./views/moves/MoveCreateView.vue"),
+    },
+    {
+      name: "MoveEdit",
+      path: "/moves/:id",
+      component: () => import("./views/moves/MoveEditView.vue"),
     },
     // Regions
     {
@@ -87,9 +92,14 @@ const router = createRouter({
       component: () => import("./views/regions/RegionsView.vue"),
     },
     {
-      name: "Region",
+      name: "RegionCreate",
+      path: "/regions/new",
+      component: () => import("./views/regions/RegionCreateView.vue"),
+    },
+    {
+      name: "RegionEdit",
       path: "/regions/:id",
-      component: () => import("./views/regions/RegionView.vue"),
+      component: () => import("./views/regions/RegionEditView.vue"),
     },
     // Species
     {

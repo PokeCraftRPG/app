@@ -3,7 +3,9 @@
     <div v-if="hasLoaded" class="d-flex flex-column flex-grow-1">
       <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3">
         <h1 class="mb-0">{{ title }}</h1>
-        <CreateRegion class="mb-3" @created="onCreate" @error="handleError" />
+        <RouterLink class="btn btn-lg btn-primary" :to="{ name: 'RegionCreate' }">
+          <font-awesome-icon icon="fas fa-plus" aria-hidden="true" />&nbsp;{{ t("actions.create") }}
+        </RouterLink>
       </div>
       <WorldBreadcrumb :current="title" />
       <section>
@@ -59,7 +61,6 @@ import { useRoute, useRouter } from "vue-router";
 
 import ClearFiltersButton from "@/components/shared/ClearFiltersButton.vue";
 import CountSelect from "@/components/shared/CountSelect.vue";
-import CreateRegion from "@/components/regions/CreateRegion.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
 import RefreshButton from "@/components/shared/RefreshButton.vue";
 import RegionLinkCard from "@/components/regions/RegionLinkCard.vue";
@@ -74,10 +75,8 @@ import { handleErrorKey } from "@/inject";
 import { parseTextSearch } from "@/utils/search";
 import { searchRegions } from "@/api/regions";
 import { useDocument } from "@/composables/document";
-import { useEventStore } from "@/stores/event";
 
 const document = useDocument();
-const events = useEventStore();
 const handleError = inject(handleErrorKey) as (e: unknown) => void;
 const route = useRoute();
 const router = useRouter();
@@ -107,11 +106,6 @@ const sortOptions = computed<SelectOption[]>(() =>
     "text",
   ),
 );
-
-function onCreate(region: Region): void {
-  events.push("created");
-  router.push({ name: "Region", params: { id: region.id } });
-}
 
 function clearFilters(): void {
   const query = { ...route.query, search: "", page: 1 };

@@ -1,5 +1,5 @@
 <template>
-  <LinkCard :title="region.name ?? region.key" :to="{ name: 'Region', params: { id: region.id } }">
+  <LinkCard :title="region.name ?? region.key" :to="{ name: 'RegionEdit', params: { id: region.id } }">
     <div v-if="region.summary" class="card-text">{{ region.summary }}</div>
     <StatusBlock :actor="region.updatedBy" class="card-text mt-2 small text-secondary" :date="region.updatedOn" relative />
   </LinkCard>
