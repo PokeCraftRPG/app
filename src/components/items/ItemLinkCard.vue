@@ -1,5 +1,5 @@
 <template>
-  <LinkCard :to="{ name: 'Item', params: { id: item.id } }">
+  <LinkCard :to="{ name: 'ItemEdit', params: { id: item.id } }">
     <div class="d-flex align-items-start gap-1">
       <ImageAsset v-if="item.sprite" :alt="t('sprite.alt', { name: item.name ?? item.key })" :asset="item.sprite" height="48" />
       <div class="flex-grow-1">

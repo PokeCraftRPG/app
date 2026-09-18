@@ -1,5 +1,5 @@
 <template>
-  <LinkCard :title="ability.name ?? ability.key" :to="{ name: 'Ability', params: { id: ability.id } }">
+  <LinkCard :title="ability.name ?? ability.key" :to="{ name: 'AbilityEdit', params: { id: ability.id } }">
     <div v-if="ability.summary" class="card-text">{{ ability.summary }}</div>
     <StatusBlock :actor="ability.updatedBy" class="card-text mt-2 small text-secondary" :date="ability.updatedOn" relative />
   </LinkCard>
