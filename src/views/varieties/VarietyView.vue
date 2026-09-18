@@ -15,6 +15,9 @@
         <TarTab active id="properties" :title="t('properties')">
           <VarietyProperties :variety="variety" @error="handleError" @updated="onUpdated" />
         </TarTab>
+        <TarTab id="moves" :title="t('moves.title')">
+          <VarietyMoves :variety="variety" @error="handleError" @updated="onUpdated" />
+        </TarTab>
       </TarTabs>
     </div>
     <LoadingSpinner v-else />
@@ -33,6 +36,7 @@ import TarAlert from "@/components/tar/TarAlert.vue";
 import TarBadge from "@/components/tar/TarBadge.vue";
 import TarTab from "@/components/tar/TarTab.vue";
 import TarTabs from "@/components/tar/TarTabs.vue";
+import VarietyMoves from "@/components/varieties/VarietyMoves.vue";
 import VarietyProperties from "@/components/varieties/VarietyProperties.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
 import type { ApiFailure } from "@/types/api";

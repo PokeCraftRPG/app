@@ -1,4 +1,5 @@
 import type { Aggregate, Auditable, Optional } from "./api";
+import type { Move, MoveSummary } from "./moves";
 import type { SearchPayload } from "./search";
 import type { Species, SpeciesSummary } from "./species";
 
@@ -20,6 +21,12 @@ export type SearchVarietiesPayload = SearchPayload<VarietySort> & {
   canChangeForm?: boolean | null;
   isDefault?: boolean | null;
   species?: string | null;
+};
+
+export type SetVarietyMovePayload = {
+  moveId: string;
+  learningMethod: LearningMethod;
+  level?: number | null;
 };
 
 export type UpdateVarietyPayload = {
@@ -48,10 +55,12 @@ export type Variety = Aggregate & {
 
 export type VarietyFilters = {
   species: SpeciesSummary[];
+  moves: MoveSummary[];
 };
 
 export type VarietyMove = Auditable & {
   id: string;
+  move: Move;
   learningMethod: LearningMethod;
   level?: number | null;
 };

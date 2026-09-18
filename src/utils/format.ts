@@ -1,6 +1,6 @@
 import type { Ability } from "@/types/abilities";
 import type { Item } from "@/types/items";
-import type { Move } from "@/types/moves";
+import type { Move, MoveSummary } from "@/types/moves";
 import type { Region, RegionSummary } from "@/types/regions";
 import type { Species, SpeciesSummary } from "@/types/species";
 import type { Trainer } from "@/types/trainers";
@@ -15,7 +15,7 @@ export function formatItem(item: Item): string {
   return item.name ?? item.key;
 }
 
-export function formatMove(move: Move): string {
+export function formatMove(move: Move | MoveSummary): string {
   return move.name ?? move.key;
 }
 

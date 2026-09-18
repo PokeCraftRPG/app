@@ -28,6 +28,14 @@ export type Move = Aggregate & {
 
 export type MoveCategory = "Physical" | "Special" | "Status";
 
+export type MoveSummary = {
+  id: string;
+  type: PokemonType;
+  category: MoveCategory;
+  key: string;
+  name?: string | null;
+};
+
 export type MoveSort = "Accuracy" | "CreatedOn" | "Key" | "Name" | "Power" | "PowerPoints" | "UpdatedOn";
 
 export type SearchMovesPayload = SearchPayload<MoveSort> & {

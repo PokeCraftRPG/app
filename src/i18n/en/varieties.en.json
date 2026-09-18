@@ -25,6 +25,28 @@
     "placeholder": "Genderless"
   },
   "genus": "Genus",
+  "learningMethod": {
+    "label": "Learning method",
+    "options": {
+      "Evolution": "Evolution",
+      "LevelUp": "Level up",
+      "Reminder": "Reminder"
+    },
+    "placeholder": "Select a learning method"
+  },
+  "moves": {
+    "add": "Add a move",
+    "alreadyUsed": {
+      "help": "Choose a different move, learning method, or level.",
+      "lead": "That move is already on this variety."
+    },
+    "edit": "Edit {move}",
+    "empty": "No moves yet.",
+    "remove": {
+      "help": "This will remove {move} from this variety. This action cannot be undone.",
+      "lead": "Remove move?"
+    }
+  },
   "sort": {
     "options": {
       "CreatedOn": "Created on",
