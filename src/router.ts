@@ -124,9 +124,14 @@ const router = createRouter({
       component: () => import("./views/trainers/TrainersView.vue"),
     },
     {
-      name: "Trainer",
+      name: "TrainerCreate",
+      path: "/trainers/new",
+      component: () => import("./views/trainers/TrainerCreateView.vue"),
+    },
+    {
+      name: "TrainerEdit",
       path: "/trainers/:id",
-      component: () => import("./views/trainers/TrainerView.vue"),
+      component: () => import("./views/trainers/TrainerEditView.vue"),
     },
     // NotFound
     {
