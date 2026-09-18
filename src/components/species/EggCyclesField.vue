@@ -5,9 +5,10 @@
     :max="max"
     :min="min"
     :model-value="modelValue?.toString() ?? ''"
+    :required="required"
     :step="step"
     type="number"
-    @update:model-value="$emit('update:model-value', parseNumber($event) ?? 0)"
+    @update:model-value="$emit('update:model-value', parseNumber($event))"
   />
 </template>
 
@@ -27,6 +28,7 @@ withDefaults(
     max?: number | string;
     min?: number | string;
     modelValue?: number | string;
+    required?: boolean | string;
     step?: number | string;
   }>(),
   {
@@ -39,6 +41,6 @@ withDefaults(
 );
 
 defineEmits<{
-  (e: "update:model-value", value: number): void;
+  (e: "update:model-value", value: number | undefined): void;
 }>();
 </script>

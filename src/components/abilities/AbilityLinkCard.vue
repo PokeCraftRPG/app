@@ -1,5 +1,5 @@
 <template>
-  <LinkCard :title="formatAbility(ability)" :to="{ name: 'Ability', params: { id: ability.id } }">
+  <LinkCard :title="formatAbility(ability)" :to="{ name: 'AbilityEdit', params: { id: ability.id } }">
     <div v-if="ability.summary" class="card-text mb-2">{{ ability.summary }}</div>
     <StatusBlock :actor="ability.updatedBy" class="card-text small text-secondary" :date="ability.updatedOn" relative />
   </LinkCard>

@@ -3,7 +3,9 @@
     <div v-if="hasLoaded" class="d-flex flex-column flex-grow-1">
       <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3">
         <h1 class="mb-0">{{ title }}</h1>
-        <CreateAbility class="mb-3" @created="onCreate" @error="handleError" />
+        <RouterLink class="btn btn-lg btn-primary" :to="{ name: 'AbilityCreate' }">
+          <font-awesome-icon icon="fas fa-plus" aria-hidden="true" />&nbsp;{{ t("actions.create") }}
+        </RouterLink>
       </div>
       <WorldBreadcrumb :current="title" />
       <section>
@@ -60,7 +62,6 @@ import { useRoute, useRouter } from "vue-router";
 import AbilityLinkCard from "@/components/abilities/AbilityLinkCard.vue";
 import ClearFiltersButton from "@/components/shared/ClearFiltersButton.vue";
 import CountSelect from "@/components/shared/CountSelect.vue";
-import CreateAbility from "@/components/abilities/CreateAbility.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
 import RefreshButton from "@/components/shared/RefreshButton.vue";
 import SearchInput from "@/components/shared/SearchInput.vue";
@@ -74,10 +75,8 @@ import { handleErrorKey } from "@/inject";
 import { parseTextSearch } from "@/utils/search";
 import { searchAbilities } from "@/api/abilities";
 import { useDocument } from "@/composables/document";
-import { useEventStore } from "@/stores/event";
 
 const document = useDocument();
-const events = useEventStore();
 const handleError = inject(handleErrorKey) as (e: unknown) => void;
 const route = useRoute();
 const router = useRouter();
@@ -107,11 +106,6 @@ const sortOptions = computed<SelectOption[]>(() =>
     "text",
   ),
 );
-
-function onCreate(ability: Ability): void {
-  events.push("created");
-  router.push({ name: "Ability", params: { id: ability.id } });
-}
 
 function clearFilters(): void {
   const query = { ...route.query, search: "", page: 1 };

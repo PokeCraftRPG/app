@@ -3,7 +3,9 @@
     <div v-if="filters" class="d-flex flex-column flex-grow-1">
       <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3">
         <h1 class="mb-0">{{ title }}</h1>
-        <CreateSpecies class="mb-3" @created="onCreate" @error="handleError" />
+        <RouterLink class="btn btn-lg btn-primary" :to="{ name: 'SpeciesCreate' }">
+          <font-awesome-icon icon="fas fa-plus" aria-hidden="true" />&nbsp;{{ t("actions.create") }}
+        </RouterLink>
       </div>
       <WorldBreadcrumb :current="title" />
       <section>
@@ -73,7 +75,6 @@ import { useRoute, useRouter } from "vue-router";
 
 import ClearFiltersButton from "@/components/shared/ClearFiltersButton.vue";
 import CountSelect from "@/components/shared/CountSelect.vue";
-import CreateSpecies from "@/components/species/CreateSpecies.vue";
 import EggGroupSelect from "@/components/species/EggGroupSelect.vue";
 import GrowthRateSelect from "@/components/species/GrowthRateSelect.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
@@ -92,10 +93,8 @@ import { handleErrorKey } from "@/inject";
 import { parseTextSearch } from "@/utils/search";
 import { getSpeciesFilters, searchSpecies } from "@/api/species";
 import { useDocument } from "@/composables/document";
-import { useEventStore } from "@/stores/event";
 
 const document = useDocument();
-const events = useEventStore();
 const handleError = inject(handleErrorKey) as (e: unknown) => void;
 const route = useRoute();
 const router = useRouter();
@@ -129,11 +128,6 @@ const sortOptions = computed<SelectOption[]>(() =>
     "text",
   ),
 );
-
-function onCreate(entry: Species): void {
-  events.push("created");
-  router.push({ name: "SpeciesDetail", params: { id: entry.id } });
-}
 
 function clearFilters(): void {
   const query = { ...route.query, category: "", egg: "", growth: "", region: "", search: "", page: 1 };

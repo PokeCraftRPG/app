@@ -1,13 +1,13 @@
 <template>
-  <LinkCard :title="formatMove(move)" :to="{ name: 'Move', params: { id: move.id } }">
+  <LinkCard :title="formatMove(move)" :to="{ name: 'MoveEdit', params: { id: move.id } }">
     <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
       <PokemonTypeImage :type="move.type" height="24" />
       <MoveCategoryBadge :category="move.category" height="24" />
     </div>
     <div v-if="hasMechanics" class="d-flex justify-content-between align-items-center gap-2 mb-2 text-body-secondary">
-      <div v-if="move.accuracy">{{ t("moves.accuracy.format", { accuracy: n(move.accuracy, "integer") }) }}</div>
-      <div v-if="move.power">{{ t("moves.power.format", { power: n(move.power, "integer") }) }}</div>
-      <div v-if="move.powerPoints">{{ t("moves.powerPoints.format", { powerPoints: n(move.powerPoints, "integer") }) }}</div>
+      <div>{{ t("moves.accuracy.format", { accuracy: move.accuracy ? n(move.accuracy, "integer") : "—" }) }}</div>
+      <div>{{ t("moves.power.format", { power: move.power ? n(move.power, "integer") : "—" }) }}</div>
+      <div>{{ t("moves.powerPoints.format", { powerPoints: move.powerPoints ? n(move.powerPoints, "integer") : "—" }) }}</div>
     </div>
     <div v-if="move.summary" class="card-text mb-2">{{ move.summary }}</div>
     <StatusBlock :actor="move.updatedBy" class="card-text small text-secondary" :date="move.updatedOn" relative />
