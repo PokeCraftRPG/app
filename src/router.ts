@@ -71,9 +71,14 @@ const router = createRouter({
       component: () => import("./views/moves/MovesView.vue"),
     },
     {
-      name: "Move",
+      name: "MoveEdit",
       path: "/moves/:id",
-      component: () => import("./views/moves/MoveView.vue"),
+      component: () => import("./views/moves/MoveEditView.vue"),
+    },
+    {
+      name: "MoveCreate",
+      path: "/moves/new",
+      component: () => import("./views/moves/MoveCreateView.vue"),
     },
     // Regions
     {
