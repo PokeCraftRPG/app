@@ -113,9 +113,14 @@ const router = createRouter({
       component: () => import("./views/species/SpeciesView.vue"),
     },
     {
-      name: "SpeciesDetail",
+      name: "SpeciesCreate",
+      path: "/species/new",
+      component: () => import("./views/species/SpeciesCreateView.vue"),
+    },
+    {
+      name: "SpeciesEdit",
       path: "/species/:id",
-      component: () => import("./views/species/SpeciesDetailView.vue"),
+      component: () => import("./views/species/SpeciesEditView.vue"),
     },
     // Trainers
     {

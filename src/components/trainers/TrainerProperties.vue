@@ -83,7 +83,7 @@ const licenseField = ref<InstanceType<typeof LicenseField> | null>(null);
 const member = ref<Actor>();
 const members = ref<Actor[]>([]);
 const name = ref<string>("");
-const partyLimit = ref<number>(0);
+const partyLimit = ref<number>();
 const summary = ref<string>("");
 
 const hasChanges = computed<boolean>(() => {
@@ -96,7 +96,7 @@ const hasChanges = computed<boolean>(() => {
     license.value !== (trainer?.license ?? "") ||
     gender.value !== (trainer?.gender ?? "") ||
     (member.value?.id ?? "") !== (trainer?.member?.id ?? "") ||
-    partyLimit.value !== (trainer?.partyLimit ?? 0)
+    (partyLimit.value ?? 0) !== (trainer?.partyLimit ?? 0)
   );
 });
 
@@ -173,7 +173,7 @@ watch(
     license.value = trainer?.license ?? "";
     gender.value = trainer?.gender ?? "";
     member.value = trainer?.member ? { ...trainer.member } : undefined;
-    partyLimit.value = trainer?.partyLimit ?? 0;
+    partyLimit.value = trainer?.partyLimit ?? undefined;
   },
   { deep: true, immediate: true },
 );

@@ -8,7 +8,7 @@
     :model-value="modelValue?.toString()"
     :step="step"
     type="number"
-    @update:model-value="$emit('update:model-value', parseNumber($event) ?? 0)"
+    @update:model-value="$emit('update:model-value', parseNumber($event))"
   />
 </template>
 
@@ -41,6 +41,6 @@ withDefaults(
 );
 
 defineEmits<{
-  (e: "update:model-value", value: number): void;
+  (e: "update:model-value", value: number | undefined): void;
 }>();
 </script>

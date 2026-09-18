@@ -1,5 +1,6 @@
 <template>
   <InputField
+    :disabled="disabled"
     :id="id"
     :label="label ? t(label) : undefined"
     :max="max"
@@ -9,7 +10,7 @@
     :required="required"
     :step="step"
     type="number"
-    @update:model-value="$emit('update:model-value', parseNumber($event) ?? 0)"
+    @update:model-value="$emit('update:model-value', parseNumber($event))"
   />
 </template>
 
@@ -25,6 +26,7 @@ const { t } = useI18n();
 
 withDefaults(
   defineProps<{
+    disabled?: boolean | string;
     id?: string;
     label?: string;
     max?: number | string;
@@ -43,7 +45,7 @@ withDefaults(
 );
 
 defineEmits<{
-  (e: "update:model-value", value: number): void;
+  (e: "update:model-value", value: number | undefined): void;
 }>();
 
 const inputRef = ref<InstanceType<typeof InputField> | null>();

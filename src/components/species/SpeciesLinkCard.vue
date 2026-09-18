@@ -1,5 +1,5 @@
 <template>
-  <LinkCard :subtitle="category" :title="title" :to="{ name: 'SpeciesDetail', params: { id: species.id } }">
+  <LinkCard :subtitle="category" :title="title" :to="{ name: 'SpeciesEdit', params: { id: species.id } }">
     <div v-if="species.summary" class="card-text">{{ species.summary }}</div>
     <StatusBlock :actor="species.updatedBy" class="card-text mt-2 small text-secondary" :date="species.updatedOn" relative />
   </LinkCard>
