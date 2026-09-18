@@ -1,7 +1,6 @@
 <template>
   <form class="border-top border-secondary-subtle pt-4" @submit.prevent="handleSubmit(submit)">
     <KeyAlreadyUsed v-model="keyAlreadyUsed" />
-    <ItemCategoryField class="mb-3" :disabled="Boolean(item)" required v-model="category" />
     <div class="row">
       <div class="col-md-6">
         <NameField class="mb-3" v-model="name" />
@@ -11,10 +10,13 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
+        <ItemCategoryField class="mb-3" :disabled="Boolean(item)" required v-model="category" />
+      </div>
+      <div class="col-md-4">
         <PriceField class="mb-3" v-model="price" />
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <WeightField class="mb-3" v-model="weight" />
       </div>
     </div>
