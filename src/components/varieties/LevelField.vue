@@ -35,7 +35,7 @@ withDefaults(
   }>(),
   {
     id: "level",
-    label: "varieties.level.label",
+    label: "pokemon.level.label",
     max: 100,
     min: 1,
     step: 1,

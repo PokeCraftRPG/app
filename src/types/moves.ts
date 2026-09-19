@@ -30,8 +30,6 @@ export type MoveCategory = "Physical" | "Special" | "Status";
 
 export type MoveSummary = {
   id: string;
-  type: PokemonType;
-  category: MoveCategory;
   key: string;
   name?: string | null;
 };

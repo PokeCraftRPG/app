@@ -8,11 +8,9 @@ import type {
   Variety,
   VarietyFilters,
 } from "@/types/varieties";
-import type { MoveSummary } from "@/types/moves";
 import type { SearchResults } from "@/types/search";
 import { _delete, get, patch, post, put } from ".";
 import { encodeSortOption } from "@/utils/search";
-import { searchMoves } from "./moves";
 
 export async function addVarietyMove(varietyId: string, payload: SetVarietyMovePayload): Promise<Variety> {
   const url: string = new urlUtils.UrlBuilder({ path: "/varieties/{varietyId}/moves" }).setParameter("varietyId", varietyId).buildRelative();
@@ -26,25 +24,7 @@ export async function createVariety(payload: CreateOrReplaceVarietyPayload): Pro
 
 export async function getVarietyFilters(): Promise<VarietyFilters> {
   const url: string = new urlUtils.UrlBuilder({ path: "/varieties/filters" }).buildRelative();
-  const filters = (await get<Omit<VarietyFilters, "moves">>(url)).data;
-  // TODO(fpion): remove when the API returns moves in variety filters
-  const results = await searchMoves({
-    ids: [],
-    search: { terms: [], mode: "All" },
-    sort: [{ field: "Name", direction: "Ascending" }],
-    offset: 0,
-    limit: 0,
-  });
-  return {
-    ...filters,
-    moves: results.items.map((move): MoveSummary => ({
-      id: move.id,
-      type: move.type,
-      category: move.category,
-      key: move.key,
-      name: move.name,
-    })),
-  };
+  return (await get<VarietyFilters>(url)).data;
 }
 
 export async function readVariety(id: string): Promise<Variety> {
