@@ -1,6 +1,6 @@
 <template>
   <SelectField
-    :disabled="!options.length"
+    :disabled="disabled || !options.length"
     :id="id"
     :label="label ? t(label) : undefined"
     :model-value="modelValue"
@@ -24,6 +24,7 @@ const { n, t } = useI18n();
 
 const props = withDefaults(
   defineProps<{
+    disabled?: boolean | string;
     id?: string;
     label?: string;
     modelValue?: string;

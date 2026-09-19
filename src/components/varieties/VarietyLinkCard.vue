@@ -1,5 +1,5 @@
 <template>
-  <LinkCard :subtitle="subtitle" :title="title" :to="{ name: 'VarietyDetail', params: { id: variety.id } }">
+  <LinkCard :subtitle="subtitle" :title="title" :to="{ name: 'VarietyEdit', params: { id: variety.id } }">
     <DefaultBadge v-if="variety.isDefault" class="mb-2" />
     <div v-if="variety.summary" class="card-text mb-2">{{ variety.summary }}</div>
     <StatusBlock :actor="variety.updatedBy" class="card-text small text-secondary" :date="variety.updatedOn" relative />
