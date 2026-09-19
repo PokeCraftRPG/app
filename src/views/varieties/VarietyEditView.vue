@@ -1,11 +1,7 @@
 <template>
   <main class="container page">
     <div v-if="variety">
-      <div class="d-flex flex-wrap align-items-center gap-3">
-        <h1>{{ title }}</h1>
-        <TarBadge class="fs-6" variant="secondary">{{ formatSpecies(variety.species, n) }}</TarBadge>
-        <DefaultBadge v-if="variety.isDefault" class="fs-6" />
-      </div>
+      <h1>{{ title }}</h1>
       <WorldBreadcrumb :current="title" :parent="breadcrumb" />
       <TarAlert :close="t('actions.close')" dismissible variant="success" v-model="isCreated">
         <strong>{{ t("varieties.created.lead", { name: title }) }}</strong> {{ t("varieties.created.help") }}
@@ -29,11 +25,9 @@ import { computed, inject, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
-import DefaultBadge from "@/components/varieties/DefaultBadge.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
 import StatusDetail from "@/components/shared/StatusDetail.vue";
 import TarAlert from "@/components/tar/TarAlert.vue";
-import TarBadge from "@/components/tar/TarBadge.vue";
 import TarTab from "@/components/tar/TarTab.vue";
 import TarTabs from "@/components/tar/TarTabs.vue";
 import VarietyMoves from "@/components/varieties/VarietyMoves.vue";
@@ -43,7 +37,7 @@ import type { ApiFailure } from "@/types/api";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
 import type { Variety } from "@/types/varieties";
 import { StatusCodes } from "@/types/api";
-import { formatSpecies, formatVariety } from "@/utils/format";
+import { formatVariety } from "@/utils/format";
 import { handleErrorKey } from "@/inject";
 import { readVariety } from "@/api/varieties";
 import { useDocument } from "@/composables/document";
@@ -56,7 +50,7 @@ const handleError = inject(handleErrorKey) as (e: unknown) => void;
 const route = useRoute();
 const router = useRouter();
 const toasts = useToastStore();
-const { n, t } = useI18n();
+const { t } = useI18n();
 
 const isCreated = ref<boolean>(false);
 const variety = ref<Variety>();

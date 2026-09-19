@@ -1,13 +1,13 @@
 <template>
   <form @submit.prevent="handleSubmit(submit)">
     <KeyAlreadyUsed v-model="keyAlreadyUsed" />
-    <SpeciesField class="mb-3" :disabled="Boolean(variety)" :model-value="species?.id" :species="speciesOptions" required @selected="selectSpecies" />
     <div class="row">
       <div class="col-md-6">
-        <TarCheckbox class="mb-3" :label="t('varieties.default.label')" switch v-model="isDefault" />
+        <SpeciesField class="mb-3" :disabled="Boolean(variety)" :model-value="species?.id" :species="speciesOptions" required @selected="selectSpecies" />
       </div>
-      <div class="col-md-6">
-        <TarCheckbox class="mb-3" :label="t('varieties.canChangeForm')" switch v-model="canChangeForm" />
+      <div class="col-md-6 mb-3">
+        <TarCheckbox :label="t('varieties.default.label')" switch v-model="isDefault" />
+        <TarCheckbox :label="t('varieties.canChangeForm')" switch v-model="canChangeForm" />
       </div>
     </div>
     <div class="row">
