@@ -138,6 +138,22 @@ const router = createRouter({
       path: "/trainers/:id",
       component: () => import("./views/trainers/TrainerEditView.vue"),
     },
+    // Varieties
+    {
+      name: "Varieties",
+      path: "/varieties",
+      component: () => import("./views/varieties/VarietiesView.vue"),
+    },
+    {
+      name: "VarietyCreate",
+      path: "/varieties/new",
+      component: () => import("./views/varieties/VarietyCreateView.vue"),
+    },
+    {
+      name: "VarietyEdit",
+      path: "/varieties/:id",
+      component: () => import("./views/varieties/VarietyEditView.vue"),
+    },
     // NotFound
     {
       name: "NotFound",

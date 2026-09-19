@@ -28,6 +28,7 @@ import RemoveRegionalNumber from "./RemoveRegionalNumber.vue";
 import TarButton from "@/components/tar/TarButton.vue";
 import type { RegionSummary } from "@/types/regions";
 import type { RegionalNumber, Species, SpeciesFilters } from "@/types/species";
+import { formatRegion } from "@/utils/format";
 import { getSpeciesFilters } from "@/api/species";
 
 const { t } = useI18n();
@@ -50,7 +51,7 @@ const availableRegions = computed<RegionSummary[]>(() => {
   return regions.value.filter((region) => !used.has(region.id));
 });
 const regionalNumbers = computed<RegionalNumber[]>(() =>
-  [...props.species.regionalNumbers].sort((a, b) => (a.region.name ?? a.region.key).localeCompare(b.region.name ?? b.region.key)),
+  [...props.species.regionalNumbers].sort((a, b) => formatRegion(a.region).localeCompare(formatRegion(b.region))),
 );
 
 function add(): void {

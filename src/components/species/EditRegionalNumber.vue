@@ -7,7 +7,7 @@
           <StatusDetail class="mb-3" :subject="regionalNumber" />
           <TarCard class="mb-3">
             <div class="small text-body-secondary">{{ t("regions.label") }}</div>
-            <div class="fw-semibold">{{ regionalNumber.region.name ?? regionalNumber.region.key }}</div>
+            <div class="fw-semibold">{{ formatRegion(regionalNumber.region) }}</div>
           </TarCard>
         </template>
         <RegionField v-else class="mb-3" :model-value="region?.id" :regions="regions" required @selected="region = $event" />
@@ -43,6 +43,7 @@ import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { RegionSummary } from "@/types/regions";
 import type { RegionalNumber, SetRegionalNumberPayload, Species } from "@/types/species";
 import { ErrorCodes, StatusCodes } from "@/types/api";
+import { formatPokemonNumber, formatRegion } from "@/utils/format";
 import { setRegionalNumber } from "@/api/species";
 import { useForm } from "@/forms";
 
@@ -70,8 +71,8 @@ const canSubmit = computed<boolean>(() => !regionalNumber.value || number.value 
 const title = computed<string>(() =>
   regionalNumber.value
     ? t("species.regionalNumbers.edit", {
-        number: n(regionalNumber.value.number, "pokemonNumber"),
-        region: regionalNumber.value.region.name ?? regionalNumber.value.region.key,
+        number: formatPokemonNumber(regionalNumber.value.number, n),
+        region: formatRegion(regionalNumber.value.region),
       })
     : t("species.regionalNumbers.add"),
 );

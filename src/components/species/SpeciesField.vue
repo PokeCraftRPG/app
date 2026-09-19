@@ -1,12 +1,12 @@
 <template>
-  <TarSelect
-    :disabled="!options.length"
-    floating
+  <SelectField
+    :disabled="disabled || !options.length"
     :id="id"
     :label="label ? t(label) : undefined"
     :model-value="modelValue"
     :options="options"
     :placeholder="placeholder ? t(placeholder) : undefined"
+    :required="required"
     @update:model-value="onModelValueUpdate($event ?? '')"
   />
 </template>
@@ -15,41 +15,43 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-import TarSelect from "@/components/tar/TarSelect.vue";
+import SelectField from "@/components/forms/SelectField.vue";
+import type { SpeciesSummary } from "@/types/species";
 import type { SelectOption } from "@/types/tar/select";
-import type { RegionSummary } from "@/types/regions";
-import { formatRegion } from "@/utils/format";
+import { formatSpecies } from "@/utils/format";
 
-const { t } = useI18n();
+const { n, t } = useI18n();
 
 const props = withDefaults(
   defineProps<{
+    disabled?: boolean | string;
     id?: string;
     label?: string;
     modelValue?: string;
     placeholder?: string;
-    regions?: RegionSummary[];
+    required?: boolean | string;
+    species?: SpeciesSummary[];
   }>(),
   {
-    id: "region",
-    label: "regions.label",
-    placeholder: "all",
-    regions: () => [],
+    id: "species",
+    label: "species.label",
+    placeholder: "species.placeholder",
+    species: () => [],
   },
 );
 
 const emit = defineEmits<{
-  (e: "selected", value: RegionSummary | undefined): void;
+  (e: "selected", value: SpeciesSummary | undefined): void;
   (e: "update:model-value", value: string): void;
 }>();
 
-const options = computed<SelectOption[]>(() => props.regions.map((region) => ({ text: formatRegion(region), value: region.id })));
+const options = computed<SelectOption[]>(() => props.species.map((species) => ({ text: formatSpecies(species, n), value: species.id })));
 
 function onModelValueUpdate(id: string): void {
   emit("update:model-value", id);
   emit(
     "selected",
-    props.regions.find((region) => region.id === id),
+    props.species.find((species) => species.id === id),
   );
 }
 </script>

@@ -44,6 +44,7 @@ export type Auditable = {
 };
 
 export enum ErrorCodes {
+  DuplicateVarietyMove = "DuplicateVarietyMove",
   InvalidCredentials = "InvalidCredentials",
   KeyAlreadyUsed = "KeyAlreadyUsed",
   LicenseAlreadyUsed = "LicenseAlreadyUsed",

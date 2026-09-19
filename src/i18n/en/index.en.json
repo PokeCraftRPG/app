@@ -43,6 +43,7 @@
   },
   "loading": "Loading…",
   "name": "Name",
+  "no": "No",
   "notFound": {
     "help": "The requested page could not be found.",
     "lead": "Page Not Found"
@@ -83,5 +84,6 @@
     "dollar": "$",
     "kilogram": "kg",
     "percentage": "%"
-  }
+  },
+  "yes": "Yes"
 }

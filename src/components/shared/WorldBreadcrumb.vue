@@ -9,6 +9,7 @@ import { useI18n } from "vue-i18n";
 
 import TarBreadcrumb from "@/components/tar/TarBreadcrumb.vue";
 import type { Breadcrumb } from "@/types/tar/breadcrumb";
+import { formatWorld } from "@/utils/format";
 import { useWorldStore } from "@/stores/world";
 
 const world = useWorldStore();
@@ -32,7 +33,7 @@ const breadcrumbs = computed<Breadcrumb[]>(() => {
   const breadcrumbs: Breadcrumb[] = [{ text: t("worlds.title"), to: { name: "Worlds" } }];
   if (world.current && !isRoot.value) {
     breadcrumbs.push({
-      text: world.current.name ?? world.current.key,
+      text: formatWorld(world.current),
       to: { name: "World", params: { id: world.current.id } },
     });
   }

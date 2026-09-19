@@ -1,12 +1,12 @@
 <template>
-  <TarSelect
+  <SelectField
     :disabled="!options.length"
-    floating
     :id="id"
     :label="label ? t(label) : undefined"
     :model-value="modelValue"
     :options="options"
     :placeholder="placeholder ? t(placeholder) : undefined"
+    :required="required"
     @update:model-value="onModelValueUpdate($event ?? '')"
   />
 </template>
@@ -15,10 +15,10 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-import TarSelect from "@/components/tar/TarSelect.vue";
+import SelectField from "@/components/forms/SelectField.vue";
+import type { MoveSummary } from "@/types/moves";
 import type { SelectOption } from "@/types/tar/select";
-import type { RegionSummary } from "@/types/regions";
-import { formatRegion } from "@/utils/format";
+import { formatMove } from "@/utils/format";
 
 const { t } = useI18n();
 
@@ -27,29 +27,30 @@ const props = withDefaults(
     id?: string;
     label?: string;
     modelValue?: string;
+    moves?: MoveSummary[];
     placeholder?: string;
-    regions?: RegionSummary[];
+    required?: boolean | string;
   }>(),
   {
-    id: "region",
-    label: "regions.label",
-    placeholder: "all",
-    regions: () => [],
+    id: "move",
+    label: "moves.label",
+    placeholder: "moves.placeholder",
+    moves: () => [],
   },
 );
 
 const emit = defineEmits<{
-  (e: "selected", value: RegionSummary | undefined): void;
+  (e: "selected", value: MoveSummary | undefined): void;
   (e: "update:model-value", value: string): void;
 }>();
 
-const options = computed<SelectOption[]>(() => props.regions.map((region) => ({ text: formatRegion(region), value: region.id })));
+const options = computed<SelectOption[]>(() => props.moves.map((move) => ({ text: formatMove(move), value: move.id })));
 
 function onModelValueUpdate(id: string): void {
   emit("update:model-value", id);
   emit(
     "selected",
-    props.regions.find((region) => region.id === id),
+    props.moves.find((move) => move.id === id),
   );
 }
 </script>
