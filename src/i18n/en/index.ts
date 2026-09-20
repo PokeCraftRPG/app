@@ -1,6 +1,7 @@
 import abilities from "./abilities.en.json";
 import account from "./account.en.json";
 import errors from "./errors.en.json";
+import forms from "./forms.en.json";
 import index from "./index.en.json";
 import items from "./items.en.json";
 import members from "./members.en.json";
@@ -17,6 +18,7 @@ export default {
   abilities,
   account,
   errors,
+  forms,
   items,
   members,
   moves,

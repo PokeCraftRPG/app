@@ -1,0 +1,50 @@
+{
+  "abilities": {
+    "hidden": "Hidden Ability",
+    "primary": "Primary Ability",
+    "secondary": "Secondary Ability"
+  },
+  "category": {
+    "label": "Category",
+    "options": {
+      "Alternative": "Alternative",
+      "BattleOnly": "Battle only",
+      "Default": "Default",
+      "Mega": "Mega"
+    },
+    "placeholder": "Select a category"
+  },
+  "create": "Create a form",
+  "created": {
+    "help": "You can now complete its details.",
+    "lead": "The form “{name}” was created."
+  },
+  "size": {
+    "height": "Height",
+    "weight": "Weight"
+  },
+  "sort": {
+    "options": {
+      "CreatedOn": "Created on",
+      "ExperienceYield": "Experience yield",
+      "Height": "Height",
+      "Key": "Key",
+      "Name": "Name",
+      "UpdatedOn": "Last updated",
+      "Weight": "Weight"
+    }
+  },
+  "statistics": {
+    "base": "Base Statistics",
+    "total": "Total: {total}",
+    "yield": {
+      "invalid": "Effort Value yield must total between 1 and 4.",
+      "title": "Yield"
+    }
+  },
+  "title": "Forms",
+  "types": {
+    "primary": "Primary Type",
+    "secondary": "Secondary Type"
+  }
+}

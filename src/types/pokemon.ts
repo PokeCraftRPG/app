@@ -1,3 +1,5 @@
+export type PokemonStatistic = "HP" | "Attack" | "Defense" | "SpecialAttack" | "SpecialDefense" | "Speed";
+
 export type PokemonType =
   | "Bug"
   | "Dark"

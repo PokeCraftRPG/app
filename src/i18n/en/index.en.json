@@ -83,6 +83,7 @@
   "unit": {
     "dollar": "$",
     "kilogram": "kg",
+    "meter": "m",
     "percentage": "%"
   },
   "yes": "Yes"

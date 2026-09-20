@@ -154,6 +154,22 @@ const router = createRouter({
       path: "/varieties/:id",
       component: () => import("./views/varieties/VarietyEditView.vue"),
     },
+    // Forms
+    {
+      name: "Forms",
+      path: "/forms",
+      component: () => import("./views/pokemonForms/FormsView.vue"),
+    },
+    {
+      name: "FormCreate",
+      path: "/forms/new",
+      component: () => import("./views/pokemonForms/FormCreateView.vue"),
+    },
+    {
+      name: "FormEdit",
+      path: "/forms/:id",
+      component: () => import("./views/pokemonForms/FormEditView.vue"),
+    },
     // NotFound
     {
       name: "NotFound",
