@@ -54,6 +54,7 @@
     },
     "placeholder": "Select a growth rate"
   },
+  "label": "Species",
   "number": {
     "alreadyUsed": {
       "help": "Choose another unique number, then try again.",
@@ -61,12 +62,13 @@
     },
     "label": "Number"
   },
+  "placeholder": "Select a species",
   "regionalNumbers": {
     "add": "Add a regional number",
-    "edit": "Edit #{number} ({region})",
+    "edit": "Edit {number} ({region})",
     "empty": "No regional numbers yet.",
     "remove": {
-      "help": "This will remove #{number} from {region}. This action cannot be undone.",
+      "help": "This will remove {number} from {region}. This action cannot be undone.",
       "lead": "Remove regional number?"
     },
     "title": "Regional Numbers"

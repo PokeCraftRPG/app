@@ -1,9 +1,9 @@
 <template>
   <LinkCard :to="{ name: 'ItemEdit', params: { id: item.id } }">
     <div class="d-flex align-items-start gap-1">
-      <ImageAsset v-if="item.sprite" :alt="t('sprite.alt', { name: item.name ?? item.key })" :asset="item.sprite" height="48" />
+      <ImageAsset v-if="item.sprite" :alt="t('sprite.alt', { name: formatItem(item) })" :asset="item.sprite" height="48" />
       <div class="flex-grow-1">
-        <h5 class="card-title">{{ item.name ?? item.key }}</h5>
+        <h5 class="card-title">{{ formatItem(item) }}</h5>
         <h6 class="card-subtitle mb-2 text-body-secondary">{{ category }}</h6>
       </div>
     </div>
@@ -17,8 +17,8 @@
         ><span v-else class="text-secondary">{{ "—" }}</span>
       </div>
     </div>
-    <div v-if="item.summary" class="card-text">{{ item.summary }}</div>
-    <StatusBlock :actor="item.updatedBy" class="card-text mt-2 small text-secondary" :date="item.updatedOn" relative />
+    <div v-if="item.summary" class="card-text mb-2">{{ item.summary }}</div>
+    <StatusBlock :actor="item.updatedBy" class="card-text small text-secondary" :date="item.updatedOn" relative />
   </LinkCard>
 </template>
 
@@ -30,6 +30,7 @@ import ImageAsset from "@/components/shared/ImageAsset.vue";
 import LinkCard from "@/components/shared/LinkCard.vue";
 import StatusBlock from "@/components/shared/StatusBlock.vue";
 import type { Item } from "@/types/items";
+import { formatItem } from "@/utils/format";
 import { fromHundredths } from "@/utils/number";
 
 const { n, t } = useI18n();

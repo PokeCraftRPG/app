@@ -67,6 +67,13 @@ export type SpeciesFilters = {
   regions: RegionSummary[];
 };
 
+export type SpeciesSummary = {
+  id: string;
+  number: number;
+  key: string;
+  name?: string | null;
+};
+
 export type RegionalNumber = Auditable & {
   region: Region;
   number: number;

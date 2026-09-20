@@ -17,6 +17,8 @@
     "help": "You can now complete its details.",
     "lead": "The move “{name}” was created."
   },
+  "label": "Move",
+  "placeholder": "Select a move",
   "power": {
     "format": "Pow.: {power}",
     "label": "Power"

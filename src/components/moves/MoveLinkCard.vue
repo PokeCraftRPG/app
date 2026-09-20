@@ -1,5 +1,5 @@
 <template>
-  <LinkCard :title="move.name ?? move.key" :to="{ name: 'MoveEdit', params: { id: move.id } }">
+  <LinkCard :title="formatMove(move)" :to="{ name: 'MoveEdit', params: { id: move.id } }">
     <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
       <PokemonTypeImage :type="move.type" height="24" />
       <MoveCategoryBadge :category="move.category" height="24" />
@@ -9,8 +9,8 @@
       <div>{{ t("moves.power.format", { power: move.power ? n(move.power, "integer") : "—" }) }}</div>
       <div>{{ t("moves.powerPoints.format", { powerPoints: move.powerPoints ? n(move.powerPoints, "integer") : "—" }) }}</div>
     </div>
-    <div v-if="move.summary" class="card-text">{{ move.summary }}</div>
-    <StatusBlock :actor="move.updatedBy" class="card-text mt-2 small text-secondary" :date="move.updatedOn" relative />
+    <div v-if="move.summary" class="card-text mb-2">{{ move.summary }}</div>
+    <StatusBlock :actor="move.updatedBy" class="card-text small text-secondary" :date="move.updatedOn" relative />
   </LinkCard>
 </template>
 
@@ -23,6 +23,7 @@ import MoveCategoryBadge from "@/components/moves/MoveCategoryBadge.vue";
 import PokemonTypeImage from "@/components/pokemon/PokemonTypeImage.vue";
 import StatusBlock from "@/components/shared/StatusBlock.vue";
 import type { Move } from "@/types/moves";
+import { formatMove } from "@/utils/format";
 
 const { n, t } = useI18n();
 

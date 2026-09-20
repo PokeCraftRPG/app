@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TarModal centered :close="t('actions.close')" fade scrollable ref="modal" :title="t('species.regionalNumbers.remove.lead')">
+    <TarModal centered :close="t('actions.close')" fade scrollable ref="modal" :title="t('varieties.moves.remove.lead')">
       <p class="mb-0">{{ help }}</p>
       <template #footer>
         <TarButton icon="fas fa-ban" :text="t('actions.cancel')" variant="secondary" @click="cancel" />
@@ -24,51 +24,50 @@ import { useI18n } from "vue-i18n";
 
 import TarButton from "@/components/tar/TarButton.vue";
 import TarModal from "@/components/tar/TarModal.vue";
-import type { RegionalNumber, Species } from "@/types/species";
-import { formatPokemonNumber, formatRegion } from "@/utils/format";
-import { removeRegionalNumber } from "@/api/species";
+import type { Variety, VarietyMove } from "@/types/varieties";
+import { formatMove } from "@/utils/format";
+import { removeVarietyMove } from "@/api/varieties";
 
-const { n, t } = useI18n();
+const { t } = useI18n();
 
 const props = defineProps<{
-  speciesId: string;
+  varietyId: string;
 }>();
 
 const emit = defineEmits<{
   (e: "error", value: unknown): void;
-  (e: "removed", value: Species): void;
+  (e: "removed", value: Variety): void;
 }>();
 
 const isLoading = ref<boolean>(false);
 const modal = ref<InstanceType<typeof TarModal> | null>(null);
-const regionalNumber = ref<RegionalNumber>();
+const varietyMove = ref<VarietyMove>();
 
 const help = computed<string>(() =>
-  t("species.regionalNumbers.remove.help", {
-    number: formatPokemonNumber(regionalNumber.value?.number ?? 0, n),
-    region: regionalNumber.value ? formatRegion(regionalNumber.value.region) : "",
+  t("varieties.moves.remove.help", {
+    move: varietyMove.value ? formatMove(varietyMove.value.move) : "",
   }),
 );
 
 function cancel(): void {
-  regionalNumber.value = undefined;
+  varietyMove.value = undefined;
   modal.value?.hide();
 }
 
-function open(entry: RegionalNumber): void {
-  regionalNumber.value = entry;
+function open(entry: VarietyMove): void {
+  varietyMove.value = entry;
   modal.value?.show();
 }
 defineExpose({ open });
 
 async function remove(): Promise<void> {
-  if (!isLoading.value && regionalNumber.value) {
+  if (!isLoading.value && varietyMove.value) {
     isLoading.value = true;
     try {
-      const species: Species = await removeRegionalNumber(props.speciesId, regionalNumber.value.region.id);
-      regionalNumber.value = undefined;
+      const variety: Variety = await removeVarietyMove(props.varietyId, varietyMove.value.id);
+      varietyMove.value = undefined;
       modal.value?.hide();
-      emit("removed", species);
+      emit("removed", variety);
     } catch (e: unknown) {
       emit("error", e);
     } finally {

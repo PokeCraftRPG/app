@@ -1,4 +1,8 @@
 {
+  "level": {
+    "format": "Lv. {level}",
+    "label": "Level"
+  },
   "type": {
     "label": "Type",
     "options": {

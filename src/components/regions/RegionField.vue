@@ -18,6 +18,7 @@ import { useI18n } from "vue-i18n";
 import SelectField from "@/components/forms/SelectField.vue";
 import type { SelectOption } from "@/types/tar/select";
 import type { RegionSummary } from "@/types/regions";
+import { formatRegion } from "@/utils/format";
 
 const { t } = useI18n();
 
@@ -43,12 +44,13 @@ const emit = defineEmits<{
   (e: "update:model-value", value: string): void;
 }>();
 
-const options = computed<SelectOption[]>(() => props.regions.map((region) => ({ text: region.name ?? region.key, value: region.id })));
+const options = computed<SelectOption[]>(() => props.regions.map((region) => ({ text: formatRegion(region), value: region.id })));
 
 function onModelValueUpdate(id: string): void {
   emit("update:model-value", id);
-
-  const region: RegionSummary | undefined = props.regions.find((region) => region.id === id);
-  emit("selected", region);
+  emit(
+    "selected",
+    props.regions.find((region) => region.id === id),
+  );
 }
 </script>
