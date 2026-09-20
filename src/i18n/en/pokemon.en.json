@@ -1,7 +1,20 @@
 {
+  "experience": {
+    "label": "Experience"
+  },
   "level": {
     "format": "Lv. {level}",
     "label": "Level"
+  },
+  "statistic": {
+    "options": {
+      "Attack": "Attack",
+      "Defense": "Defense",
+      "HP": "HP",
+      "SpecialAttack": "Special Attack",
+      "SpecialDefense": "Special Defense",
+      "Speed": "Speed"
+    }
   },
   "type": {
     "label": "Type",

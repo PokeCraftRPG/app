@@ -29,7 +29,14 @@
     </div>
     <div class="row">
       <div class="col-md-6">
-        <PokemonTypeField class="mb-3" id="primary-type" label="forms.types.primary" required v-model="primaryType" @update:model-value="onPrimaryTypeUpdate" />
+        <PokemonTypeField
+          class="mb-3"
+          id="primary-type"
+          label="forms.types.primary"
+          :model-value="primaryType"
+          required
+          @update:model-value="onPrimaryTypeUpdate"
+        />
       </div>
       <div class="col-md-6">
         <PokemonTypeField class="mb-3" :exclude="secondaryTypeExclusions" id="secondary-type" label="forms.types.secondary" v-model="secondaryType" />
@@ -43,9 +50,9 @@
           :exclude="primaryAbilityExclusions"
           id="primary-ability"
           label="forms.abilities.primary"
+          :model-value="primaryAbility?.id"
           required
-          v-model="primaryAbilityId"
-          @update:model-value="onPrimaryAbilityUpdate"
+          @selected="onPrimaryAbilitySelected"
         />
       </div>
       <div class="col-md-4">
@@ -55,8 +62,8 @@
           :exclude="secondaryAbilityExclusions"
           id="secondary-ability"
           label="forms.abilities.secondary"
-          v-model="secondaryAbilityId"
-          @update:model-value="onSecondaryAbilityUpdate"
+          :model-value="secondaryAbility?.id"
+          @selected="onSecondaryAbilityUpdate"
         />
       </div>
       <div class="col-md-4">
@@ -66,7 +73,8 @@
           :exclude="hiddenAbilityExclusions"
           id="hidden-ability"
           label="forms.abilities.hidden"
-          v-model="hiddenAbilityId"
+          :model-value="hiddenAbility?.id"
+          @selected="hiddenAbility = $event"
         />
       </div>
     </div>
@@ -78,62 +86,63 @@
         <WeightField class="mb-3" required v-model="weight" />
       </div>
     </div>
-    <h2 class="h5">{{ t("forms.baseStatistics.title") }}</h2>
+    <h2 class="h5">{{ t("forms.statistics.base") }}</h2>
     <div class="row">
       <div class="col-md-4 col-lg-2">
-        <StatisticField class="mb-3" id="base-hp" label="forms.baseStatistics.hp" required v-model="baseHp" />
+        <BaseStatisticField class="mb-3" statistic="HP" v-model="baseHp" />
       </div>
       <div class="col-md-4 col-lg-2">
-        <StatisticField class="mb-3" id="base-attack" label="forms.baseStatistics.attack" required v-model="baseAttack" />
+        <BaseStatisticField class="mb-3" statistic="Attack" v-model="baseAttack" />
       </div>
       <div class="col-md-4 col-lg-2">
-        <StatisticField class="mb-3" id="base-defense" label="forms.baseStatistics.defense" required v-model="baseDefense" />
+        <BaseStatisticField class="mb-3" statistic="Defense" v-model="baseDefense" />
       </div>
       <div class="col-md-4 col-lg-2">
-        <StatisticField class="mb-3" id="base-special-attack" label="forms.baseStatistics.specialAttack" required v-model="baseSpecialAttack" />
+        <BaseStatisticField class="mb-3" statistic="SpecialAttack" v-model="baseSpecialAttack" />
       </div>
       <div class="col-md-4 col-lg-2">
-        <StatisticField class="mb-3" id="base-special-defense" label="forms.baseStatistics.specialDefense" required v-model="baseSpecialDefense" />
+        <BaseStatisticField class="mb-3" statistic="SpecialDefense" v-model="baseSpecialDefense" />
       </div>
       <div class="col-md-4 col-lg-2">
-        <StatisticField class="mb-3" id="base-speed" label="forms.baseStatistics.speed" required v-model="baseSpeed" />
+        <BaseStatisticField class="mb-3" statistic="Speed" v-model="baseSpeed" />
       </div>
     </div>
-    <h2 class="h5">{{ t("forms.yield.title") }}</h2>
+    <div class="mb-3 text-body-secondary">{{ t("forms.statistics.total", { total: totalBaseStatistics }) }}</div>
+    <h2 class="h5">{{ t("forms.statistics.yield.title") }}</h2>
     <div class="row">
       <div class="col-md-4">
-        <StatisticField class="mb-3" id="yield-experience" label="forms.yield.experience" :max="999" :min="1" required v-model="yieldExperience" />
+        <YieldField class="mb-3" v-model="yieldExperience" />
       </div>
     </div>
     <div class="row">
       <div class="col-md-4 col-lg-2">
-        <StatisticField class="mb-3" id="yield-hp" label="forms.baseStatistics.hp" :max="3" :min="0" v-model="yieldHp" />
+        <YieldField class="mb-3" statistic="HP" v-model="yieldHp" />
       </div>
       <div class="col-md-4 col-lg-2">
-        <StatisticField class="mb-3" id="yield-attack" label="forms.baseStatistics.attack" :max="3" :min="0" v-model="yieldAttack" />
+        <YieldField class="mb-3" statistic="Attack" v-model="yieldAttack" />
       </div>
       <div class="col-md-4 col-lg-2">
-        <StatisticField class="mb-3" id="yield-defense" label="forms.baseStatistics.defense" :max="3" :min="0" v-model="yieldDefense" />
+        <YieldField class="mb-3" statistic="Defense" v-model="yieldDefense" />
       </div>
       <div class="col-md-4 col-lg-2">
-        <StatisticField class="mb-3" id="yield-special-attack" label="forms.baseStatistics.specialAttack" :max="3" :min="0" v-model="yieldSpecialAttack" />
+        <YieldField class="mb-3" statistic="SpecialAttack" v-model="yieldSpecialAttack" />
       </div>
       <div class="col-md-4 col-lg-2">
-        <StatisticField class="mb-3" id="yield-special-defense" label="forms.baseStatistics.specialDefense" :max="3" :min="0" v-model="yieldSpecialDefense" />
+        <YieldField class="mb-3" statistic="SpecialDefense" v-model="yieldSpecialDefense" />
       </div>
       <div class="col-md-4 col-lg-2">
-        <StatisticField class="mb-3" id="yield-speed" label="forms.baseStatistics.speed" :max="3" :min="0" v-model="yieldSpeed" />
+        <YieldField class="mb-3" statistic="Speed" v-model="yieldSpeed" />
       </div>
     </div>
-    <p class="mb-3" :class="isYieldValid ? 'text-body-secondary' : 'text-danger'">
-      {{ t("forms.yield.total.label", { total: yieldTotal }) }}
-      <template v-if="!isYieldValid"> — {{ t("forms.yield.total.invalid") }}</template>
-    </p>
+    <div class="mb-3" :class="isTotalYieldValid ? 'text-body-secondary' : 'text-danger'">
+      {{ t("forms.statistics.total", { total: totalYield }) }}
+      <template v-if="!isTotalYieldValid"> {{ "—" }} {{ t("forms.statistics.yield.invalid") }}</template>
+    </div>
     <SummaryField class="mb-3" v-model="summary" />
     <ContentField class="mb-3" v-model="content" />
     <div class="d-flex justify-content-end mb-3">
       <SaveButton
-        :disabled="!hasChanges || isLoading || !isYieldValid"
+        :disabled="!hasChanges || isLoading || !isTotalYieldValid"
         :icon="form ? 'fas fa-floppy-disk' : 'fas fa-plus'"
         :loading="isLoading"
         :text="form ? 'actions.save' : 'actions.create'"
@@ -148,6 +157,7 @@ import { stringUtils } from "logitar-js";
 import { useI18n } from "vue-i18n";
 
 import AbilityField from "@/components/abilities/AbilityField.vue";
+import BaseStatisticField from "./BaseStatisticField.vue";
 import ContentField from "@/components/shared/ContentField.vue";
 import FormCategoryField from "./FormCategoryField.vue";
 import HeightField from "./HeightField.vue";
@@ -156,14 +166,23 @@ import KeyField from "@/components/shared/KeyField.vue";
 import NameField from "@/components/shared/NameField.vue";
 import PokemonTypeField from "@/components/pokemon/PokemonTypeField.vue";
 import SaveButton from "@/components/shared/SaveButton.vue";
-import StatisticField from "./StatisticField.vue";
 import SummaryField from "@/components/shared/SummaryField.vue";
 import TarInput from "@/components/tar/TarInput.vue";
 import VarietyField from "@/components/varieties/VarietyField.vue";
 import WeightField from "./WeightField.vue";
-import type { AbilitySummary } from "@/types/abilities";
+import YieldField from "./YieldField.vue";
+import type { Ability, AbilitySummary } from "@/types/abilities";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
-import type { BaseStatistics, CreateOrReplaceFormPayload, Form, FormCategory, FormFilters, FormYield, UpdateFormPayload } from "@/types/pokemonForms";
+import type {
+  BaseStatistics,
+  CreateOrReplaceFormPayload,
+  Form,
+  FormAbilitiesPayload,
+  FormCategory,
+  FormFilters,
+  FormYield,
+  UpdateFormPayload,
+} from "@/types/pokemonForms";
 import type { PokemonType } from "@/types/pokemon";
 import type { VarietySummary } from "@/types/varieties";
 import { ErrorCodes, StatusCodes } from "@/types/api";
@@ -195,15 +214,15 @@ const baseSpeed = ref<number>();
 const category = ref<FormCategory | "">("");
 const content = ref<string>("");
 const height = ref<number>();
-const hiddenAbilityId = ref<string>("");
+const hiddenAbility = ref<Ability | AbilitySummary>();
 const isLoading = ref<boolean>(false);
 const key = ref<string>("");
 const keyAlreadyUsed = ref<boolean>(false);
 const keyField = ref<InstanceType<typeof KeyField> | null>(null);
 const name = ref<string>("");
-const primaryAbilityId = ref<string>("");
+const primaryAbility = ref<Ability | AbilitySummary>();
 const primaryType = ref<PokemonType | "">("");
-const secondaryAbilityId = ref<string>("");
+const secondaryAbility = ref<Ability | AbilitySummary>();
 const secondaryType = ref<PokemonType | "">("");
 const summary = ref<string>("");
 const variety = ref<VarietySummary>();
@@ -233,9 +252,9 @@ const abilityOptions = computed<AbilitySummary[]>(() => {
   return [...byId.values()];
 });
 const secondaryTypeExclusions = computed<PokemonType[]>(() => (primaryType.value ? [primaryType.value] : []));
-const primaryAbilityExclusions = computed<string[]>(() => [secondaryAbilityId.value, hiddenAbilityId.value].filter(Boolean));
-const secondaryAbilityExclusions = computed<string[]>(() => [primaryAbilityId.value, hiddenAbilityId.value].filter(Boolean));
-const hiddenAbilityExclusions = computed<string[]>(() => [primaryAbilityId.value, secondaryAbilityId.value].filter(Boolean));
+const primaryAbilityExclusions = computed<string[]>(() => [secondaryAbility.value?.id ?? "", hiddenAbility.value?.id ?? ""].filter(Boolean));
+const secondaryAbilityExclusions = computed<string[]>(() => [primaryAbility.value?.id ?? "", hiddenAbility.value?.id ?? ""].filter(Boolean));
+const hiddenAbilityExclusions = computed<string[]>(() => [primaryAbility.value?.id ?? "", secondaryAbility.value?.id ?? ""].filter(Boolean));
 const sizePayload = computed(() => ({
   height: toTenths(height.value) ?? 0,
   weight: toTenths(weight.value) ?? 0,
@@ -248,6 +267,15 @@ const baseStatisticsPayload = computed<BaseStatistics>(() => ({
   specialDefense: baseSpecialDefense.value ?? 0,
   speed: baseSpeed.value ?? 0,
 }));
+const totalBaseStatistics = computed<number>(
+  () =>
+    (baseHp.value ?? 0) +
+    (baseAttack.value ?? 0) +
+    (baseDefense.value ?? 0) +
+    (baseSpecialAttack.value ?? 0) +
+    (baseSpecialDefense.value ?? 0) +
+    (baseSpeed.value ?? 0),
+);
 const yieldPayload = computed<FormYield>(() => ({
   experience: yieldExperience.value ?? 0,
   hp: yieldHp.value ?? 0,
@@ -257,7 +285,7 @@ const yieldPayload = computed<FormYield>(() => ({
   specialDefense: yieldSpecialDefense.value ?? 0,
   speed: yieldSpeed.value ?? 0,
 }));
-const yieldTotal = computed<number>(
+const totalYield = computed<number>(
   () =>
     (yieldHp.value ?? 0) +
     (yieldAttack.value ?? 0) +
@@ -266,23 +294,7 @@ const yieldTotal = computed<number>(
     (yieldSpecialDefense.value ?? 0) +
     (yieldSpeed.value ?? 0),
 );
-const isBaseStatisticsValid = computed<boolean>(() =>
-  [baseHp.value, baseAttack.value, baseDefense.value, baseSpecialAttack.value, baseSpecialDefense.value, baseSpeed.value].every(
-    (value) => typeof value === "number" && value > 0 && value <= 255,
-  ),
-);
-const isYieldValid = computed<boolean>(() => {
-  const experience = yieldExperience.value ?? 0;
-  const evs = [
-    yieldHp.value ?? 0,
-    yieldAttack.value ?? 0,
-    yieldDefense.value ?? 0,
-    yieldSpecialAttack.value ?? 0,
-    yieldSpecialDefense.value ?? 0,
-    yieldSpeed.value ?? 0,
-  ];
-  return experience >= 1 && experience <= 999 && evs.every((value) => value >= 0 && value <= 3) && yieldTotal.value >= 1 && yieldTotal.value <= 4;
-});
+const isTotalYieldValid = computed<boolean>(() => totalYield.value >= 1 && totalYield.value <= 4);
 const hasChanges = computed<boolean>(() => {
   const form: Form | undefined = props.form;
   return (
@@ -294,9 +306,9 @@ const hasChanges = computed<boolean>(() => {
     content.value !== (form?.content ?? "") ||
     primaryType.value !== (form?.types.primary ?? "") ||
     secondaryType.value !== (form?.types.secondary ?? "") ||
-    primaryAbilityId.value !== (form?.abilities.primary.id ?? "") ||
-    secondaryAbilityId.value !== (form?.abilities.secondary?.id ?? "") ||
-    hiddenAbilityId.value !== (form?.abilities.hidden?.id ?? "") ||
+    (primaryAbility.value?.id ?? "") !== (form?.abilities.primary.id ?? "") ||
+    (secondaryAbility.value?.id ?? "") !== (form?.abilities.secondary?.id ?? "") ||
+    (hiddenAbility.value?.id ?? "") !== (form?.abilities.hidden?.id ?? "") ||
     (height.value ?? 0) !== (fromTenths(form?.size.height) ?? 0) ||
     (weight.value ?? 0) !== (fromTenths(form?.size.weight) ?? 0) ||
     (baseHp.value ?? 0) !== (form?.baseStatistics.hp ?? 0) ||
@@ -317,22 +329,14 @@ const hasChanges = computed<boolean>(() => {
 
 const { handleSubmit, reinitialize } = useForm();
 async function submit(): Promise<void> {
-  if (
-    !isLoading.value &&
-    primaryType.value &&
-    primaryAbilityId.value &&
-    sizePayload.value.height &&
-    sizePayload.value.weight &&
-    isBaseStatisticsValid.value &&
-    isYieldValid.value
-  ) {
+  if (!isLoading.value && primaryType.value && primaryAbility.value) {
     isLoading.value = true;
     keyAlreadyUsed.value = false;
     try {
-      const abilitiesPayload = {
-        primaryId: primaryAbilityId.value,
-        secondaryId: secondaryAbilityId.value || null,
-        hiddenId: hiddenAbilityId.value || null,
+      const abilitiesPayload: FormAbilitiesPayload = {
+        primaryId: primaryAbility.value?.id,
+        secondaryId: secondaryAbility.value?.id,
+        hiddenId: hiddenAbility.value?.id,
       };
       if (props.form) {
         const payload: UpdateFormPayload = {
@@ -390,23 +394,26 @@ async function submit(): Promise<void> {
 }
 
 function onPrimaryTypeUpdate(value: PokemonType | ""): void {
+  primaryType.value = value;
   if (value && value === secondaryType.value) {
     secondaryType.value = "";
   }
 }
 
-function onPrimaryAbilityUpdate(value: string): void {
-  if (value && value === secondaryAbilityId.value) {
-    secondaryAbilityId.value = "";
+function onPrimaryAbilitySelected(ability: AbilitySummary | undefined): void {
+  primaryAbility.value = ability;
+  if (ability && ability.id === secondaryAbility.value?.id) {
+    secondaryAbility.value = undefined;
   }
-  if (value && value === hiddenAbilityId.value) {
-    hiddenAbilityId.value = "";
+  if (ability && ability.id === hiddenAbility.value?.id) {
+    hiddenAbility.value = undefined;
   }
 }
 
-function onSecondaryAbilityUpdate(value: string): void {
-  if (value && value === hiddenAbilityId.value) {
-    hiddenAbilityId.value = "";
+function onSecondaryAbilityUpdate(ability: AbilitySummary | undefined): void {
+  secondaryAbility.value = ability;
+  if (ability && ability.id === hiddenAbility.value?.id) {
+    hiddenAbility.value = undefined;
   }
 }
 
@@ -434,9 +441,9 @@ watch(
     content.value = form?.content ?? "";
     primaryType.value = form?.types.primary ?? "";
     secondaryType.value = form?.types.secondary ?? "";
-    primaryAbilityId.value = form?.abilities.primary.id ?? "";
-    secondaryAbilityId.value = form?.abilities.secondary?.id ?? "";
-    hiddenAbilityId.value = form?.abilities.hidden?.id ?? "";
+    primaryAbility.value = form?.abilities.primary;
+    secondaryAbility.value = form?.abilities.secondary ?? undefined;
+    hiddenAbility.value = form?.abilities.hidden ?? undefined;
     height.value = fromTenths(form?.size.height);
     weight.value = fromTenths(form?.size.weight);
     baseHp.value = form?.baseStatistics.hp;

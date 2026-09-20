@@ -28,10 +28,20 @@ export default createI18n<[MessageSchema], "en">({
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       },
+      itemWeight: {
+        style: "decimal",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      },
       money: {
         style: "decimal",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
+      },
+      pokemonHeight: {
+        style: "decimal",
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
       },
       pokemonNumber: {
         style: "decimal",
@@ -39,12 +49,7 @@ export default createI18n<[MessageSchema], "en">({
         maximumFractionDigits: 0,
         useGrouping: false,
       },
-      weight: {
-        style: "decimal",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      },
-      height: {
+      pokemonWeight: {
         style: "decimal",
         minimumFractionDigits: 1,
         maximumFractionDigits: 1,

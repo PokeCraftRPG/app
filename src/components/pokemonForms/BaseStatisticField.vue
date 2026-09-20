@@ -1,45 +1,37 @@
 <template>
   <InputField
     :id="id"
-    :label="label ? t(label) : undefined"
-    :max="max"
-    :min="min"
+    :label="label"
+    :max="255"
+    :min="1"
     :model-value="modelValue?.toString() ?? ''"
-    :required="required"
-    :step="step"
+    required
+    :step="1"
     type="number"
     @update:model-value="$emit('update:model-value', parseNumber($event))"
   />
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { parsingUtils } from "logitar-js";
 import { useI18n } from "vue-i18n";
 
 import InputField from "@/components/forms/InputField.vue";
+import type { PokemonStatistic } from "@/types/pokemon";
 
 const { parseNumber } = parsingUtils;
 const { t } = useI18n();
 
-withDefaults(
-  defineProps<{
-    id?: string;
-    label?: string;
-    max?: number | string;
-    min?: number | string;
-    modelValue?: number | string;
-    required?: boolean | string;
-    step?: number | string;
-  }>(),
-  {
-    id: "statistic",
-    max: 255,
-    min: 0,
-    step: 1,
-  },
-);
+const props = defineProps<{
+  modelValue?: number | string;
+  statistic: PokemonStatistic;
+}>();
 
 defineEmits<{
   (e: "update:model-value", value: number | undefined): void;
 }>();
+
+const id = computed<string>(() => `base-${props.statistic.toLowerCase()}`);
+const label = computed<string>(() => t(`pokemon.statistic.options.${props.statistic}`));
 </script>

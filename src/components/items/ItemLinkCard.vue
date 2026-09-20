@@ -9,11 +9,11 @@
     </div>
     <div v-if="price || weight" class="d-flex justify-content-between align-items-center gap-2 mb-2 text-body-secondary">
       <div>
-        <font-awesome-icon icon="fas fa-dollar-sign" aria-hidden="true" />&nbsp;<template v-if="item.price">{{ n(price, "money") }}</template
+        <font-awesome-icon icon="fas fa-dollar-sign" aria-hidden="true" />&nbsp;<template v-if="price">{{ n(price, "money") }}</template
         ><span v-else class="text-secondary">{{ "—" }}</span>
       </div>
       <div>
-        <font-awesome-icon icon="fas fa-weight-hanging" aria-hidden="true" />&nbsp;<template v-if="item.weight">{{ n(weight, "weight") }}</template
+        <font-awesome-icon icon="fas fa-weight-hanging" aria-hidden="true" />&nbsp;<template v-if="weight">{{ n(weight, "itemWeight") }}</template
         ><span v-else class="text-secondary">{{ "—" }}</span>
       </div>
     </div>

@@ -4,16 +4,6 @@
     "primary": "Primary Ability",
     "secondary": "Secondary Ability"
   },
-  "baseStatistics": {
-    "attack": "Attack",
-    "defense": "Defense",
-    "hp": "HP",
-    "specialAttack": "Sp. Atk",
-    "specialDefense": "Sp. Def",
-    "speed": "Speed",
-    "title": "Base Statistics",
-    "total": "BST {total}"
-  },
   "category": {
     "label": "Category",
     "options": {
@@ -44,17 +34,17 @@
       "Weight": "Weight"
     }
   },
+  "statistics": {
+    "base": "Base Statistics",
+    "total": "Total: {total}",
+    "yield": {
+      "invalid": "Effort Value yield must total between 1 and 4.",
+      "title": "Yield"
+    }
+  },
   "title": "Forms",
   "types": {
     "primary": "Primary Type",
     "secondary": "Secondary Type"
-  },
-  "yield": {
-    "experience": "Experience",
-    "title": "Yield",
-    "total": {
-      "invalid": "Effort Value yield must total between 1 and 4.",
-      "label": "Total EVs: {total}"
-    }
   }
 }
