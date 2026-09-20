@@ -134,9 +134,11 @@
         <YieldField class="mb-3" statistic="Speed" v-model="yieldSpeed" />
       </div>
     </div>
-    <div class="mb-3" :class="isTotalYieldValid ? 'text-body-secondary' : 'text-danger'">
-      {{ t("forms.statistics.total", { total: totalYield }) }}
-      <template v-if="!isTotalYieldValid"> {{ "—" }} {{ t("forms.statistics.yield.invalid") }}</template>
+    <div class="d-flex justify-content-between align-items-center gap-2 mb-3" :class="isTotalYieldValid ? 'text-body-secondary' : 'text-danger'">
+      <div>
+        {{ t("forms.statistics.total", { total: totalYield }) }}
+      </div>
+      <div v-if="!isTotalYieldValid">{{ t("forms.statistics.yield.invalid") }}</div>
     </div>
     <SummaryField class="mb-3" v-model="summary" />
     <ContentField class="mb-3" v-model="content" />
