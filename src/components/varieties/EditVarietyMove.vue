@@ -3,13 +3,7 @@
     <TarModal centered :close="t('actions.close')" fade scrollable ref="modal" :title="title">
       <KeyAlreadyUsed v-model="alreadyUsed" help="varieties.moves.alreadyUsed.help" lead="varieties.moves.alreadyUsed.lead" />
       <form @submit.prevent="handleSubmit(submit)">
-        <template v-if="varietyMove">
-          <StatusDetail class="mb-3" :subject="varietyMove" />
-          <TarCard class="mb-3">
-            <div class="small text-body-secondary">{{ t("moves.label") }}</div>
-            <div class="fw-semibold">{{ formatMove(varietyMove.move) }}</div>
-          </TarCard>
-        </template>
+        <TarInput v-if="varietyMove" class="mb-3" disabled floating id="move" :label="t('moves.label')" :model-value="formatMove(varietyMove.move)" />
         <MoveField v-else class="mb-3" :model-value="move?.id" :moves="moves" required @selected="move = $event" />
         <LearningMethodField class="mb-3" required v-model="learningMethod" />
         <LevelField v-if="learningMethod === 'LevelUp'" class="mb-3" required v-model="level" />
@@ -37,9 +31,8 @@ import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
 import LearningMethodField from "./LearningMethodField.vue";
 import LevelField from "./LevelField.vue";
 import MoveField from "@/components/moves/MoveField.vue";
-import StatusDetail from "@/components/shared/StatusDetail.vue";
 import TarButton from "@/components/tar/TarButton.vue";
-import TarCard from "@/components/tar/TarCard.vue";
+import TarInput from "@/components/tar/TarInput.vue";
 import TarModal from "@/components/tar/TarModal.vue";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { MoveSummary } from "@/types/moves";
@@ -69,20 +62,9 @@ const modal = ref<InstanceType<typeof TarModal> | null>(null);
 const move = ref<MoveSummary>();
 const varietyMove = ref<VarietyMove>();
 
-const canSubmit = computed<boolean>(() => {
-  if (!learningMethod.value) {
-    return false;
-  }
-  if (learningMethod.value === "LevelUp" && !level.value) {
-    return false;
-  }
-  if (!varietyMove.value) {
-    return Boolean(move.value);
-  }
-  return (
-    learningMethod.value !== varietyMove.value.learningMethod || (learningMethod.value === "LevelUp" ? level.value : null) !== (varietyMove.value.level ?? null)
-  );
-});
+const canSubmit = computed<boolean>(
+  () => !varietyMove.value || learningMethod.value !== varietyMove.value.learningMethod || level.value !== (varietyMove.value.level ?? 0),
+);
 const title = computed<string>(() => (varietyMove.value ? t("varieties.moves.edit", { move: formatMove(varietyMove.value.move) }) : t("varieties.moves.add")));
 
 function cancel(): void {
@@ -93,8 +75,6 @@ function cancel(): void {
 function clear(): void {
   reset();
   alreadyUsed.value = false;
-  learningMethod.value = "";
-  level.value = 0;
   move.value = undefined;
   varietyMove.value = undefined;
 }

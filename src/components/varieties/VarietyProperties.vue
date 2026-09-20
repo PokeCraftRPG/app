@@ -3,11 +3,12 @@
     <KeyAlreadyUsed v-model="keyAlreadyUsed" />
     <div class="row">
       <div class="col-md-6">
-        <SpeciesField class="mb-3" :disabled="Boolean(variety)" :model-value="species?.id" :species="speciesOptions" required @selected="selectSpecies" />
+        <TarInput v-if="variety" class="mb-3" disabled floating id="species" :label="t('species.label')" :model-value="formatSpecies(variety.species, n)" />
+        <SpeciesField v-else class="mb-3" :model-value="species?.id" required :species="speciesOptions" @selected="selectSpecies" />
       </div>
       <div class="col-md-6 mb-3">
-        <TarCheckbox :label="t('varieties.default.label')" switch v-model="isDefault" />
-        <TarCheckbox :label="t('varieties.canChangeForm')" switch v-model="canChangeForm" />
+        <TarCheckbox id="default" :label="t('varieties.default.label')" switch v-model="isDefault" />
+        <TarCheckbox id="metamorph" :label="t('varieties.canChangeForm')" switch v-model="canChangeForm" />
       </div>
     </div>
     <div class="row">
@@ -54,6 +55,7 @@ import SaveButton from "@/components/shared/SaveButton.vue";
 import SpeciesField from "@/components/species/SpeciesField.vue";
 import SummaryField from "@/components/shared/SummaryField.vue";
 import TarCheckbox from "@/components/tar/TarCheckbox.vue";
+import TarInput from "@/components/tar/TarInput.vue";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { SpeciesSummary } from "@/types/species";
 import type { CreateOrReplaceVarietyPayload, UpdateVarietyPayload, Variety } from "@/types/varieties";

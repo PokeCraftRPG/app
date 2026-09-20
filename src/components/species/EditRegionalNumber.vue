@@ -3,13 +3,15 @@
     <TarModal centered :close="t('actions.close')" fade scrollable ref="modal" :title="title">
       <KeyAlreadyUsed v-model="numberAlreadyUsed" help="species.number.alreadyUsed.help" lead="species.number.alreadyUsed.lead" />
       <form @submit.prevent="handleSubmit(submit)">
-        <template v-if="regionalNumber">
-          <StatusDetail class="mb-3" :subject="regionalNumber" />
-          <TarCard class="mb-3">
-            <div class="small text-body-secondary">{{ t("regions.label") }}</div>
-            <div class="fw-semibold">{{ formatRegion(regionalNumber.region) }}</div>
-          </TarCard>
-        </template>
+        <TarInput
+          v-if="regionalNumber"
+          class="mb-3"
+          disabled
+          floating
+          id="region"
+          :label="t('regions.label')"
+          :model-value="formatRegion(regionalNumber.region)"
+        />
         <RegionField v-else class="mb-3" :model-value="region?.id" :regions="regions" required @selected="region = $event" />
         <NumberField class="mb-3" ref="numberField" required v-model="number" />
       </form>
@@ -35,9 +37,8 @@ import { useI18n } from "vue-i18n";
 import KeyAlreadyUsed from "@/components/shared/KeyAlreadyUsed.vue";
 import NumberField from "./NumberField.vue";
 import RegionField from "@/components/regions/RegionField.vue";
-import StatusDetail from "@/components/shared/StatusDetail.vue";
 import TarButton from "@/components/tar/TarButton.vue";
-import TarCard from "@/components/tar/TarCard.vue";
+import TarInput from "@/components/tar/TarInput.vue";
 import TarModal from "@/components/tar/TarModal.vue";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { RegionSummary } from "@/types/regions";
@@ -92,6 +93,7 @@ function clear(): void {
 function open(entry?: RegionalNumber): void {
   regionalNumber.value = entry;
   region.value = entry?.region;
+  console.log(region.value);
   number.value = entry?.number ?? 0;
   numberAlreadyUsed.value = false;
   nextTick(() => {
