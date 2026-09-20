@@ -58,7 +58,7 @@ import TarCheckbox from "@/components/tar/TarCheckbox.vue";
 import TarInput from "@/components/tar/TarInput.vue";
 import type { ApiFailure, ProblemDetails } from "@/types/api";
 import type { SpeciesSummary } from "@/types/species";
-import type { CreateOrReplaceVarietyPayload, UpdateVarietyPayload, Variety } from "@/types/varieties";
+import type { CreateOrReplaceVarietyPayload, UpdateVarietyPayload, Variety, VarietyFilters } from "@/types/varieties";
 import { ErrorCodes, StatusCodes } from "@/types/api";
 import { createVariety, getVarietyFilters, updateVariety } from "@/api/varieties";
 import { formatSpecies } from "@/utils/format";
@@ -191,7 +191,7 @@ watch(
 onMounted(async () => {
   if (!props.variety) {
     try {
-      const filters = await getVarietyFilters();
+      const filters: VarietyFilters = await getVarietyFilters();
       speciesList.value = [...filters.species];
     } catch (e: unknown) {
       emit("error", e);

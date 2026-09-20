@@ -25,6 +25,7 @@
     "placeholder": "Genderless"
   },
   "genus": "Genus",
+  "label": "Variety",
   "learningMethod": {
     "label": "Learning method",
     "options": {
@@ -47,6 +48,7 @@
       "lead": "Remove move?"
     }
   },
+  "placeholder": "Select a variety",
   "sort": {
     "options": {
       "CreatedOn": "Created on",

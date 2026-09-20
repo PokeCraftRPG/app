@@ -1,0 +1,26 @@
+{
+  "category": {
+    "label": "Category",
+    "options": {
+      "Alternative": "Alternative",
+      "BattleOnly": "Battle only",
+      "Default": "Default",
+      "Mega": "Mega"
+    },
+    "placeholder": "Select a category"
+  },
+  "create": "Create a form",
+  "created": {
+    "help": "You can now complete its details.",
+    "lead": "The form “{name}” was created."
+  },
+  "sort": {
+    "options": {
+      "CreatedOn": "Created on",
+      "Key": "Key",
+      "Name": "Name",
+      "UpdatedOn": "Last updated"
+    }
+  },
+  "title": "Forms"
+}

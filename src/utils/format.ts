@@ -4,11 +4,16 @@ import type { Move, MoveSummary } from "@/types/moves";
 import type { Region, RegionSummary } from "@/types/regions";
 import type { Species, SpeciesSummary } from "@/types/species";
 import type { Trainer } from "@/types/trainers";
-import type { Variety } from "@/types/varieties";
+import type { Variety, VarietySummary } from "@/types/varieties";
+import type { Form } from "@/types/pokemonForms";
 import type { World } from "@/types/worlds";
 
 export function formatAbility(ability: Ability): string {
   return ability.name ?? ability.key;
+}
+
+export function formatForm(form: Form): string {
+  return form.name ?? form.key;
 }
 
 export function formatItem(item: Item): string {
@@ -36,7 +41,7 @@ export function formatTrainer(trainer: Trainer): string {
   return trainer.name ?? trainer.key;
 }
 
-export function formatVariety(variety: Variety): string {
+export function formatVariety(variety: Variety | VarietySummary): string {
   return variety.name ?? variety.key;
 }
 

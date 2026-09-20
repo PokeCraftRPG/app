@@ -66,3 +66,9 @@ export type VarietyMove = Auditable & {
 };
 
 export type VarietySort = "CreatedOn" | "Key" | "Name" | "UpdatedOn";
+
+export type VarietySummary = {
+  id: string;
+  key: string;
+  name?: string | null;
+};

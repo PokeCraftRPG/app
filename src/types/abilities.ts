@@ -10,6 +10,12 @@ export type Ability = Aggregate & {
 
 export type AbilitySort = "CreatedOn" | "Key" | "Name" | "UpdatedOn";
 
+export type AbilitySummary = {
+  id: string;
+  key: string;
+  name?: string | null;
+};
+
 export type CreateOrReplaceAbilityPayload = {
   key: string;
   name?: string | null;
