@@ -1,4 +1,4 @@
-import type { Ability } from "@/types/abilities";
+import type { Ability, AbilitySummary } from "@/types/abilities";
 import type { Item } from "@/types/items";
 import type { Move, MoveSummary } from "@/types/moves";
 import type { Region, RegionSummary } from "@/types/regions";
@@ -8,7 +8,7 @@ import type { Variety, VarietySummary } from "@/types/varieties";
 import type { Form } from "@/types/pokemonForms";
 import type { World } from "@/types/worlds";
 
-export function formatAbility(ability: Ability): string {
+export function formatAbility(ability: Ability | AbilitySummary): string {
   return ability.name ?? ability.key;
 }
 

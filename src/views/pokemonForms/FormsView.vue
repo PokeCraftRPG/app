@@ -16,11 +16,17 @@
       </section>
       <section>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-6 col-lg-3">
             <VarietySelect class="mb-3" :model-value="variety" :varieties="filters.varieties" @update:model-value="setQuery('variety', $event)" />
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6 col-lg-3">
             <FormCategorySelect class="mb-3" :model-value="category" @update:model-value="setQuery('category', $event)" />
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <PokemonTypeSelect class="mb-3" :model-value="type" @update:model-value="setQuery('type', $event)" />
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <AbilitySelect class="mb-3" :abilities="filters.abilities" :model-value="ability" @update:model-value="setQuery('ability', $event)" />
           </div>
         </div>
         <div class="row">
@@ -67,11 +73,13 @@ import { computed, inject, ref, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
+import AbilitySelect from "@/components/abilities/AbilitySelect.vue";
 import ClearFiltersButton from "@/components/shared/ClearFiltersButton.vue";
 import CountSelect from "@/components/shared/CountSelect.vue";
 import FormCategorySelect from "@/components/pokemonForms/FormCategorySelect.vue";
 import FormLinkCard from "@/components/pokemonForms/FormLinkCard.vue";
 import LoadingSpinner from "@/components/shared/LoadingSpinner.vue";
+import PokemonTypeSelect from "@/components/pokemon/PokemonTypeSelect.vue";
 import RefreshButton from "@/components/shared/RefreshButton.vue";
 import SearchInput from "@/components/shared/SearchInput.vue";
 import SearchPagination from "@/components/shared/SearchPagination.vue";
@@ -79,6 +87,7 @@ import SortSelect from "@/components/shared/SortSelect.vue";
 import VarietySelect from "@/components/varieties/VarietySelect.vue";
 import WorldBreadcrumb from "@/components/shared/WorldBreadcrumb.vue";
 import type { Form, FormCategory, FormFilters, FormSort, SearchFormsPayload } from "@/types/pokemonForms";
+import type { PokemonType } from "@/types/pokemon";
 import type { SearchResults, SortDirection } from "@/types/search";
 import type { SelectOption } from "@/types/tar/select";
 import { handleErrorKey } from "@/inject";
@@ -101,6 +110,7 @@ const isLoading = ref<boolean>(false);
 const timestamp = ref<number>(0);
 const total = ref<number>(0);
 
+const ability = computed<string>(() => route.query.ability?.toString() ?? "");
 const category = computed<FormCategory | "">(() => (route.query.category?.toString() as FormCategory) ?? "");
 const count = computed<number>(() => parseNumber(route.query.count?.toString()) || 12);
 const direction = computed<string>(() => route.query.direction?.toString() ?? "");
@@ -108,9 +118,10 @@ const page = computed<number>(() => parseNumber(route.query.page?.toString()) ||
 const search = computed<string>(() => route.query.search?.toString() ?? "");
 const sort = computed<string>(() => route.query.sort?.toString() ?? "");
 const title = computed<string>(() => t("forms.title"));
+const type = computed<PokemonType | "">(() => (route.query.type?.toString() as PokemonType) ?? "");
 const variety = computed<string>(() => route.query.variety?.toString() ?? "");
 
-const hasFilters = computed<boolean>(() => Boolean(category.value || search.value || variety.value));
+const hasFilters = computed<boolean>(() => Boolean(ability.value || category.value || search.value || type.value || variety.value));
 
 const sortOptions = computed<SelectOption[]>(() =>
   orderBy(
@@ -120,15 +131,17 @@ const sortOptions = computed<SelectOption[]>(() =>
 );
 
 function clearFilters(): void {
-  const query = { ...route.query, category: "", search: "", variety: "", page: 1 };
+  const query = { ...route.query, ability: "", category: "", search: "", type: "", variety: "", page: 1 };
   router.replace({ ...route, query });
 }
 
 function setQuery(key: string, value?: boolean | null | number | string): void {
   const query = { ...route.query, [key]: value?.toString() ?? "" };
   switch (key) {
+    case "ability":
     case "category":
     case "search":
+    case "type":
     case "variety":
     case "count":
       query.page = "1";
@@ -144,16 +157,21 @@ async function loadFilters(): Promise<void> {
     handleError(e);
   }
 
+  if (ability.value && !filters.value?.abilities.some((entry) => entry.id === ability.value)) {
+    setQuery("ability", "");
+  }
   if (variety.value && !filters.value?.varieties.some((entry) => entry.id === variety.value)) {
     setQuery("variety", "");
   }
 }
 async function loadResults(): Promise<void> {
   const payload: SearchFormsPayload = {
+    ability: ability.value || undefined,
     category: category.value || undefined,
     ids: [],
     search: parseTextSearch(search.value),
     sort: sort.value ? [{ field: sort.value as FormSort, direction: direction.value as SortDirection }] : [],
+    type: type.value || undefined,
     variety: variety.value || undefined,
     offset: (page.value - 1) * count.value,
     limit: count.value,
@@ -190,8 +208,10 @@ watch(
           ...route,
           query: isEmpty(query)
             ? {
+                ability: "",
                 category: "",
                 search: "",
+                type: "",
                 variety: "",
                 sort: "Name",
                 direction: "Ascending",

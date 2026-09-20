@@ -94,4 +94,9 @@ export type UpdateFormPayload = {
   name?: Optional<string> | null;
   summary?: Optional<string> | null;
   content?: Optional<string> | null;
+  types?: FormTypes | null;
+  abilities?: FormAbilitiesPayload | null;
+  baseStatistics?: BaseStatistics | null;
+  yield?: FormYield | null;
+  size?: FormSize | null;
 };

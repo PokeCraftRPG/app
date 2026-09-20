@@ -44,6 +44,11 @@ export default createI18n<[MessageSchema], "en">({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       },
+      height: {
+        style: "decimal",
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      },
     },
   },
 });

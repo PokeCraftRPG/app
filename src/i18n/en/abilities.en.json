@@ -4,6 +4,8 @@
     "help": "You can now complete its details.",
     "lead": "The ability “{name}” was created."
   },
+  "label": "Ability",
+  "placeholder": "Select an ability",
   "sort": {
     "options": {
       "CreatedOn": "Created on",

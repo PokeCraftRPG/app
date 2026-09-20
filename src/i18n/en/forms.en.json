@@ -1,4 +1,19 @@
 {
+  "abilities": {
+    "hidden": "Hidden Ability",
+    "primary": "Primary Ability",
+    "secondary": "Secondary Ability"
+  },
+  "baseStatistics": {
+    "attack": "Attack",
+    "defense": "Defense",
+    "hp": "HP",
+    "specialAttack": "Sp. Atk",
+    "specialDefense": "Sp. Def",
+    "speed": "Speed",
+    "title": "Base Statistics",
+    "total": "BST {total}"
+  },
   "category": {
     "label": "Category",
     "options": {
@@ -14,13 +29,32 @@
     "help": "You can now complete its details.",
     "lead": "The form “{name}” was created."
   },
+  "size": {
+    "height": "Height",
+    "weight": "Weight"
+  },
   "sort": {
     "options": {
       "CreatedOn": "Created on",
+      "ExperienceYield": "Experience yield",
+      "Height": "Height",
       "Key": "Key",
       "Name": "Name",
-      "UpdatedOn": "Last updated"
+      "UpdatedOn": "Last updated",
+      "Weight": "Weight"
     }
   },
-  "title": "Forms"
+  "title": "Forms",
+  "types": {
+    "primary": "Primary Type",
+    "secondary": "Secondary Type"
+  },
+  "yield": {
+    "experience": "Experience",
+    "title": "Yield",
+    "total": {
+      "invalid": "Effort Value yield must total between 1 and 4.",
+      "label": "Total EVs: {total}"
+    }
+  }
 }

@@ -30,9 +30,10 @@ import type { SelectOption } from "@/types/tar/select";
 const { orderBy } = arrayUtils;
 const { rt, t, tm } = useI18n();
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     disabled?: boolean | string;
+    exclude?: PokemonType[];
     id?: string;
     label?: string;
     modelValue?: PokemonType | "";
@@ -40,6 +41,7 @@ withDefaults(
     required?: boolean | string;
   }>(),
   {
+    exclude: () => [],
     id: "type",
     label: "pokemon.type.label",
     placeholder: "pokemon.type.placeholder",
@@ -50,10 +52,13 @@ defineEmits<{
   (e: "update:model-value", value: PokemonType | ""): void;
 }>();
 
-const options = computed<SelectOption[]>(() =>
-  orderBy(
-    Object.entries(tm(rt("pokemon.type.options"))).map(([value, text]) => ({ text, value }) as SelectOption),
+const options = computed<SelectOption[]>(() => {
+  const excluded = new Set(props.exclude);
+  return orderBy(
+    Object.entries(tm(rt("pokemon.type.options")))
+      .filter(([value]) => !excluded.has(value as PokemonType))
+      .map(([value, text]) => ({ text, value }) as SelectOption),
     "text",
-  ),
-);
+  );
+});
 </script>
